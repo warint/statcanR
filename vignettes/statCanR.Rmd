@@ -1,0 +1,87 @@
+---
+title: "statCanR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{statCanR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(statcanR)
+```
+
+# Goals 
+
+The goals and contributions of this paper are both methodological and thematical, namely data science technics and competitiveness thematic. This means that this paper describes the components of the _statcanR_  R package allowing, throughout the using of Data Science technics, to get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service.
+
+In details, the _getCansimTbl_ function has 2 arguments to fulfill to get data:   
+  
+  1. _tableNumber_
+  2. _lang_
+  
+  
+The _tableNumber_ argument simply referes to the table number of the Statistics Canada data table you want to collect, such as '_14-10-0287-03_' for the _Labour force characteristics by province, monthly, seasonally adjusted_ as an example.
+
+The second argument, _lang_, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages. Therefore, users can choose if they want to get satistics data table in french or english by seting the _lang_ argument by c("fra", "eng").
+
+The global process of the _getCansimTbl_ function:
+
+First, clean the table number in order to align it with the official complete table number typology of Statistic Canada Web Data Service. Second, create a temporary folder where all the next operations can be done. Third, check and select the correct language asked by the user. Fourth, define the correct 'url' where statistic data table is stored and download the _.Zip_ file from it. Fifth, unzip the previous downloaded _.Zip_ file to get the data and meta data _.csv_ files. Sixth, load the statistics data into a data frame called '_data_' and add the official table indicator name in the new '_INDICATOR_' column.         
+  
+
+To go deeper in the _getCansimTbl_ function treatment, here is below a line-by-line of code description:   
+  
+  - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
+  The first action the function make is to clean the table number gave by user in order to be able to get the complete data table related to the specific indicator the user are looking for. In fact, each Statistics Canada data web page display is an excerpt of the one complete table.
+  In addition, following the Statistics Canada Web Data Service, the url typology defined for the REST API is to stocked csv file by table number without '-'. Also, the 2 last digit after the last '-' indicates the specific excerpt of the original complete table.
+  Therefore, following the Statistics Canada Web Data Service typology, the function first remove the '-' and the 2 last digits from the user function input.
+
+  - `if(lang == "eng")` | `if(lang == "fra")`:
+  The second applying is the '_if statement_' to get the data in the correct language.
+
+  - `urlFra <- paste0("https://www150.statcan.gc.ca/n1/fr/tbl/csv/", tableNumber, "-fra.zip")`:
+  The third applying is the creation of the correct url in order to download the correct _.Zip_ file from the Statistics Canada Web Data Service.   
+  
+  - `download.file(urlEng, destfile=paste0(path,"/temp/datasetEng.zip"), method="curl")`:
+  The fourth applying is a simple downloading function that extract _.Zip_ file and download it into the temporary folder create at the beginning. 
+  
+  - `unzip(paste0(path, "/temp/datasetEng.zip"), exdir = paste0(path,"/temp"))`:
+  The fifth applying consist to unzip the _.Zip_ file downaloaded at the last step. The unzip process give an access to two diffrent _.csv_ files, such as the statistics data table and the meta data table.
+    
+  - `data <- fread(paste0(path,"/temp/", tableNumber, ".csv"))`:
+  The sixth applying consist to load the statistics data table into a unique data frame. We decide to use the function _fread_ from the _data.table_ package due to the better applied function speed.   
+    
+  - `data$INDICATOR <- as.character(0)` and `data$INDICATOR <- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])`:
+  The seventh applying of the _getCansimTbl_ function consist to add the name of the table extract from the meta data table. 
+  
+  - `unlink(paste0(path,"/temp/"), recursive = TRUE)`:
+  The heighth applying allow to remove and delete the temporary folder used to download, unzip, extract and load data for a unique using of the function.
+  
+  - `return(data)`:
+  Finally, the last line of the _getCansimTbl_ function allows to return the value of the function treatment into the IDE.
+
+
+
+# Practical usage
+
+This section present an example of how to use the _statcanR_ R package and its function _getCansimTbl_.    
+  
+
+The example is provided to illustrate how to practical use the function as well as understand and know more about the Canadian labour force wages in terms of competitiveness and attractiveness thematic. Therefore, it consists to collect and present descriptive statistics of Canadian Labour Force Characteristics at a country and province geographical levels as well as based on a monthly frequency.  
+
+With a simple web search '_statistics canada wages by industry metropolitan area monthly_', you can easily find the table number of the satistic you are looking for on the Statisitcs Canada data web page. Here is below a figure which illustrates this case for our example, such as '_14-10-0063-01_' for the _Employee wages by industry, monthly, unadjusted for seasonality at a country and provinces level_.
+
+Once the correct table number of the statistics you are looking for is found out, you can easily used the _getCansimTbl_ to collect the data, as following:  
+  
+```{r, eval=FALSE}
+# Get data with getCansimTbl function
+dt <- getCansimTbl("14-10-0063-01", "eng")
+```
