@@ -20,6 +20,7 @@ You can install the released version of statcanR from
 
 ``` r
 install.packages("statcanR")
+devtools::install_github("https://github.com/warint/statcanR")
 ```
 
 ## Example
@@ -28,7 +29,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(statcanR)
-data <- getCansimTbl("14-10-0063-01", "eng")
+data <- sqs_statcan_data("14-10-0063-01", "eng")
 ```
 
 ## SKEMA Global Lab in AI

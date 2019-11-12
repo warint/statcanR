@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>statcanR — getCansimTbl • statcanR</title>
+<title>statcanR — sqs_statcan_data • statcanR</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="statcanR — getCansimTbl" />
+<meta property="og:title" content="statcanR — sqs_statcan_data" />
 <meta property="og:description" content="Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service" />
 <meta name="twitter:card" content="summary" />
 
@@ -98,7 +98,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/warint/statcanR">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -113,15 +118,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>statcanR</h1>
-    
-    <div class="hidden name"><code>getCansimTbl.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/warint/statcanR/blob/master/R/statcanR.R'><code>R/statcanR.R</code></a></small>
+    <div class="hidden name"><code>sqs_statcan_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getCansimTbl</span>(<span class='no'>tableNumber</span>, <span class='no'>lang</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_statcan_data</span>(<span class='no'>tableNumber</span>, <span class='no'>lang</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,16 +147,16 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The
-<code>_getCansimTbl_</code> function has 2 arguments to fulfill to get data: _tableNumber_ &amp; param_lang_</p>
-<p>The _tableNumber_ argument simply referes to the table number of the Statistics Canada data table you want to collect,
-such as '_14-10-0287-03_' for the _Labour force characteristics by province, monthly, seasonally adjusted_ as an example.</p>
+<code>_sqs_statcan_data_</code> function has 2 arguments to fulfill to get data: tableNumber &amp; lang</p>
+<p>The tableNumber argument simply referes to the table number of the Statistics Canada data table you want to collect,
+such as '14-10-0287-03' for the Labour force characteristics by province, monthly, seasonally adjusted_ as an example.</p>
 <p>To get the table number :<a href='https://www150.statcan.gc.ca/n1/en/type/data'>https://www150.statcan.gc.ca/n1/en/type/data</a></p>
-<p>The second argument, _lang_, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
-Therefore, users can choose if they want to get satistics data table in french or english by seting the _lang_ argument by c("fra", "eng").</p>
+<p>The second argument, lang, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
+Therefore, users can choose if they want to get satistics data table in french or english by seting the lang argument by c("fra", "eng").</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>datatable</span> <span class='kw'>&lt;-</span> <span class='fu'>getCansimTble</span>(<span class='st'>"14-10-0287-03"</span>,<span class='st'>"eng"</span>)
+<span class='no'>datatable</span> <span class='kw'>&lt;-</span> <span class='fu'>sqs_statcan_data</span>(<span class='st'>"14-10-0287-03"</span>,<span class='st'>"eng"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

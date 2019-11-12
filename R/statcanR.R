@@ -5,16 +5,16 @@
 #'Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service
 #'
 #'The
-#'\code{_getCansimTbl_} function has 2 arguments to fulfill to get data: {_tableNumber_} & param{_lang_}
+#'\code{_sqs_statcan_data_} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}
 #'
 #'
-#'The _tableNumber_ argument simply referes to the table number of the Statistics Canada data table you want to collect,
-#'such as '_14-10-0287-03_' for the _Labour force characteristics by province, monthly, seasonally adjusted_ as an example.
+#'The tableNumber argument simply referes to the table number of the Statistics Canada data table you want to collect,
+#'such as '14-10-0287-03' for the Labour force characteristics by province, monthly, seasonally adjusted_ as an example.
 #'
 #'To get the table number :\url{https://www150.statcan.gc.ca/n1/en/type/data}
 #'
-#'The second argument, _lang_, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
-#' Therefore, users can choose if they want to get satistics data table in french or english by seting the _lang_ argument by c("fra", "eng").
+#'The second argument, lang, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
+#' Therefore, users can choose if they want to get satistics data table in french or english by seting the lang argument by c("fra", "eng").
 #'
 #'
 #' @param tableNumber The table number of the Statistics Canada data table
@@ -28,11 +28,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' datatable <- getCansimTble("14-10-0287-03","eng")
+#' datatable <- sqs_statcan_data("14-10-0287-03","eng")
 #'}
 
 # Scrapping function for statcan
-getCansimTbl <- function(tableNumber, lang){
+sqs_statcan_data <- function(tableNumber, lang){
 
 
   #table number
