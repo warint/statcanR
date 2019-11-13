@@ -22,7 +22,7 @@ library(statcanR)
 
 The goals and contributions of this paper are both methodological and thematical, namely data science technics and competitiveness thematic. This means that this paper describes the components of the _statcanR_  R package allowing, throughout the using of Data Science technics, to get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service.
 
-In details, the _sqs_statcan_data_ function has 2 arguments to fulfill to get data:   
+In details, the _sqs_statcan_data()_ function has 2 arguments to fulfill to get data:   
   
   1. _tableNumber_
   2. _lang_
