@@ -72,14 +72,14 @@ To go deeper in the _sqs_statcan_data_ function treatment, here is below a line-
 
 # Practical usage
 
-This section present an example of how to use the _statcanR_ R package and its function _sqs_statcan_data_.    
+This section presents an example of how to use the _statcanR_ R package and its function _sqs_statcan_data()_.    
   
 
-The example is provided to illustrate how to practical use the function as well as understand and know more about the Canadian labour force wages in terms of competitiveness and attractiveness thematic. Therefore, it consists to collect and present descriptive statistics of Canadian Labour Force Characteristics at a country and province geographical levels as well as based on a monthly frequency.  
+The example is provided to illustrate how to use the function as well as understand and know more about the Canadian labour force wages in terms of competitiveness and attractiveness theme. Therefore, it consists in collecting descriptive statistics about the Canadian Labour Force characteristics at a country and provincial levels, as well as based on a monthly frequency.  
 
-With a simple web search '_statistics canada wages by industry metropolitan area monthly_', you can easily find the table number of the satistic you are looking for on the Statisitcs Canada data web page. Here is below a figure which illustrates this case for our example, such as '_14-10-0063-01_' for the _Employee wages by industry, monthly, unadjusted for seasonality at a country and provinces level_.
+With a simple web search '_statistics canada wages by industry metropolitan area monthly_', you can easily find the table number of the satistics you are looking for on the Statisitcs Canada data web page. Here is below a figure that illustrates this example, such as '_14-10-0063-01_' for the _Employee wages by industry, monthly, unadjusted for seasonality at a country and provinces level_.
 
-Once the correct table number of the statistics you are looking for is found out, you can easily used the _sqs_statcan_data_ to collect the data, as following:  
+Once you have the table number, you can easily used the _sqs_statcan_data()_ function to collect the data, as following:  
   
 ```{r, eval=FALSE}
 # Get data with sqs_statcan_data function
