@@ -13,8 +13,8 @@
 #'
 #'To get the table number :\url{https://www150.statcan.gc.ca/n1/en/type/data}
 #'
-#'The second argument, lang, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
-#' Therefore, users can choose if they want to get satistics data table in french or english by seting the lang argument by c("fra", "eng").
+#'The second argument, lang, referes to the language. As Canada is a bilingual country, Statistics Canada displays all data in both languages.
+#' Therefore, users can choose if they want to get satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 #'
 #'
 #' @param tableNumber The table number of the Statistics Canada data table
@@ -59,7 +59,7 @@ sqs_statcan_data <- function(tableNumber, lang){
           exdir = paste0(path,"/temp"))
 
     #load the data file in english version
-    data <- fread(paste0(path,
+    data <- data.table::fread(paste0(path,
                          "/temp/",
                          tableNumber,
                          ".csv"))
@@ -89,7 +89,7 @@ sqs_statcan_data <- function(tableNumber, lang){
           exdir = paste0(path,"/temp"))
 
     #load the data file in french version
-    data <- fread(paste0(path,
+    data <- data.table::fread(paste0(path,
                          "/temp/",
                          tableNumber,
                          ".csv"))
