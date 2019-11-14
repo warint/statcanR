@@ -1,5 +1,7 @@
 ---
 title: "statCanR"
+author: "Thierry Warin"
+data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{statCanR}
