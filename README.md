@@ -15,11 +15,10 @@ and provided by the new Statistics Canada Web Data Service
 
 ## Installation
 
-You can install the released version of statcanR from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the released version of statcanR with devtools.
 
 ``` r
-install.packages("statcanR")
+
 devtools::install_github("https://github.com/warint/statcanR")
 ```
 

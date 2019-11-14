@@ -32,12 +32,12 @@ The _tableNumber_ argument simply referes to the table number of the Statistics 
 
 The second argument, _lang_, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages. Therefore, users can choose if they want to get satistics data table in french or english by seting the _lang_ argument by c("fra", "eng").
 
-The global process of the _sqs_statcan_data_ function:
+The global process of the _sqs_statcan_data()_ function:
 
 First, clean the table number in order to align it with the official complete table number typology of Statistic Canada Web Data Service. Second, create a temporary folder where all the next operations can be done. Third, check and select the correct language asked by the user. Fourth, define the correct 'url' where statistic data table is stored and download the _.Zip_ file from it. Fifth, unzip the previous downloaded _.Zip_ file to get the data and meta data _.csv_ files. Sixth, load the statistics data into a data frame called '_data_' and add the official table indicator name in the new '_INDICATOR_' column.         
   
 
-To go deeper in the _sqs_statcan_data_ function treatment, here is below a line-by-line of code description:   
+To go deeper in the _sqs_statcan_data()_ function treatment, here is below a line-by-line of code description:   
   
   - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
   The first action the function make is to clean the table number gave by user in order to be able to get the complete data table related to the specific indicator the user are looking for. In fact, each Statistics Canada data web page display is an excerpt of the one complete table.
@@ -60,13 +60,13 @@ To go deeper in the _sqs_statcan_data_ function treatment, here is below a line-
   The sixth applying consist to load the statistics data table into a unique data frame. We decide to use the function _fread_ from the _data.table_ package due to the better applied function speed.   
     
   - `data$INDICATOR <- as.character(0)` and `data$INDICATOR <- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])`:
-  The seventh applying of the _sqs_statcan_data_ function consist to add the name of the table extract from the meta data table. 
+  The seventh applying of the _sqs_statcan_data()_ function consist to add the name of the table extract from the meta data table. 
   
   - `unlink(paste0(path,"/temp/"), recursive = TRUE)`:
   The heighth applying allow to remove and delete the temporary folder used to download, unzip, extract and load data for a unique using of the function.
   
   - `return(data)`:
-  Finally, the last line of the _sqs_statcan_data_ function allows to return the value of the function treatment into the IDE.
+  Finally, the last line of the _sqs_statcan_data()_ function allows to return the value of the function treatment into the IDE.
 
 
 
