@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# pkgdown <img src="man/figures/LOGO.png" align="right" />
-
 # statcanR
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis-ci.org/warint/statcanR)
 <!-- badges: end -->
 
 The goal of statcanR is to get all to get all Canadian statistics data
@@ -15,22 +15,18 @@ and provided by the new Statistics Canada Web Data Service
 
 ## Installation
 
-You can install the released version of statcanR with devtools.
+You can install the released version of statcanR from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-
-devtools::install_github("https://github.com/warint/statcanR")
+install.packages("statcanR")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to get Canadian data
 
 ``` r
 library(statcanR)
-data <- sqs_statcan_data("14-10-0063-01", "eng")
+data <- getCansimTbl("14-10-0063-01", "eng")
 ```
-
-## SKEMA Global Lab in AI
-
-For more information on the SKEMA Global Lab in AI or the SKEMA Quantum Studio, you can visit our [website](https://skemagloballab.io/).
