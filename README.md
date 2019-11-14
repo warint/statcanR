@@ -11,7 +11,7 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 
 The goal of statcanR is to get all to get all Canadian statistics data
 (CANSIM tables,now identify by Product IDs (PID)) without any limitation
-and provided by the new Statistics Canada Web Data Service
+and provided by the new Statistics Canada Web Data Service.
 
 ## Installation
 
