@@ -10,4 +10,6 @@ os:
 
 r:
   - 3.6.1
- 
+
+after_success:
+    - Rscript -e 'covr::codecov(type = "all")'

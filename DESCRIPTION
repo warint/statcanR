@@ -13,8 +13,8 @@ RoxygenNote: 6.1.1
 Suggests: 
     knitr,
     rmarkdown,
+    covr
 VignetteBuilder: knitr
 Imports: data.table
 URL: http://github.com/warint/statcanR
 BugReports: https://github.com/warint/statcanR/issues
-
