@@ -8,3 +8,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Test environments
+* Linux & OS (on travis-ci), R 3.6.1
+* Microsoft (on appveyor), R 3.6.1
+* win-builder (release)
+
+## R CMD check results
+There were no ERRORs,WARNINGs or NOTES. 
+
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
