@@ -1,6 +1,6 @@
 Package: statcanR
 Type: Package
-Title: An R Package to access Statistics Canada's Open Data
+Title: An R Package to access Statistics Canada's Open Economic Data
 Version: 0.1.0
 Authors@R: c(
     person("Thierry", "Warin", email = "thierry.warin@skema.edu", role =c("aut", "cre")),
