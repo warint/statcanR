@@ -17,11 +17,11 @@ and provided by the new Statistics Canada Web Data Service.
 
 ## Installation
 
-You can install the released version of statcanR from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the released version of statcanR with devtools.
 
 ``` r
-install.packages("statcanR")
+install.packages("devtools")
+devtools::install_github('warint/statcanR')
 ```
 
 ## Example
@@ -30,5 +30,23 @@ This is a basic example which shows you how to get Canadian data
 
 ``` r
 library(statcanR)
-data <- getCansimTbl("14-10-0063-01", "eng")
+data <- sqs_statcan_data("14-10-0287-03","eng")
 ```
+
+### Why SQS?
+
+SQS stands for SKEMA Quantum Studio, a research and technological
+development centre based in Montreal,Canada, that serves as the engine
+room for the SKEMA Global lab in AI and the SKEMA Business School.
+
+SKEMA Quantum Studio is also a state-of-the-art platform developed by
+our team that enables scholars, students and professors to access one of
+the most powerful analytical tools in higher education. By using data
+science and artificial intelligence within the platform, new theories,
+methods and concepts are being developed to study globalisation,
+innovation and digital transformations that face our society.
+
+To learn more about the SKEMA Quantum Studio and the mission of the
+SKEMA Global Lab in AI, you can visit these following websites :
+[SQS](https://quantumstudio.skemagloballab.io) ; [Global
+Lab](https://skemagloballab.io/)
