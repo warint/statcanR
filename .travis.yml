@@ -15,5 +15,5 @@ r_packages:
   - covr
 
 after_success:
-    - Rscript -e 'covr::codecov(type = "all")'
-    - Rscript -e 'library(covr); codecov()'
+    - Rscript -e 'covr::codecov()'
+    
