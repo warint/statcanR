@@ -31,24 +31,25 @@
 #' datatable <- sqs_statcan_data("14-10-0287-03","eng")
 #'}
 
-# Scrapping function for statcan
+# Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang){
 
-dir_user <- getwd()
+  # identifying the user's current folder
+  dir_user <- getwd()
   setwd(dir_user)
   
-  #table number
+  # identifying the table number
   tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))
 
-  #create path
+  # creating path
   path <- "./"
 
-  #create a temporary folder to work on the collected data
+  # creating a temporary folder to work on the collected data
   dir.create(file.path(path, "temp"))
 
-  #get data in English version
+  # getting data in English version
   if(lang == "eng"){
-    #download the data file in English version
+    # downloading the data file in English version
     urlEng <- paste0("https://www150.statcan.gc.ca/n1/en/tbl/csv/",
                      tableNumber,
                      "-eng.zip")
@@ -56,18 +57,18 @@ dir_user <- getwd()
                   destfile=paste0(path,"/temp/datasetEng.zip"),
                   method="curl")
 
-    #unzip the downloaded data file in English version
+    # unziping the downloaded data file in English version
     utils::unzip(paste0(path, "/temp/datasetEng.zip"),
           exdir = paste0(path,"/temp"))
 
-    #load the data file in English version
+    # loading the data file in English version
     data <- data.table::fread(paste0(path,
                          "/temp/",
                          tableNumber,
                          ".csv"))
 
-    #add to the data.frame or data.table the Official Data Table Indicator
-    #defined by Statitics Canada and based on metadata file.
+    # adding to the data.frame or data.table the Official Data Table Indicator
+    # defined by Statitics Canada and based on metadata file.
     data$INDICATOR <- as.character(0)
     data$INDICATOR <- as.character(utils::read.csv(paste0(path,
                                                    "/temp/",
@@ -76,9 +77,9 @@ dir_user <- getwd()
     )[1,1])
   }
 
-  #get data in French version
+  # getting data in French version
   if(lang == "fra"){
-    #download the data file in French version
+    # downloading the data file in French version
     urlFra <- paste0("https://www150.statcan.gc.ca/n1/fr/tbl/csv/",
                      tableNumber,
                      "-fra.zip")
@@ -86,17 +87,17 @@ dir_user <- getwd()
                   destfile=paste0(path, "/temp/datasetFra.zip"),
                   method="curl")
 
-    #unzip the downloaded data file in French version
+    # unzipping the downloaded data file in French version
     utils::unzip(paste0(path, "/temp/datasetFra.zip"),
           exdir = paste0(path,"/temp"))
 
-    #load the data file in French version
+    # loading the data file in French version
     data <- data.table::fread(paste0(path,
                          "/temp/",
                          tableNumber,
                          ".csv"))
-    #add to the data.frame or data.table the Official Data Table Indicator
-    #defined by Statitics Canada and based on metadata file.
+    # adding to the data.frame or data.table the Official Data Table Indicator
+    # defined by Statitics Canada and based on metadata file.
     data$INDICATEUR <- as.character(0)
     data$INDICATEUR <- as.character(utils::read.csv(paste0(path,
                                                     "/temp/",
@@ -105,10 +106,10 @@ dir_user <- getwd()
     )[1,1])
   }
 
+  # deleting the temp folder
   unlink(paste0(path,"/temp/"), recursive = TRUE)
 
-  #return(data)
-
+   # writing the output file in the user's folder
   utils::write.csv(data, file = "./sqs_statcan_data.csv")
 
 }
