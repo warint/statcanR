@@ -1,11 +1,11 @@
 Package: statcanR
 Type: Package
-Title: Get all Canadian Statistics Data
+Title: An R Package to access Statistics Canada's Open Data
 Version: 0.1.0
 Authors@R: c(
     person("Thierry", "Warin", email = "thierry.warin@skema.edu", role =c("aut", "cre")),
     person("Romain", "Le Duc", role = "aut"))
-Description: The _statcanR_ package is composed of a single function named _sqs_statcan_data()_ allowing to get all to get all Canadian statistics data (CANSIM tables, now identify by Product IDs (PID)) without any limitation and provided by the new Statistics Canada Web Data Service.
+Description: The _statcanR_ package allows an easy connection in R to Statistics Canada's Web Data Service. Open economic data (former CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user<s environment.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
