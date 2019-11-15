@@ -9,8 +9,6 @@
 status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis-ci.org/warint/statcanR)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
-[![Codecov test
-coverage](https://codecov.io/gh/warint/statcanR/branch/master/graph/badge.svg)](https://codecov.io/gh/warint/statcanR?branch=master)
 <!-- badges: end -->
 
 The goal of statcanR is to get all to get all Canadian statistics data
