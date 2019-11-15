@@ -33,20 +33,20 @@
 
 # Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang){
-
+  
   # identifying the user's current folder
   dir_user <- getwd()
   setwd(dir_user)
   
   # identifying the table number
   tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))
-
+  
   # creating path
   path <- "./"
-
+  
   # creating a temporary folder to work on the collected data
   dir.create(file.path(path, "temp"))
-
+  
   # getting data in English version
   if(lang == "eng"){
     # downloading the data file in English version
@@ -54,29 +54,29 @@ sqs_statcan_data <- function(tableNumber, lang){
                      tableNumber,
                      "-eng.zip")
     utils::download.file(urlEng,
-                  destfile=paste0(path,"/temp/datasetEng.zip"),
-                  method="curl")
-
+                         destfile=paste0(path,"/temp/datasetEng.zip"),
+                         method="curl")
+    
     # unziping the downloaded data file in English version
     utils::unzip(paste0(path, "/temp/datasetEng.zip"),
-          exdir = paste0(path,"/temp"))
-
+                 exdir = paste0(path,"/temp"))
+    
     # loading the data file in English version
-    data <- data.table::fread(paste0(path,
-                         "/temp/",
-                         tableNumber,
-                         ".csv"))
-
+    sqs_data <- data.table::fread(paste0(path,
+                                     "/temp/",
+                                     tableNumber,
+                                     ".csv"))
+    
     # adding to the data.frame or data.table the Official Data Table Indicator
     # defined by Statitics Canada and based on metadata file.
-    data$INDICATOR <- as.character(0)
-    data$INDICATOR <- as.character(utils::read.csv(paste0(path,
-                                                   "/temp/",
-                                                   tableNumber,
-                                                   "_MetaData.csv")
+    sqs_data$INDICATOR <- as.character(0)
+    sqs_data$INDICATOR <- as.character(utils::read.csv(paste0(path,
+                                                          "/temp/",
+                                                          tableNumber,
+                                                          "_MetaData.csv")
     )[1,1])
   }
-
+  
   # getting data in French version
   if(lang == "fra"){
     # downloading the data file in French version
@@ -84,32 +84,31 @@ sqs_statcan_data <- function(tableNumber, lang){
                      tableNumber,
                      "-fra.zip")
     utils::download.file(urlFra,
-                  destfile=paste0(path, "/temp/datasetFra.zip"),
-                  method="curl")
-
+                         destfile=paste0(path, "/temp/datasetFra.zip"),
+                         method="curl")
+    
     # unzipping the downloaded data file in French version
     utils::unzip(paste0(path, "/temp/datasetFra.zip"),
-          exdir = paste0(path,"/temp"))
-
+                 exdir = paste0(path,"/temp"))
+    
     # loading the data file in French version
-    data <- data.table::fread(paste0(path,
-                         "/temp/",
-                         tableNumber,
-                         ".csv"))
+    sqs_data <- data.table::fread(paste0(path,
+                                     "/temp/",
+                                     tableNumber,
+                                     ".csv"))
     # adding to the data.frame or data.table the Official Data Table Indicator
     # defined by Statitics Canada and based on metadata file.
-    data$INDICATEUR <- as.character(0)
-    data$INDICATEUR <- as.character(utils::read.csv(paste0(path,
-                                                    "/temp/",
-                                                    tableNumber,
-                                                    "_MetaData.csv")
+    sqs_data$INDICATEUR <- as.character(0)
+    sqs_data$INDICATEUR <- as.character(utils::read.csv(paste0(path,
+                                                           "/temp/",
+                                                           tableNumber,
+                                                           "_MetaData.csv")
     )[1,1])
   }
-
+  
   # deleting the temp folder
   unlink(paste0(path,"/temp/"), recursive = TRUE)
-
-   # writing the output file in the user's folder
-  utils::write.csv(data, file = "./sqs_statcan_data.csv")
-
+  
+  data.table::setDF(return(sqs_data))
+  
 }
