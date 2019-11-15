@@ -3,7 +3,7 @@ Type: Package
 Title: Get all Canadian Statistics Data
 Version: 0.1.0
 Authors@R: c(
-    person("Thierry", "Warin", email = "thierry.warin@skema.edu", role =c("aut", "cre")),
+    person("Thierry", "Warin", email = "martin.paquette@skemagloballab.io", role =c("aut", "cre")),
     person("Romain", "Le Duc", role = "aut"))
 Description: The _statcanR_ package is composed of a single function named _sqs_statcan_data()_ allowing to get all to get all Canadian statistics data (CANSIM tables, now identify by Product IDs (PID)) without any limitation and provided by the new Statistics Canada Web Data Service.
 License: MIT + file LICENSE
@@ -12,9 +12,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
-    rmarkdown,
-    covr,
-    testthat
+    rmarkdown
 VignetteBuilder: knitr
 Imports: data.table
 URL: http://github.com/warint/statcanR
