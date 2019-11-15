@@ -2,14 +2,14 @@
 #' statcanR
 #'
 #'
-#'Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service
+#'An R package to acccess Statistics Canada's open economic data (formerly known as CANSIM tables) now identified by Product IDs (PID) by the new Statistics Canada's Web Data Service
 #'
 #'The
 #'\code{_sqs_statcan_data()_} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}
 #'
 #'
-#'The tableNumber argument simply refers to the table number of the Statistics Canada data table you want to collect,
-#'such as '14-10-0287-03' for the Labour force characteristics by province, monthly, seasonally adjusted_ as an example.
+#'The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
+#'such as '14-10-0287-03' for the Labour force variales by province, monthly, seasonally adjusted_ as an example.
 #'
 #'To get the table number :\url{https://www150.statcan.gc.ca/n1/en/type/data}
 #'
