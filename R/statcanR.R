@@ -65,7 +65,7 @@ sqs_statcan_data <- function(tableNumber, lang){
                          ".csv"))
 
     #add to the data.frame or data.table the Official Data Table Indicator
-    #defined by Statitics Canada and based on meta data file.
+    #defined by Statitics Canada and based on metadata file.
     data$INDICATOR <- as.character(0)
     data$INDICATOR <- as.character(utils::read.csv(paste0(path,
                                                    "/temp/",
@@ -94,7 +94,7 @@ sqs_statcan_data <- function(tableNumber, lang){
                          tableNumber,
                          ".csv"))
     #add to the data.frame or data.table the Official Data Table Indicator
-    #defined by Statitics Canada and based on meta data file.
+    #defined by Statitics Canada and based on metadata file.
     data$INDICATEUR <- as.character(0)
     data$INDICATEUR <- as.character(utils::read.csv(paste0(path,
                                                     "/temp/",
