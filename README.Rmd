@@ -22,12 +22,12 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 <!-- badges: end -->
 
-The goal of the statcanR package is to have access to Statistics Canada's open economic data
-(formerly CANSIM tables, now identified by Product IDs (PID)) in an easy manner using R and following the new Statistics Canada Web Data Service frameowrk.
+The goal of the statcanR package is to access Statistics Canada's open economic data
+(formerly known as CANSIM tables, now identified by Product IDs (PID)) in an easy manner using R and following the new Statistics Canada Web Data Service framework.
 
 ## Installation
 
-You can install the released version of statcanR with devtools.
+The released version of statcanR package is accessible through devtools.
 
 ``` r
 install.packages("devtools")
@@ -46,7 +46,7 @@ mydata <- sqs_statcan_data("14-10-0287-03","eng")
 
 SQS stands for SKEMA Quantum Studio, a research and technological development centre based in Montreal, Canada, that serves as the engine room for the SKEMA Global lab in AI.
 
-SKEMA Quantum Studio is also a state-of-the-art platform developed by our team that enables scholars, students and professors to access one of the most powerful analytical tools in higher education. By using data science and artificial intelligence within the platform, new theories, methods and concepts are being developed to study globalisation, innovation and digital transformations that face our society.  
+SKEMA Quantum Studio is also a state-of-the-art platform developed by our team that enables scholars, students and professors to access one of the most powerful analytical tools in higher education. By using data science and artificial intelligence within the platform, new theories, methods and concepts are being developed to study globalisation, innovation and digital transformations that our society faces.
 
 
-To learn more about the SKEMA Quantum Studio and the mission of the SKEMA Global Lab in AI, you can visit these following websites : [SQS]( https://quantumstudio.skemagloballab.io) ; [Global Lab](https://skemagloballab.io/)
+To learn more about the SKEMA Quantum Studio and the mission of the SKEMA Global Lab in AI, please visit the following websites : [SQS]( https://quantumstudio.skemagloballab.io) ; [Global Lab](https://skemagloballab.io/)
