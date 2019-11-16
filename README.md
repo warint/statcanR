@@ -44,9 +44,9 @@ our team that enables scholars, students and professors to access one of
 the most powerful analytical tools in higher education. By using data
 science and artificial intelligence within the platform, new theories,
 methods and concepts are being developed to study globalisation,
-innovation and digital transformations that face our society.
+innovation and digital transformations that our society faces.
 
 To learn more about the SKEMA Quantum Studio and the mission of the
-SKEMA Global Lab in AI, you can visit these following websites :
+SKEMA Global Lab in AI, please visit the following websites :
 [SQS](https://quantumstudio.skemagloballab.io) ; [Global
 Lab](https://skemagloballab.io/)
