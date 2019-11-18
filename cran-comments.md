@@ -1,3 +1,14 @@
+
+## Resubmission
+
+This is a resubmission. In this version I have :
+
+* Omited some redundancies in the DESCRIPTION file.
+
+* Removed the unnecessary underscores.
+
+* Added the direct link to the Data Service in my vignette. 
+
 ## Test environments
 * local OS X install, R 3.6.1
 * ubuntu 14.04 (on travis-ci), R 3.6.1

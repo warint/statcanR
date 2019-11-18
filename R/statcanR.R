@@ -11,7 +11,7 @@
 #'The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
 #'such as '14-10-0287-03' for the Labour force variales by province, monthly, seasonally adjusted_ as an example.
 #'
-#'To get the table number :\url{https://www150.statcan.gc.ca/n1/en/type/data}
+#'To get the table number: <https://www150.statcan.gc.ca/n1/en/type/data>
 #'
 #'The second argument, lang, referes to the language. As Canada is a bilingual country, Statistics Canada displays all data in both languages.
 #' Therefore, users can choose if they want to get satistics data tables in French or English by setting the lang argument with c("fra", "eng").
