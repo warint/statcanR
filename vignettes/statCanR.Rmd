@@ -39,7 +39,7 @@ The code architecture of the sqs_statcan_data() function is the following one:
 The first step if to clean the table number in order to align it with the official typology of Statistic Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called '_sqs_data_' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
-To be more precise about the _sqs_statcan_data()_ function, here is below a further ode description:   
+To be more precise about the _sqs_statcan_data()_ function, here is below a further code description:   
   
   - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
   The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table.
