@@ -36,7 +36,7 @@ data <- sqs_statcan_data("14-10-0287-03","eng")
 ### Why SQS?
 
 SQS stands for SKEMA Quantum Studio, a research and technological
-development centre based in Montreal,Canada, that serves as the engine
+development centre based in Montreal, Canada, that serves as the engine
 room for the SKEMA Global lab in AI and the SKEMA Business School.
 
 SKEMA Quantum Studio is also a state-of-the-art platform developed by
