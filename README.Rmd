@@ -46,7 +46,7 @@ Once the table number is identified, the sqs_statcan_data() function is easy to 
 
 ``` r
 library(statcanR)
-mydata <- sqs_statcan_data("14-10-0287-03","eng")
+mydata <- sqs_statcan_data("14-10-0063-01","eng")
 ```
 ### Why SQS?
 

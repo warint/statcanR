@@ -47,7 +47,7 @@ is easy to use in order to collect the data, as following:
 
 ``` r
 library(statcanR)
-mydata <- sqs_statcan_data("14-10-0287-03","eng")
+mydata <- sqs_statcan_data("14-10-0063-01","eng")
 ```
 
 ### Why SQS?
