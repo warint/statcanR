@@ -5,22 +5,24 @@
 #'This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 #'
 #'The
-#'\code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}
+#'\code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}.
 #'
 #'
-#'The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
-#'such as '14-10-0287-03' for the Labour force variales by province, monthly, seasonally adjusted_ as an example.
+#'The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect, 
+#'such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
 #'
-#'To get the table number: <https://www150.statcan.gc.ca/n1/en/type/data>
 #'
-#'The second argument, lang, referes to the language. As Canada is a bilingual country, Statistics Canada displays all data in both languages.
-#' Therefore, users can choose if they want to get satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+#'To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
+#'
+#'The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
+#'Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+#' 
 #'
 #'
 #' @param tableNumber The table number of the Statistics Canada data table
 #' @param lang The language wanted
 #'
-#' @return The output will be a data table representing the data associated with the chosen table number
+#' @return The output will be a data table representing the data associated with the chosen table number.
 #' @export
 #'
 #'@import data.table

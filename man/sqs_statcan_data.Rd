@@ -12,22 +12,22 @@ sqs_statcan_data(tableNumber, lang)
 \item{lang}{The language wanted}
 }
 \value{
-The output will be a data table representing the data associated with the chosen table number
+The output will be a data table representing the data associated with the chosen table number.
 }
 \description{
-Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service
+This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 }
 \details{
 The
-\code{_sqs_statcan_data_} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}
+\code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}.
 
-The tableNumber argument simply referes to the table number of the Statistics Canada data table you want to collect,
-such as '14-10-0287-03' for the Labour force characteristics by province, monthly, seasonally adjusted_ as an example.
+The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect, 
+such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
 
-To get the table number :\url{https://www150.statcan.gc.ca/n1/en/type/data}
+To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
 
-The second argument, lang, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
-Therefore, users can choose if they want to get satistics data table in french or english by seting the lang argument by c("fra", "eng").
+The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
+Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 }
 \examples{
 \dontrun{

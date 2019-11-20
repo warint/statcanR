@@ -66,4 +66,4 @@ innovation and digital transformations that our society faces.
 To learn more about the SKEMA Quantum Studio and the mission of the
 SKEMA Global Lab in AI, please visit the following websites :
 [SQS](https://quantumstudio.skemagloballab.io) ; [Global
-Lab](https://skemagloballab.io/)
+Lab](https://skemagloballab.io/).

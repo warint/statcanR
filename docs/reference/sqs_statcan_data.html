@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="statcanR — sqs_statcan_data" />
-<meta property="og:description" content="Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service" />
+<meta property="og:description" content="This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,7 +123,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Get all Canadian statistics data (CANSIM tables) now identify by Product IDs (PID) by the new Statistics Canada Web Data Service</p>
+    <p>This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sqs_statcan_data</span>(<span class='no'>tableNumber</span>, <span class='no'>lang</span>)</pre>
@@ -143,16 +143,16 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The output will be a data table representing the data associated with the chosen table number</p>
+    <p>The output will be a data table representing the data associated with the chosen table number.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The
-<code>_sqs_statcan_data_</code> function has 2 arguments to fulfill to get data: tableNumber &amp; lang</p>
-<p>The tableNumber argument simply referes to the table number of the Statistics Canada data table you want to collect,
-such as '14-10-0287-03' for the Labour force characteristics by province, monthly, seasonally adjusted_ as an example.</p>
-<p>To get the table number :<a href='https://www150.statcan.gc.ca/n1/en/type/data'>https://www150.statcan.gc.ca/n1/en/type/data</a></p>
-<p>The second argument, lang, referes to the language. As Canada is a billingual country (french speaking in Quebec and english speaking in the other provinces), Statistics Canada display all Statistics Data in both languages.
-Therefore, users can choose if they want to get satistics data table in french or english by seting the lang argument by c("fra", "eng").</p>
+<code>sqs_statcan_data()</code> function has 2 arguments to fulfill to get data: tableNumber &amp; lang.</p>
+<p>The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect, 
+such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.</p>
+<p>To get the table number: <a href='https://www150.statcan.gc.ca/n1/en/type/data'>https://www150.statcan.gc.ca/n1/en/type/data</a>.</p>
+<p>The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
+Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
