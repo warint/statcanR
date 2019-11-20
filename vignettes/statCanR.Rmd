@@ -30,13 +30,13 @@ In details, the sqs_statcan_data() function has 2 arguments:
   2. lang
   
   
-The _tableNumber_ argument simply referes to the table number of the Statistics Canada data table a user wants to collect, such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
+The 'tableNumber' argument simply referes to the table number of the Statistics Canada data table a user wants to collect, such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
 
-The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic Data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic Data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
 The code architecture of the sqs_statcan_data() function is the following one:
 
-The first step if to clean the table number in order to align it with the official typology of Statistic Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called '_sqs_data_' and to add the official table indicator name in the new 'INDICATOR' column.         
+The first step if to clean the table number in order to align it with the official typology of Statistic Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'sqs_data' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
 To be more precise about the _sqs_statcan_data()_ function, here is below a further ode description:   
@@ -74,14 +74,14 @@ To be more precise about the _sqs_statcan_data()_ function, here is below a furt
 
 # Practical usage
 
-This section presents an example of how to use the _statcanR_ R package and its function sqs_statcan_data().    
+This section presents an example of how to use the statcanR R package and its function sqs_statcan_data().    
   
 
 The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian Labour Force at the federal, provincial and industrial levels, on a monthly basis.  
 
 With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '14-10-0063-01' for the Employee wages by industry, monthly, unadjusted for seasonality at the ferederal and provincial levels.
 
-Once the table number is identified, the _sqs_statcan_data()_ function is easy to use in order to collect the data, as following:  
+Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:  
   
 ```{r, eval=FALSE}
 # Get data with sqs_statcan_data function
