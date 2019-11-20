@@ -30,9 +30,13 @@ In details, the sqs_statcan_data() function has 2 arguments:
   2. lang
   
   
+<<<<<<< HEAD
 The tableNumber argument simply referes to the table number of the Statistics Canada data table a user wants to collect, such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
+=======
+The 'tableNumber' argument simply referes to the table number of the Statistics Canada data table a user wants to collect, such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
+>>>>>>> 6bd1020c584d751adf2c41ddc8df5697086d0ed0
 
-The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic Data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic Data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
 The code architecture of the sqs_statcan_data() function is the following one:
 

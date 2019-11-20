@@ -11,13 +11,14 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 <!-- badges: end -->
 
-The goal of statcanR is to get all to get all Canadian statistics data
-(CANSIM tables,now identify by Product IDs (PID)) without any limitation
-and provided by the new Statistics Canada Web Data Service.
+This client allows an easy connection with R to Statistics Canada’s Web
+Data Service. Open economic data (formerly known as CANSIM tables, now
+identified by Product IDs (PID)) are accessible as a data frame,
+directly in the user’s R environment.
 
 ## Installation
 
-You can install the released version of statcanR with devtools.
+The released version of statcanR package is accessible through devtools.
 
 ``` r
 install.packages("devtools")
@@ -26,18 +27,34 @@ devtools::install_github('warint/statcanR')
 
 ## Example
 
-This is a basic example which shows you how to get Canadian data
+This section presents an example of how to use the statcanR R package
+and its function sqs\_statcan\_data().
+
+The following example is provided to illustrate how to use the function.
+It consists in collecting some descriptive statistics about the Canadian
+Labour Force at the federal, provincial and industrial levels, on a
+monthly basis.
+
+With a simple web search ‘statistics canada wages by industry
+metropolitan area monthly’, the table number can easily be found on
+Statisitcs Canada’s webpage. Here is below a figure that illustrates
+this example, such as ‘14-10-0063-01’ for the Employee wages by
+industry, monthly, unadjusted for seasonality at the ferederal and
+provincial levels.
+
+Once the table number is identified, the sqs\_statcan\_data() function
+is easy to use in order to collect the data, as following:
 
 ``` r
 library(statcanR)
-data <- sqs_statcan_data("14-10-0287-03","eng")
+mydata <- sqs_statcan_data("14-10-0287-03","eng")
 ```
 
 ### Why SQS?
 
 SQS stands for SKEMA Quantum Studio, a research and technological
-development centre based in Montreal,Canada, that serves as the engine
-room for the SKEMA Global lab in AI and the SKEMA Business School.
+development centre based in Montreal, Canada, that serves as the engine
+room for the SKEMA Global lab in AI.
 
 SKEMA Quantum Studio is also a state-of-the-art platform developed by
 our team that enables scholars, students and professors to access one of

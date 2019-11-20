@@ -22,8 +22,7 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 <!-- badges: end -->
 
-The goal of the statcanR package is to access Statistics Canada's open economic data
-(formerly known as CANSIM tables, now identified by Product IDs (PID)) in an easy manner using R and following the new Statistics Canada Web Data Service framework.
+This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 
 ## Installation
 
@@ -36,7 +35,14 @@ devtools::install_github('warint/statcanR')
 
 ## Example
 
-This is a basic example that shows how to create a data frame directly from a Statistics Canada's economic indicator:
+This section presents an example of how to use the statcanR R package and its function sqs_statcan_data().    
+  
+
+The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian Labour Force at the federal, provincial and industrial levels, on a monthly basis.  
+
+With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '14-10-0063-01' for the Employee wages by industry, monthly, unadjusted for seasonality at the ferederal and provincial levels.
+
+Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:
 
 ``` r
 library(statcanR)
