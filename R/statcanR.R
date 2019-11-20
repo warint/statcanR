@@ -2,7 +2,7 @@
 #' statcanR
 #'
 #'
-#'An R package to acccess Statistics Canada's open economic data (formerly known as CANSIM tables) now identified by Product IDs (PID) by the new Statistics Canada's Web Data Service
+#'This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 #'
 #'The
 #'\code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}
