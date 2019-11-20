@@ -3,11 +3,11 @@
 
 This is a resubmission. In this version I have :
 
-* Omited some redundancies in the DESCRIPTION file.
+* Put the Title field in title case.
 
-* Removed the unnecessary underscores.
+* Omitted the redundancies in the Title fied and the Description field.
 
-* Added the direct link to the Data Service in my vignette. 
+* Added reference in the Description field by joining the DOI . 
 
 ## Test environments
 * local OS X install, R 3.6.1
