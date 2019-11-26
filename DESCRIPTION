@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Thierry", "Warin", email = "thierry.warin@skema.edu", role =c("aut", "cre")),
     person("Romain", "Le Duc", role = "aut"))
-Description: This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+Description: An easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
     Warin, Le Duc (2019) <doi:10.6084/m9.figshare.10544735>.
 License: MIT + file LICENSE
 Encoding: UTF-8

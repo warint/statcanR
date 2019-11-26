@@ -15,7 +15,7 @@ sqs_statcan_data(tableNumber, lang)
 The output will be a data table representing the data associated with the chosen table number.
 }
 \description{
-This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+Allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 }
 \details{
 The
@@ -30,7 +30,6 @@ The second argument, lang, refers to the language. As Canada is a bilingual coun
 Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 }
 \examples{
-\dontrun{
-datatable <- sqs_statcan_data("14-10-0287-03","eng")
-}
+mydata <- sqs_statcan_data("14-10-0287-03","eng")
+
 }

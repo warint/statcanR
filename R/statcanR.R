@@ -2,7 +2,7 @@
 #' statcanR
 #'
 #'
-#'This client allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+#'Allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 #'
 #'The
 #'\code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}.
@@ -25,13 +25,12 @@
 #' @return The output will be a data table representing the data associated with the chosen table number.
 #' @export
 #'
-#'@import data.table
+#' @import data.table
 #'
 #'
 #' @examples
-#' \dontrun{
-#' datatable <- sqs_statcan_data("14-10-0287-03","eng")
-#'}
+#' mydata <- sqs_statcan_data("14-10-0287-03","eng")
+#'
 
 # Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang){
