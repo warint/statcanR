@@ -35,9 +35,6 @@
 # Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang){
   
-  # identifying the user's current folder
-  dir_user <- getwd()
-  setwd(dir_user)
   
   # identifying the table number
   tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))

@@ -3,6 +3,8 @@
 
 # statcanR
 
+# <img src="man/figures/LOGO.png" align="right" />
+
 <!-- badges: start -->
 
 [![Travis build
@@ -67,3 +69,24 @@ To learn more about the SKEMA Quantum Studio and the mission of the
 SKEMA Global Lab in AI, please visit the following websites :
 [SQS](https://quantumstudio.skemagloballab.io) ; [Global
 Lab](https://skemagloballab.io/).
+
+### Attribution
+
+Acknowledgment of Source according to Statistics Canada Open Licence
+Agreement :
+
+  - You shall include and maintain the following notice on all licensed
+    rights of the Information:
+    
+      - Source: Statistics Canada, name of product, reference date.
+        Reproduced and distributed on an “as is” basis with the
+        permission of Statistics Canada.
+
+  - Where any Information is contained within a Value-added Product, you
+    shall include on such Value-added Product the following notice:
+    
+      - Adapted from Statistics Canada, name of product, reference date.
+        This does not constitute an endorsement by Statistics Canada of
+        this product.
+
+### Cite statcanR
