@@ -90,3 +90,18 @@ Agreement :
         this product.
 
 ### Cite statcanR
+
+To cite stantcanR package in your work:
+
+Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics
+Canada’s Open Economic Data. v0.1.0.
+
+``` r
+@Manual{R-statcanR,
+   title = {statcanR: Client for Statistics Canada's Open Economic Data},
+   author = {Thierry Warin and Romain {Le Duc}},
+   note = {R package version 0.1.0},
+   url = {http://github.com/warint/statcanR},
+   year = {2019},
+ }
+```
