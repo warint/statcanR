@@ -62,7 +62,7 @@ SKEMA Quantum Studio is also a state-of-the-art platform developed by our team t
 
 To learn more about the SKEMA Quantum Studio and the mission of the SKEMA Global Lab in AI, please visit the following websites : [SQS]( https://quantumstudio.skemagloballab.io) ; [Global Lab](https://skemagloballab.io/).
 
-### Attribution
+### Credits
 
 Acknowledgment of Source according to Statistics Canada Open Licence Agreement :
 

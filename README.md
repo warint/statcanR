@@ -70,7 +70,7 @@ SKEMA Global Lab in AI, please visit the following websites :
 [SQS](https://quantumstudio.skemagloballab.io) ; [Global
 Lab](https://skemagloballab.io/).
 
-### Attribution
+### Credits
 
 Acknowledgment of Source according to Statistics Canada Open Licence
 Agreement :
