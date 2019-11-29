@@ -70,10 +70,25 @@ SKEMA Global Lab in AI, please visit the following websites :
 [SQS](https://quantumstudio.skemagloballab.io) ; [Global
 Lab](https://skemagloballab.io/).
 
-### Credits
+### Statistics Canada Open Licence
 
-Acknowledgment of Source according to Statistics Canada Open Licence
-Agreement :
+This licence is issued on behalf of Her Majesty the Queen in Right of
+Canada, as represented by the Minister for Statistics Canada
+(“Statistics Canada”) to you (an individual or a legal entity that you
+are authorized to represent).
+
+Statistics Canada may modify this licence at any time, and such
+modifications shall be effective immediately upon posting of the
+modified licence on the Statistics Canada website. Your use of the
+Information will be governed by the terms of the licence in force as of
+the date and time you accessed the Information.
+
+Please refer to the [terms of
+licence](https://www.statcan.gc.ca/eng/reference/licence) before using
+the
+Information.
+
+### Acknowledgment of Source according to Statistics Canada Open Licence Agreement :
 
   - You shall include and maintain the following notice on all licensed
     rights of the Information:

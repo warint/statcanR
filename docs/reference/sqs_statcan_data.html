@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="statcanR — sqs_statcan_data" />
-<meta property="og:description" content="Allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment." />
+<meta property="og:description" content="Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,7 +123,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.</p>
+    <p>Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sqs_statcan_data</span>(<span class='no'>tableNumber</span>, <span class='no'>lang</span>)</pre>
@@ -148,14 +148,14 @@
 
     <p>The
 <code>sqs_statcan_data()</code> function has 2 arguments to fulfill to get data: tableNumber &amp; lang.</p>
-<p>The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect, 
+<p>The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
 such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.</p>
 <p>To get the table number: <a href='https://www150.statcan.gc.ca/n1/en/type/data'>https://www150.statcan.gc.ca/n1/en/type/data</a>.</p>
 <p>The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
 Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mydata</span> <span class='kw'>&lt;-</span> <span class='fu'>sqs_statcan_data</span>(<span class='st'>"14-10-0287-03"</span>,<span class='st'>"eng"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>mydata</span> <span class='kw'>&lt;-</span> <span class='fu'>sqs_statcan_data</span>(<span class='st'>"14-10-0287-03"</span>, <span class='st'>"eng"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

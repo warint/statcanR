@@ -2,3 +2,4 @@
 
 export(sqs_statcan_data)
 import(data.table)
+import(downloader)

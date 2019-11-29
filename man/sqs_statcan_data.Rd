@@ -15,13 +15,13 @@ sqs_statcan_data(tableNumber, lang)
 The output will be a data table representing the data associated with the chosen table number.
 }
 \description{
-Allows an easy connection with R to Statistics Canada's Web Data Service. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
 }
 \details{
 The
 \code{sqs_statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}.
 
-The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect, 
+The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
 such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
 
 To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
@@ -30,6 +30,9 @@ The second argument, lang, refers to the language. As Canada is a bilingual coun
 Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 }
 \examples{
-mydata <- sqs_statcan_data("14-10-0287-03","eng")
+mydata <- sqs_statcan_data("14-10-0287-03", "eng")
+
+
+
 
 }
