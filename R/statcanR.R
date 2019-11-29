@@ -36,7 +36,7 @@
 #'
 #' 
 
- # Scraping function for statcan
+# Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang) {
   
   
@@ -51,18 +51,17 @@ sqs_statcan_data <- function(tableNumber, lang) {
       tableNumber,
       "-eng.zip"
     )
-    downloader::download(urlEng, paste0(tempdir(), "/datasetEng.zip"), mode = "wb")
+    
+    download_dir <- file.path(tempdir(), "datasetEng.zip")
+    downloader::download(urlEng, download_dir, mode = "wb")
     
     # unziping the downloaded data file in English version
-    utils::unzip(zipfile = paste0(tempdir(), "/datasetEng.zip"), exdir = paste0(tempdir(), "/"))
+    unzip_dir <- file.path(paste0(tempdir(), "/"))
+    utils::unzip(zipfile = download_dir, exdir = unzip_dir)
     
     # loading the data file in English version
-    sqs_data <- data.table::fread(paste0(
-      tempdir(),
-      "/",
-      tableNumber,
-      ".csv"
-    ))
+    csv_file <- file.path(paste0(tempdir(),"/",tableNumber,".csv"))
+    sqs_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table Indicator
     # defined by Statitics Canada and based on metadata file.
@@ -83,19 +82,16 @@ sqs_statcan_data <- function(tableNumber, lang) {
       tableNumber,
       "-fra.zip"
     )
-    
-    downloader::download(urlFra, paste0(tempdir(), "/datasetFra.zip"), mode = "wb")
+    download_dir <- file.path(tempdir(), "datasetFra.zip")
+    downloader::download(urlFra, download_dir, mode = "wb")
     
     # unzipping the downloaded data file in French version
-    utils::unzip(zipfile = paste0(tempdir(), "/datasetFra.zip"), exdir = paste0(tempdir(), "/"))
+    unzip_dir <- file.path(paste0(tempdir(), "/"))
+    utils::unzip(zipfile = download_dir, exdir = unzip_dir)
     
     # loading the data file in French version
-    sqs_data <- data.table::fread(paste0(
-      tempdir(),
-      "/",
-      tableNumber,
-      ".csv"
-    ))
+    csv_file <- file.path(paste0(tempdir(),"/",tableNumber,".csv"))
+    sqs_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table Indicator
     # defined by Statitics Canada and based on metadata file.
@@ -109,7 +105,7 @@ sqs_statcan_data <- function(tableNumber, lang) {
   }
   
   # deleting the temp folder
-  unlink(tempdir(), recursive = TRUE)
+  unlink(unzip_dir, recursive = TRUE)
   
   data.table::setDF(return(sqs_data))
 }
