@@ -27,12 +27,14 @@ such as '14-10-0287-03' for the labour force variables by province, monthly, sea
 To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
 
 The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
-Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').
 }
 \examples{
-mydata <- sqs_statcan_data("14-10-0287-03", "eng")
+mydata <- sqs_statcan_data('14-10-0287-03', 'eng')
 
 
 
 
+
+# Scraping function for statcan
 }

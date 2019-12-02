@@ -13,10 +13,10 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 <!-- badges: end -->
 
-Allows an easy connection with R to Statistics Canada’s Web Data
-Service. Open economic data (formerly known as CANSIM tables, now
-identified by Product IDs (PID)) are accessible as a data frame,
-directly in the user’s R environment.
+Easily connect to Statistics Canada’s Web Data Service with R. Open
+economic data (formerly known as CANSIM tables, now identified by
+Product IDs (PID)) are accessible as a data frame, directly in the
+user’s R environment.
 
 ## Installation
 
@@ -88,21 +88,22 @@ licence](https://www.statcan.gc.ca/eng/reference/licence) before using
 the
 Information.
 
-### Acknowledgment of Source according to Statistics Canada Open Licence Agreement :
+##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
 
-  - You shall include and maintain the following notice on all licensed
-    rights of the Information:
-    
-      - Source: Statistics Canada, name of product, reference date.
-        Reproduced and distributed on an “as is” basis with the
-        permission of Statistics Canada.
+Statistics Canada has a specific procedure regarding the ackowledgment
+of source :
 
-  - Where any Information is contained within a Value-added Product, you
-    shall include on such Value-added Product the following notice:
-    
-      - Adapted from Statistics Canada, name of product, reference date.
-        This does not constitute an endorsement by Statistics Canada of
-        this product.
+You shall include and maintain the following notice on all licensed
+rights of the
+    Information:
+
+    Source: Statistics Canada, name of product, reference date. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
+
+Where any Information is contained within a Value-added Product, you
+shall include on such Value-added Product the following
+    notice:
+
+    Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.
 
 ### Cite statcanR
 
@@ -120,3 +121,10 @@ Canada’s Open Economic Data. v0.1.0.
    year = {2019},
  }
 ```
+
+### Acknowledgments
+
+The authors would like to thank the Center for Interuniversity Research
+and Analysis of Organizations (CIRANO, Montreal) for its support, as
+well as Thibault Senegas, Marine Leroi and Martin Paquette at SKEMA
+Global Lab in AI. However, errors and omissions are ours.

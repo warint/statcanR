@@ -52,7 +52,6 @@ mydata <- sqs_statcan_data("14-10-0063-01","eng")
 ```
 
 
-
 ### Why SQS?
 
 SQS stands for SKEMA Quantum Studio, a research and technological development centre based in Montreal, Canada, that serves as the engine room for the SKEMA Global lab in AI.
@@ -72,16 +71,17 @@ Statistics Canada may modify this licence at any time, and such modifications sh
 Please refer to the [terms of licence](https://www.statcan.gc.ca/eng/reference/licence) before using the Information.
 
 
-### Acknowledgment of Source according to Statistics Canada Open Licence Agreement :
+##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
 
- - You shall include and maintain the following notice on all licensed rights of the Information:
+Statistics Canada has a specific procedure regarding the ackowledgment of source : 
 
-    * Source: Statistics Canada, name of product, reference date. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
+You shall include and maintain the following notice on all licensed rights of the Information:
 
-    
- - Where any Information is contained within a Value-added Product, you shall include on such Value-added Product the following notice:
+    Source: Statistics Canada, name of product, reference date. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
 
-    * Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.
+Where any Information is contained within a Value-added Product, you shall include on such Value-added Product the following notice:
+
+    Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.
 
 ### Cite statcanR
 
@@ -100,6 +100,6 @@ Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics Canada's Open E
 ```
 
 
+### Acknowledgments
 
-
-
+The authors would like to thank the Center for Interuniversity Research and Analysis of Organizations (CIRANO, Montreal) for its support, as well as Thibault Senegas, Marine Leroi and Martin Paquette at SKEMA Global Lab in AI. However, errors and omissions are ours.
