@@ -36,7 +36,9 @@
 #'
 #'
 #'
-#' # Scraping function for statcan
+#' 
+
+# Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang)
 {
     

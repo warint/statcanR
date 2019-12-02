@@ -36,5 +36,5 @@ mydata <- sqs_statcan_data('14-10-0287-03', 'eng')
 
 
 
-# Scraping function for statcan
+
 }

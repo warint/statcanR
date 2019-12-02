@@ -29,7 +29,7 @@ statcanR provides the R user with a consistent process to collect data from Stat
 
 First, install statcanR:
 
-```{r}
+```{r, eval=FALSE}
 devtools::install_github("warint/statcanR")
 ```
 
