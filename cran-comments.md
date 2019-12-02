@@ -3,11 +3,16 @@
 
 This is a resubmission. In this version I have :
 
-* Put the Title field in title case.
+* Omitted the redundancies in the Description field.
 
-* Omitted the redundancies in the Title fied and the Description field.
+* Deleted the \dontrun{} in our example as recommended. 
 
-* Added reference in the Description field by joining the DOI . 
+* Modified our code so that the function does not write by default in the user's home filespace . To do so, I omitted all default path = 
+getwd() in the function.
+
+* Modified the vignettes so it can reflect our modifications in our code.
+
+* Added information in the README.Rmd regarding references and acknowledgment.
 
 ## Test environments
 * local OS X install, R 3.6.1
