@@ -52,24 +52,6 @@ library(statcanR)
 mydata <- sqs_statcan_data("14-10-0063-01","eng")
 ```
 
-### Why SQS?
-
-SQS stands for SKEMA Quantum Studio, a research and technological
-development centre based in Montreal, Canada, that serves as the engine
-room for the SKEMA Global lab in AI.
-
-SKEMA Quantum Studio is also a state-of-the-art platform developed by
-our team that enables scholars, students and professors to access one of
-the most powerful analytical tools in higher education. By using data
-science and artificial intelligence within the platform, new theories,
-methods and concepts are being developed to study globalisation,
-innovation and digital transformations that our society faces.
-
-To learn more about the SKEMA Quantum Studio and the mission of the
-SKEMA Global Lab in AI, please visit the following websites :
-[SQS](https://quantumstudio.skemagloballab.io) ; [Global
-Lab](https://skemagloballab.io/).
-
 ### Statistics Canada Open Licence
 
 This licence is issued on behalf of Her Majesty the Queen in Right of
@@ -121,6 +103,24 @@ Canada’s Open Economic Data. v0.1.0.
    year = {2019},
  }
 ```
+
+### Why SQS?
+
+SQS stands for SKEMA Quantum Studio, a research and technological
+development centre based in Montreal, Canada, that serves as the engine
+room for the SKEMA Global lab in AI.
+
+SKEMA Quantum Studio is also a state-of-the-art platform developed by
+our team that enables scholars, students and professors to access one of
+the most powerful analytical tools in higher education. By using data
+science and artificial intelligence within the platform, new theories,
+methods and concepts are being developed to study globalisation,
+innovation and digital transformations that our society faces.
+
+To learn more about the SKEMA Quantum Studio and the mission of the
+SKEMA Global Lab in AI, please visit the following websites :
+[SQS](https://quantumstudio.skemagloballab.io) ; [Global
+Lab](https://skemagloballab.io/).
 
 ### Acknowledgments
 
