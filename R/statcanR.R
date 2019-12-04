@@ -9,7 +9,7 @@
 #'
 #'
 #' The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
-#' such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
+#' such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives, as an example.
 #'
 #'
 #' To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
@@ -30,7 +30,7 @@
 #'
 #'
 #' @examples
-#' mydata <- sqs_statcan_data('14-10-0287-03', 'eng')
+#' mydata <- sqs_statcan_data('27-10-0014-01', 'eng')
 #'
 #'
 #'

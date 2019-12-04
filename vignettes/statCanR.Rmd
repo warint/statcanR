@@ -47,13 +47,13 @@ This section presents an example of how to use the statcanR R package and its fu
 
 The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.  
 
-With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '14-10-0063-01' for the Employee wages by industry, monthly, unadjusted for seasonality at the ferederal and provincial levels.
+With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives.
 
 Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:  
   
 ```{r, eval=FALSE}
 # Get data with sqs_statcan_data function
-mydata <- sqs_statcan_data("14-10-0063-01", "eng")
+mydata <- sqs_statcan_data("27-10-0014-01", "eng")
 ```
 
 Should you want the same data in French, just replace the argument at the end of the function with "fra".
@@ -68,7 +68,7 @@ In details, the sqs_statcan_data() function has 2 arguments:
   2. lang
   
 
-The 'tableNumber' argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as '14-10-0287-03' for the labour force variables by province, monthly, seasonally adjusted, as an example.
+The 'tableNumber' argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives, as an example.
 
 
 The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").

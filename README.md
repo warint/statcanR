@@ -40,16 +40,15 @@ monthly basis.
 With a simple web search ‘statistics canada wages by industry
 metropolitan area monthly’, the table number can easily be found on
 Statisitcs Canada’s webpage. Here is below a figure that illustrates
-this example, such as ‘14-10-0063-01’ for the Employee wages by
-industry, monthly, unadjusted for seasonality at the ferederal and
-provincial levels.
+this example, such as ‘27-10-0014-01’ for the Federal expenditures on
+science and technology, by socio-economic objectives.
 
 Once the table number is identified, the sqs\_statcan\_data() function
 is easy to use in order to collect the data, as following:
 
 ``` r
 library(statcanR)
-mydata <- sqs_statcan_data("14-10-0063-01","eng")
+mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
 ### Statistics Canada Open Licence

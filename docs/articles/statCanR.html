@@ -109,10 +109,10 @@
 <a href="#practical-usage" class="anchor"></a>Practical usage</h1>
 <p>This section presents an example of how to use the statcanR R package and its function sqs_statcan_data().</p>
 <p>The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.</p>
-<p>With a simple web search ‘statistics canada wages by industry metropolitan area monthly’, the table number can easily be found on Statisitcs Canada’s webpage. Here is below a figure that illustrates this example, such as ‘14-10-0063-01’ for the Employee wages by industry, monthly, unadjusted for seasonality at the ferederal and provincial levels.</p>
+<p>With a simple web search ‘statistics canada wages by industry metropolitan area monthly’, the table number can easily be found on Statisitcs Canada’s webpage. Here is below a figure that illustrates this example, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives.</p>
 <p>Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Get data with sqs_statcan_data function</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">mydata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sqs_statcan_data.html">sqs_statcan_data</a></span>(<span class="st">"14-10-0063-01"</span>, <span class="st">"eng"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb4-2" data-line-number="2">mydata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sqs_statcan_data.html">sqs_statcan_data</a></span>(<span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span>)</a></code></pre></div>
 <p>Should you want the same data in French, just replace the argument at the end of the function with “fra”.</p>
 <div id="code-architecture" class="section level2">
 <h2 class="hasAnchor">
@@ -123,7 +123,7 @@
 <li>tableNumber</li>
 <li>lang</li>
 </ol>
-<p>The ‘tableNumber’ argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as ‘14-10-0287-03’ for the labour force variables by province, monthly, seasonally adjusted, as an example.</p>
+<p>The ‘tableNumber’ argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives, as an example.</p>
 <p>The second argument, ‘lang’, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c(“fra”, “eng”).</p>
 <p>The code architecture of the sqs_statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada’s Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata from the .csv files. The final step is to load the statistics data into a data frame called ‘sqs_data’ and to add the official table indicator name in the new ‘INDICATOR’ column.</p>
 <p>To be more precise about the sqs_statcan_data() function, here is below some further code description:</p>
