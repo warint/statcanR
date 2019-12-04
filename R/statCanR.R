@@ -54,7 +54,7 @@ sqs_statcan_data <- function(tableNumber, lang)
                      tableNumber, "-eng.zip")
 
     download_dir <- file.path(tempdir(), "datasetEng.zip")
-    data.table::fread("curl urlEng | tar -xf- --to-stdout download_dir")
+    base::download.file(urlEng, download_dir)
     
     # unziping the downloaded data file in English version
     unzip_dir <- file.path(paste0(tempdir(), "/"))
@@ -80,7 +80,7 @@ sqs_statcan_data <- function(tableNumber, lang)
                      tableNumber, "-fra.zip")
     
     download_dir <- file.path(tempdir(), "datasetFra.zip")
-    data.table::fread("curl urlFra | tar -xf- --to-stdout download_dir")
+    base::download.file(urlFra, download_dir)
     
     # unzipping the downloaded data file in French version
     unzip_dir <- file.path(paste0(tempdir(), "/"))
