@@ -3,16 +3,7 @@
 
 This is a resubmission. In this version I have :
 
-* Omitted the redundancies in the Description field.
-
-* Deleted the \dontrun{} in our example as recommended. 
-
-* Modified our code so that the function does not write by default in the user's home filespace . To do so, I omitted all default path = 
-getwd() in the function.
-
-* Modified the vignettes so it can reflect our modifications in our code.
-
-* Added information in the README.Rmd regarding references and acknowledgment.
+* Replaced the downloader package by the curl package  to match win-builder requirements.
 
 ## Test environments
 * local OS X install, R 3.6.1
