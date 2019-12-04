@@ -26,7 +26,6 @@
 #' @export
 #'
 #' @import  data.table
-#' @import  downloader
 #'
 #'
 #' @examples
@@ -53,9 +52,9 @@ sqs_statcan_data <- function(tableNumber, lang)
     # downloading the data file in English version
     urlEng <- paste0("https://www150.statcan.gc.ca/n1/en/tbl/csv/", 
                      tableNumber, "-eng.zip")
-    
+
     download_dir <- file.path(tempdir(), "datasetEng.zip")
-    downloader::download(urlEng, download_dir, mode = "wb")
+    data.table::fread("curl urlEng | tar -xf- --to-stdout download_dir")
     
     # unziping the downloaded data file in English version
     unzip_dir <- file.path(paste0(tempdir(), "/"))
@@ -81,7 +80,7 @@ sqs_statcan_data <- function(tableNumber, lang)
                      tableNumber, "-fra.zip")
     
     download_dir <- file.path(tempdir(), "datasetFra.zip")
-    downloader::download(urlFra, download_dir, mode = "wb")
+    data.table::fread("curl urlFra | tar -xf- --to-stdout download_dir")
     
     # unzipping the downloaded data file in French version
     unzip_dir <- file.path(paste0(tempdir(), "/"))
