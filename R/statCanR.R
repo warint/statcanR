@@ -26,6 +26,7 @@
 #' @export
 #'
 #' @import  data.table
+#' @import  curl
 #'
 #'
 #' @examples
