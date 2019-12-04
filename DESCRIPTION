@@ -16,7 +16,6 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Imports:
-    data.table,
-    downloader,
+    data.table
 URL: http://github.com/warint/statcanR
 BugReports: https://github.com/warint/statcanR/issues
