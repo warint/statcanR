@@ -25,7 +25,6 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 [![Mentioned in Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/warint/statcanR)
 
 
-
 <!-- badges: end -->
 
 Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
