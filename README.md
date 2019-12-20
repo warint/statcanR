@@ -11,7 +11,9 @@
 status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis-ci.org/warint/statcanR)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
-[![Mentioned in Awesome Official Statistics ](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
+[![Mentioned in
+Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/warint/statcanR)
+
 <!-- badges: end -->
 
 Easily connect to Statistics Canada’s Web Data Service with R. Open
@@ -21,9 +23,12 @@ user’s R environment.
 
 ## Installation
 
-The released version of statcanR package is accessible through devtools.
+The released version of statcanR package is accessible through CRAN and
+devtools.
 
 ``` r
+install.packages("statcanR")
+
 install.packages("devtools")
 devtools::install_github('warint/statcanR')
 ```
