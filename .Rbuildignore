@@ -10,3 +10,4 @@
 ^cran-comments\.Rmd$
 ^CRAN-RELEASE$
 ^cran-comments\.md$
+^LICENSE\.md$
