@@ -94,7 +94,7 @@ shall include on such Value-added Product the following
 
 ### Cite statcanR
 
-To cite statcanR package in your work:
+To cite stantcanR package in your work:
 
 Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics
 Canada’s Open Economic Data. v0.1.0.
@@ -106,6 +106,7 @@ Canada’s Open Economic Data. v0.1.0.
    note = {R package version 0.1.0},
    url = {http://github.com/warint/statcanR},
    year = {2019},
+   doi = "10.6084/m9.figshare.11421573.v2"
  }
 ```
 

@@ -90,6 +90,7 @@ Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics Canada's Open E
    note = {R package version 0.1.0},
    url = {http://github.com/warint/statcanR},
    year = {2019},
+   doi = "10.6084/m9.figshare.11421573.v2"
  }
 ```
 
