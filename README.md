@@ -13,7 +13,8 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 [![Mentioned in
 Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/warint/statcanR)
-
+[![CRAN
+status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
 <!-- badges: end -->
 
 Easily connect to Statistics Canada’s Web Data Service with R. Open
