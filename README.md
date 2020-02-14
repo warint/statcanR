@@ -3,8 +3,6 @@
 
 # statcanR
 
-
-
 <!-- badges: start -->
 
 [![Travis build
