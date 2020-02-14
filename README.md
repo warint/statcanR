@@ -3,7 +3,7 @@
 
 # statcanR
 
-# <img src="man/figures/LOGO.png" align="right" />
+
 
 <!-- badges: start -->
 
