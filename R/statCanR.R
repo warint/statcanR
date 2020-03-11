@@ -32,16 +32,26 @@
 #' @examples
 #' mydata <- sqs_statcan_data('27-10-0014-01', 'eng')
 #'
-#'
-#'
-#'
-#'
+#' Deprecated functions in statcanR
 #' 
+#' This function still works but will be removed (defunct) in the next version.
+#' 
+#' sqs_statcan_data()
+#' 
+#' @name statcanR-deprecated
+#'
+#'
+
+
 
 # Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang)
 {
-  
+
+  .Deprecated(msg = "'sqs_statcan_data()' will be removed in the next version and replaced by the simpler function 'statcan_data()'")  
+
+  # In the next version, we will uncomment the next line:
+  # .Defunct(msg = "'sqs_statcan_data()' has been removed from this package and replaced with 'statcan_data()'")
   
   # identifying the table number
   tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber) - 
@@ -108,3 +118,5 @@ sqs_statcan_data <- function(tableNumber, lang)
   unlink(tempdir())
   data.table::setDF(return(sqs_data))
 }
+
+statcan_data <- sqs_statcan_data
