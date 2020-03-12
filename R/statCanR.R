@@ -17,7 +17,11 @@
 #' The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
 #' Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').
 #'
-#'
+#' Deprecated functions in statcanR
+#' 
+#' This function still works but will be removed (defunct) in the next version.
+#' 
+#' sqs_statcan_data()
 #'
 #' @param tableNumber The table number of the Statistics Canada data table
 #' @param lang The language wanted
@@ -27,18 +31,14 @@
 #'
 #' @import  data.table
 #' @import  curl
-#'
+#' @name statcanR-deprecated
 #'
 #' @examples
 #' mydata <- sqs_statcan_data('27-10-0014-01', 'eng')
 #'
-#' Deprecated functions in statcanR
 #' 
-#' This function still works but will be removed (defunct) in the next version.
 #' 
-#' sqs_statcan_data()
 #' 
-#' @name statcanR-deprecated
 #'
 #'
 
@@ -48,8 +48,8 @@
 sqs_statcan_data <- function(tableNumber, lang)
 {
 
-  .Deprecated(msg = "'sqs_statcan_data()' will be removed in the next version and replaced by the simpler function 'statcan_data()'")  
-
+  .Deprecated("statcan_data", msg = "'sqs_statcan_data()' has been removed from this package and replaced with 'statcan_data()'" )  
+  
   # In the next version, we will uncomment the next line:
   # .Defunct(msg = "'sqs_statcan_data()' has been removed from this package and replaced with 'statcan_data()'")
   
@@ -119,4 +119,3 @@ sqs_statcan_data <- function(tableNumber, lang)
   data.table::setDF(return(sqs_data))
 }
 
-statcan_data <- sqs_statcan_data
