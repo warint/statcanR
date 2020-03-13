@@ -113,23 +113,25 @@
 <p>This section presents an example of how to use the statcanR R package and its function sqs_statcan_data().</p>
 <p>The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.</p>
 <p>With a simple web search ‘statistics canada wages by industry metropolitan area monthly’, the table number can easily be found on Statisitcs Canada’s webpage. Here is below a figure that illustrates this example, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives.</p>
-<p>Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Get data with sqs_statcan_data function</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">mydata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/statcanR-deprecated.html">sqs_statcan_data</a></span>(<span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span>)</a></code></pre></div>
+<p>Once the table number is identified, the statcan_data() function is easy to use in order to collect the data, as following:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Get data with statcan_data function</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">mydata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/statcan_data.html">statcan_data</a></span>(<span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># sqs_statcandata will be depricated </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">mydata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/statcanR-deprecated.html">sqs_statcan_data</a></span>(<span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span>)</a></code></pre></div>
 <p>Should you want the same data in French, just replace the argument at the end of the function with “fra”.</p>
 <div id="code-architecture" class="section level2">
 <h2 class="hasAnchor">
 <a href="#code-architecture" class="anchor"></a>Code architecture</h2>
 <p>This section describes the code architecture of the statcanR package.</p>
-<p>In details, the sqs_statcan_data() function has 2 arguments:</p>
+<p>In details, the statcan_data() function has 2 arguments:</p>
 <ol style="list-style-type: decimal">
 <li>tableNumber</li>
 <li>lang</li>
 </ol>
 <p>The ‘tableNumber’ argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives, as an example.</p>
 <p>The second argument, ‘lang’, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c(“fra”, “eng”).</p>
-<p>The code architecture of the sqs_statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada’s Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata from the .csv files. The final step is to load the statistics data into a data frame called ‘sqs_data’ and to add the official table indicator name in the new ‘INDICATOR’ column.</p>
-<p>To be more precise about the sqs_statcan_data() function, here is below some further code description:</p>
+<p>The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada’s Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata from the .csv files. The final step is to load the statistics data into a data frame called ‘sqs_data’ and to add the official table indicator name in the new ‘INDICATOR’ column.</p>
+<p>To be more precise about the statcan_data() function, here is below some further code description:</p>
 <ul>
 <li><p><code>tableNumber &lt;- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))</code>: The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table. In addition, following the new Statistics Canada’s Web Data Service, the URL typology defined by REST API is stored in csv files by table numbers without a ‘-’. Also, the last 2 digits after the last ‘-’ refer to the specific excerpt of the original table. Therefore, following the Statistics Canada Web Data Service’s typology, the function first removes the ‘-’ and the last 2 digits from the user’s selection.</p></li>
 <li><p><code>if(lang == "eng")</code> | <code>if(lang == "fra")</code>: The second step is the ‘if statement’ to get the data in the correct language.</p></li>
@@ -139,7 +141,7 @@
 <li><p><code><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">data.table::fread(csv_file)</a></code>: The sixth step consists in loading the data table into a unique data frame. The fread() function from the data.table package is used for its higher performance.</p></li>
 <li><p><code>data$INDICATOR &lt;- as.character(0)</code> and <code>data$INDICATOR &lt;- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])</code>: The seventh step of the sqs_statcan_data() function consists in adding the name of the table from the metadata table.</p></li>
 <li><p><code><a href="https://rdrr.io/r/base/unlink.html">unlink(tempdir())</a></code>: The eighth step deletes the temporary folder used to download, unzip, extract and load the data.</p></li>
-<li><p><code><a href="https://rdrr.io/r/base/function.html">return(sqs_data)</a></code>: Finally, the last step of the sqs_statcan_data() function allows to return the value into the user’s environment.</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/function.html">return(sqs_data)</a></code>: Finally, the last step of the statcan_data() function allows to return the value into the user’s environment.</p></li>
 </ul>
 </div>
 </div>
