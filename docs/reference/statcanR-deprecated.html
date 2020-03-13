@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>statcanR — statcanR-deprecated • statcanR</title>
+<title>deprecated-statcanR — statcanR-deprecated • statcanR</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="statcanR — statcanR-deprecated" />
+<meta property="og:title" content="deprecated-statcanR — statcanR-deprecated" />
 <meta property="og:description" content="Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment." />
 <meta name="twitter:card" content="summary" />
 
@@ -120,7 +120,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>statcanR</h1>
+    <h1>deprecated-statcanR</h1>
     <small class="dont-index">Source: <a href='https://github.com/warint/statcanR/blob/master/R/statCanR.R'><code>R/statCanR.R</code></a></small>
     <div class="hidden name"><code>statcanR-deprecated.Rd</code></div>
     </div>
@@ -156,14 +156,9 @@ such as '27-10-0014-01' for the Federal expenditures on science and technology, 
 <p>To get the table number: <a href='https://www150.statcan.gc.ca/n1/en/type/data'>https://www150.statcan.gc.ca/n1/en/type/data</a>.</p>
 <p>The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
 Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').</p>
-<p>Deprecated functions in statcanR</p>
-<p>This function still works but will be removed (defunct) in the next version.</p>
-<p>sqs_statcan_data()</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mydata</span> <span class='kw'>&lt;-</span> <span class='fu'>sqs_statcan_data</span>(<span class='st'>'27-10-0014-01'</span>, <span class='st'>'eng'</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'sqs_statcan_data()' has been removed from this package and replaced with 'statcan_data()'</span></div><div class='input'>
-
-
+    <pre class="examples"><div class='input'><span class='no'>mydata</span> <span class='kw'>&lt;-</span> <span class='fu'>sqs_statcan_data</span>(<span class='st'>'27-10-0014-01'</span>, <span class='st'>'eng'</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'sqs_statcan_data()' will be removed in the next version and replaced by the simpler function 'statcan_data()'</span></div><div class='input'>
 
 
 

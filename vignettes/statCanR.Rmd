@@ -49,11 +49,13 @@ The following example is provided to illustrate how to use the function. It cons
 
 With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives.
 
-Once the table number is identified, the sqs_statcan_data() function is easy to use in order to collect the data, as following:  
+Once the table number is identified, the statcan_data() function is easy to use in order to collect the data, as following:  
   
 ```{r, eval=FALSE}
-# Get data with sqs_statcan_data function
-mydata <- sqs_statcan_data("27-10-0014-01", "eng")
+# Get data with statcan_data function
+mydata <- statcan_data("27-10-0014-01", "eng")
+# sqs_statcandata will be depricated 
+mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
 Should you want the same data in French, just replace the argument at the end of the function with "fra".
@@ -62,7 +64,7 @@ Should you want the same data in French, just replace the argument at the end of
 
 This section describes the code architecture of the statcanR package.
 
-In details, the sqs_statcan_data() function has 2 arguments:   
+In details, the statcan_data() function has 2 arguments:   
   
   1. tableNumber
   2. lang
@@ -73,10 +75,10 @@ The 'tableNumber' argument simply refers to the table number of the Statistics C
 
 The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
-The code architecture of the sqs_statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'sqs_data' and to add the official table indicator name in the new 'INDICATOR' column.         
+The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'sqs_data' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
-To be more precise about the sqs_statcan_data() function, here is below some further code description:   
+To be more precise about the statcan_data() function, here is below some further code description:   
   
   - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
   The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table.
@@ -105,7 +107,7 @@ To be more precise about the sqs_statcan_data() function, here is below some fur
   The eighth step deletes the temporary folder used to download, unzip, extract and load the data.
   
   - `return(sqs_data)`:
-  Finally, the last step of the sqs_statcan_data() function allows to return the value into the user's environment.
+  Finally, the last step of the statcan_data() function allows to return the value into the user's environment.
 
 
 

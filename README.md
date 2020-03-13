@@ -49,11 +49,13 @@ Statisitcs Canada’s webpage. Here is below a figure that illustrates
 this example, such as ‘27-10-0014-01’ for the Federal expenditures on
 science and technology, by socio-economic objectives.
 
-Once the table number is identified, the sqs\_statcan\_data() function
-is easy to use in order to collect the data, as following:
+Once the table number is identified, the statcan\_data() function is
+easy to use in order to collect the data, as following:
 
 ``` r
 library(statcanR)
+mydata <- statcan_data("27-10-0014-01","eng")
+# sqs_statcandata will be depricated 
 mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
