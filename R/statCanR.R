@@ -31,7 +31,7 @@
 #'
 #' @import  data.table
 #' @import  curl
-#' @name statcanR-deprecated
+#' 
 #'
 #' @examples
 #' mydata <- sqs_statcan_data('27-10-0014-01', 'eng')
