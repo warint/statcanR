@@ -42,7 +42,7 @@ library(statcanR)
 
 # Practical usage
 
-This section presents an example of how to use the statcanR R package and its function sqs_statcan_data().    
+This section presents an example of how to use the statcanR R package and its function statcan_data().    
   
 
 The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.  
@@ -106,7 +106,7 @@ To be more precise about the statcan_data() function, here is below some further
   - `unlink(tempdir())`:
   The eighth step deletes the temporary folder used to download, unzip, extract and load the data.
   
-  - `return(sqs_data)`:
+  - `return(Data)`:
   Finally, the last step of the statcan_data() function allows to return the value into the user's environment.
 
 

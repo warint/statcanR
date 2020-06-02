@@ -36,7 +36,7 @@ devtools::install_github('warint/statcanR')
 ## Example
 
 This section presents an example of how to use the statcanR R package
-and its function sqs\_statcan\_data().
+and its function statcan\_data().
 
 The following example is provided to illustrate how to use the function.
 It consists in collecting some descriptive statistics about the Canadian
@@ -55,7 +55,7 @@ easy to use in order to collect the data, as following:
 ``` r
 library(statcanR)
 mydata <- statcan_data("27-10-0014-01","eng")
-# sqs_statcandata will be depricated 
+# sqs_statcandata will be deprecated 
 mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
@@ -74,8 +74,7 @@ the date and time you accessed the Information.
 
 Please refer to the [terms of
 licence](https://www.statcan.gc.ca/eng/reference/licence) before using
-the
-Information.
+the Information.
 
 ##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
 
@@ -83,14 +82,12 @@ Statistics Canada has a specific procedure regarding the ackowledgment
 of source :
 
 You shall include and maintain the following notice on all licensed
-rights of the
-    Information:
+rights of the Information:
 
     Source: Statistics Canada, name of product, reference date. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
 
 Where any Information is contained within a Value-added Product, you
-shall include on such Value-added Product the following
-    notice:
+shall include on such Value-added Product the following notice:
 
     Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.
 
@@ -112,27 +109,9 @@ Canada’s Open Economic Data. v0.1.0.
  }
 ```
 
-### Why SQS?
-
-SQS stands for SKEMA Quantum Studio, a research and technological
-development centre based in Montreal, Canada, that serves as the engine
-room for the SKEMA Global lab in AI.
-
-SKEMA Quantum Studio is also a state-of-the-art platform developed by
-our team that enables scholars, students and professors to access one of
-the most powerful analytical tools in higher education. By using data
-science and artificial intelligence within the platform, new theories,
-methods and concepts are being developed to study globalisation,
-innovation and digital transformations that our society faces.
-
-To learn more about the SKEMA Quantum Studio and the mission of the
-SKEMA Global Lab in AI, please visit the following websites :
-[SQS](https://quantumstudio.skemagloballab.io) ; [Global
-Lab](https://skemagloballab.io/).
-
 ### Acknowledgments
 
 The authors would like to thank the Center for Interuniversity Research
 and Analysis of Organizations (CIRANO, Montreal) for its support, as
-well as Thibault Senegas, Marine Leroi and Martin Paquette at SKEMA
-Global Lab in AI. However, errors and omissions are ours.
+well as Thibault Senegas, Marine Leroi and Martin Paquette. However,
+errors and omissions are ours.
