@@ -10,7 +10,7 @@ status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 [![Mentioned in
-Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/warint/statcanR)
+Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
