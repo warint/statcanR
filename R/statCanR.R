@@ -38,7 +38,6 @@
 #'
 
 
-
 # Scraping function for statcan
 sqs_statcan_data <- function(tableNumber, lang)
 {
@@ -147,8 +146,6 @@ sqs_statcan_data <- function(tableNumber, lang)
 #' @examples
 #' mydata <- statcan_data('27-10-0014-01', 'eng')
 #'
-
-
 
 
 # Scraping function for statcan
