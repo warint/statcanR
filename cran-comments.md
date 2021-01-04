@@ -1,9 +1,9 @@
 
 ## Resubmission
 
-This is a resubmission. In this version I have :
+This is a resubmission (update). In this version I have :
 
-* Replaced the downloader package by the curl package  to match win-builder requirements.
+* changed the name of the functions by withdrawing the sqs mentions.
 
 ## Test environments
 * local OS X install, R 3.6.1
@@ -15,7 +15,7 @@ This is a resubmission. In this version I have :
 
 0 errors | 0 warnings | 0 note
 
-* This is a new release.
+* This is an update. 
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.
