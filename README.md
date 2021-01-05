@@ -13,7 +13,7 @@ status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branc
 Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
 <!-- badges: end -->
 
 Easily connect to Statistics Canada’s Web Data Service with R. Open
