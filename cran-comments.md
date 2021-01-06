@@ -4,7 +4,6 @@
 This is a resubmission (update). In this version I have :
 
 *  modified http to https and added trailing slashes.
-* changed version number as requested. 
 
 ## Test environments
 * local OS X install, R 3.6.1

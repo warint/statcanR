@@ -103,7 +103,7 @@ Canada’s Open Economic Data. v0.1.0.
    title = {statcanR: Client for Statistics Canada's Open Economic Data},
    author = {Thierry Warin and Romain {Le Duc}},
    note = {R package version 0.1.0},
-   url = {http://github.com/warint/statcanR},
+   url = {https://github.com/warint/statcanR},
    year = {2019},
    doi = "10.6084/m9.figshare.10544735.v1"
  }
