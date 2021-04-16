@@ -16,10 +16,23 @@ status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.o
 [![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
 <!-- badges: end -->
 
+# Overview
+
 Easily connect to Statistics Canada’s Web Data Service with R. Open
 economic data (formerly known as CANSIM tables, now identified by
 Product IDs (PID)) are accessible as a data frame, directly in the
 user’s R environment.
+
+## Shiny App : statcanR ExploR
+
+<img src="man/figures/shiny.png" />
+
+For people less comfortable with R and to allow more people to have
+access to our package, we have also developed a Shiny
+application.Through the same logic present in our package, researchers
+can retrieve data from Statistics Canada.
+
+EpiBibR EploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
 
 ## Installation
 

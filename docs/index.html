@@ -76,12 +76,24 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div id="statcanr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#statcanr" class="anchor"></a>statcanR</h1></div>
 <!-- badges: start -->
 
+</div>
+<div id="overview" class="section level1">
+<h1 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h1>
 <p>Easily connect to Statistics Canada’s Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user’s R environment.</p>
+<div id="shiny-app--statcanr-explor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#shiny-app--statcanr-explor" class="anchor"></a>Shiny App : statcanR ExploR</h2>
+<p><img src="reference/figures/shiny.png"></p>
+<p>For people less comfortable with R and to allow more people to have access to our package, we have also developed a Shiny application.Through the same logic present in our package, researchers can retrieve data from Statistics Canada.</p>
+<p>EpiBibR EploR is available <a href="https://warin.ca/shiny/statcanr/"><span class="math display"><em>h</em><em>e</em><em>r</em><em>e</em></span></a></p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -115,9 +127,9 @@
 <a href="#acknowledgment-of-source-according-to-statistics-canada-open-licence-agreement" class="anchor"></a>Acknowledgment of Source according to Statistics Canada Open Licence Agreement</h5>
 <p>Statistics Canada has a specific procedure regarding the ackowledgment of source :</p>
 <p>You shall include and maintain the following notice on all licensed rights of the Information:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>Source<span class="op">:</span><span class="st"> </span>Statistics Canada, name of product, reference date. Reproduced and distributed on an <span class="st">"as is"</span> basis with the permission of Statistics Canada.</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Source<span class="sc">:</span> Statistics Canada, name of product, reference date. Reproduced and distributed on an <span class="st">"as is"</span> basis with the permission of Statistics Canada.</span></code></pre></div>
 <p>Where any Information is contained within a Value-added Product, you shall include on such Value-added Product the following notice:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.</span></code></pre></div>
 </div>
 </div>
 <div id="cite-statcanr" class="section level3">
@@ -125,14 +137,14 @@
 <a href="#cite-statcanr" class="anchor"></a>Cite statcanR</h3>
 <p>To cite stantcanR package in your work:</p>
 <p>Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics Canada’s Open Economic Data. v0.1.0.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">@</span>Manual{R<span class="op">-</span>statcanR,</span>
-<span id="cb5-2"><a href="#cb5-2"></a>   title =<span class="st"> </span>{statcanR<span class="op">:</span><span class="st"> </span>Client <span class="cf">for</span> Statistics Canada<span class="st">'s Open Economic Data},</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="st">   author = {Thierry Warin and Romain {Le Duc}},</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="st">   note = {R package version 0.1.0},</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="st">   url = {https://github.com/warint/statcanR},</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="st">   year = {2019},</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="st">   doi = "10.6084/m9.figshare.10544735.v1"</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="st"> }</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Manual{R<span class="sc">-</span>statcanR,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   title <span class="ot">=</span> {statcanR<span class="sc">:</span> Client <span class="cf">for</span> Statistics Canada<span class="st">'s Open Economic Data},</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">   author = {Thierry Warin and Romain {Le Duc}},</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">   note = {R package version 0.1.0},</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">   url = {https://github.com/warint/statcanR},</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">   year = {2019},</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">   doi = "10.6084/m9.figshare.10544735.v1"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st"> }</span></span></code></pre></div>
 </div>
 <div id="acknowledgments" class="section level3">
 <h3 class="hasAnchor">
@@ -141,6 +153,7 @@
 </div>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
