@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![Build
-Status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://travis-ci.com/warint/statcanR)
+[![Travis build
+status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://travis-ci.com/warint/statcanR)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 [![Mentioned in
@@ -14,6 +14,7 @@ Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
+
 <!-- badges: end -->
 
 # Overview
@@ -77,7 +78,7 @@ mydata <- sqs_statcan_data("27-10-0014-01","eng")
 Tutorial made by Charles Saunders, Director of Master of Financial
 Economics Program at Western University.
 
-Thanks Charles!
+Thanks Charles!!!
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/z9TDUlgT5lc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
