@@ -33,7 +33,7 @@ access to our package, we have also developed a Shiny
 application.Through the same logic present in our package, researchers
 can retrieve data from Statistics Canada.
 
-EpiBibR EploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
+statcanR EploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
 
 ## Installation
 
@@ -75,8 +75,9 @@ mydata <- sqs_statcan_data("27-10-0014-01","eng")
 
 ### Video Tutorial
 
-Tutorial made by Professor Charles Saunders, Director of Master of Financial
-Economics Program at Western University [biography](https://economics.uwo.ca/people/faculty/saunders.html){target="_blank"}
+Tutorial made by Professor Charles Saunders, Director of Master of
+Financial Economics Program at Western University
+[biography](https://economics.uwo.ca/people/faculty/saunders.html)
 
 Thanks!
 
