@@ -72,6 +72,16 @@ mydata <- statcan_data("27-10-0014-01","eng")
 mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
+### Tutorial Video
+
+Tutorial made by Charles Saunders, Director of Master of Financial
+Economics Program at Western University.
+
+Thanks Charles!
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/z9TDUlgT5lc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+
 ### Statistics Canada Open Licence
 
 This licence is issued on behalf of Her Majesty the Queen in Right of
