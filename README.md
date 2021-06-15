@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/warint/statcanR.svg?branch=master)](https://travis-ci.org/warint/statcanR)
+[![Build
+Status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://travis-ci.com/warint/statcanR)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 [![Mentioned in
