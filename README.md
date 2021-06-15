@@ -73,15 +73,14 @@ mydata <- statcan_data("27-10-0014-01","eng")
 mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
 
-### Tutorial Video
+### Video Tutorial
 
-Tutorial made by Charles Saunders, Director of Master of Financial
-Economics Program at Western University.
+Tutorial made by Professor Charles Saunders, Director of Master of Financial
+Economics Program at Western University [biography](https://economics.uwo.ca/people/faculty/saunders.html){target="_blank"}
 
-Thanks Charles!!!
+Thanks!
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/z9TDUlgT5lc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-</iframe>
+<https://www.youtube.com/embed/z9TDUlgT5lc>
 
 ### Statistics Canada Open Licence
 
