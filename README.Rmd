@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 [![Mentioned in Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
 [![CRAN status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
+[![Travis build status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://travis-ci.com/warint/statcanR)
 <!-- badges: end -->
 
 # Overview
