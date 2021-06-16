@@ -74,7 +74,7 @@ mydata <- sqs_statcan_data("27-10-0014-01","eng")
 Tutorial made by Professor Charles Saunders, Director of Master of Financial
 Economics Program at Western University [biography](https://economics.uwo.ca/people/faculty/saunders.html)
 
-Thanks!
+Thanks!!
 
 <https://www.youtube.com/embed/z9TDUlgT5lc>
 
