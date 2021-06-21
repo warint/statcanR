@@ -181,6 +181,7 @@ statcan_data <- function(tableNumber, lang)
     # adding to the data.frame or data.table the Official Data Table
     # Indicator defined by Statitics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
+    can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
   }
@@ -209,6 +210,7 @@ statcan_data <- function(tableNumber, lang)
     # adding to the data.frame or data.table the Official Data Table
     # Indicator defined by Statitics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
+    can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
   }
