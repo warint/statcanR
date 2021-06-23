@@ -2,5 +2,6 @@
 
 export(sqs_statcan_data)
 export(statcan_data)
+export(statcan_download_data)
 import(curl)
 import(data.table)

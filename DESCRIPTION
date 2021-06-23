@@ -17,6 +17,7 @@ Suggests:
 VignetteBuilder: knitr
 Imports:
     data.table,
-    curl
+    curl,
+    readr
 URL: https://github.com/warint/statcanR/
 BugReports: https://github.com/warint/statcanR/issues/

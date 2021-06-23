@@ -49,13 +49,13 @@ devtools::install_github('warint/statcanR')
 
 ## Example
 
-This section presents an example of how to use the statcanR R package
-and its function statcan\_data().
+This section presents an example of how to use the `statcanR` R package
+and its function `statcan_data()` and `statcan_download_data()`.
 
-The following example is provided to illustrate how to use the function.
-It consists in collecting some descriptive statistics about the Canadian
-Labour Force at the federal, provincial and industrial levels, on a
-monthly basis.
+The following example is provided to illustrate how to use the
+functions. It consists in collecting some descriptive statistics about
+the Canadian Labour Force at the federal, provincial and industrial
+levels, on a monthly basis.
 
 With a simple web search ‘statistics canada wages by industry
 metropolitan area monthly’, the table number can easily be found on
@@ -72,6 +72,11 @@ mydata <- statcan_data("27-10-0014-01","eng")
 # sqs_statcandata will be deprecated 
 mydata <- sqs_statcan_data("27-10-0014-01","eng")
 ```
+
+For the `statcan_download_data()` function there is no difference on how
+to use it, the only difference is that this function allow you to
+download the data in a csv file on top of having the data in your
+environment.
 
 ### Video Tutorial
 
