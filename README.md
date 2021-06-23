@@ -78,6 +78,11 @@ to use it, the only difference is that this function allow you to
 download the data in a csv file on top of having the data in your
 environment.
 
+``` r
+library(statcanR)
+mydata <- statcan_download_data("27-10-0014-01","eng")
+```
+
 ### Video Tutorial
 
 Tutorial made by Professor Charles Saunders, Director of Master of
