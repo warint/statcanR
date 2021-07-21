@@ -74,7 +74,7 @@ sqs_statcan_data <- function(tableNumber, lang)
     sqs_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table
-    # Indicator defined by Statitics Canada and based on metadata file.
+    # Indicator defined by Statistics Canada and based on metadata file.
     sqs_data$INDICATOR <- as.character(0)
     sqs_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
@@ -102,7 +102,7 @@ sqs_statcan_data <- function(tableNumber, lang)
     sqs_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table
-    # Indicator defined by Statitics Canada and based on metadata file.
+    # Indicator defined by Statistics Canada and based on metadata file.
     sqs_data$INDICATOR <- as.character(0)
     sqs_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
@@ -139,8 +139,9 @@ sqs_statcan_data <- function(tableNumber, lang)
 #' @return The output will be a data table representing the data associated with the chosen table number.
 #' @export
 #'
-#' @import  data.table
-#' @import  curl
+#' @import data.table
+#' @import curl
+#' @import tibble
 #'
 #'
 #' @examples
@@ -179,11 +180,30 @@ statcan_data <- function(tableNumber, lang)
     can_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table
-    # Indicator defined by Statitics Canada and based on metadata file.
+    # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
+    
+    if(nchar(can_data[1,1])==9){
+      can_data$REF_DATE <- sub(".*/", "", can_data$REF_DATE)
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 3, 31, sep = "-"))
+      can_data <- tibble::add_column(can_data, REF_PERIOD = "Fiscal year", .before = 2) 
+    }
+    
+    else if(nchar(can_data[1,1])==7){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, sep = "-"))
+    }
+    
+    else if(nchar(can_data[1,1])==4){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, 1, sep = "-"))
+    }
+    
+    else{
+      can_data$REF_DATE <- as.Date(can_data$REF_DATE)
+    }
+    
   }
   
   # getting data in French version
@@ -213,7 +233,29 @@ statcan_data <- function(tableNumber, lang)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
+    
+    can_data[,1] <- "REF_DATE"
+    
+    if(nchar(can_data[1,1])==9){
+      can_data$REF_DATE <- sub(".*/", "", can_data$REF_DATE)
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 3, 31, sep = "-"))
+      can_data <- tibble::add_column(can_data, REF_PERIOD = "Fiscal year", .before = 2) 
+    }
+    
+    else if(nchar(can_data[1,1])==7){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, sep = "-"))
+    }
+    
+    else if(nchar(can_data[1,1])==4){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, 1, sep = "-"))
+    }
+    
+    else{
+      can_data$REF_DATE <- as.Date(can_data$REF_DATE)
+    }
+    
   }
+  
   
   # removing the temp folder and creating a data frame
   unlink(tempdir())
@@ -230,8 +272,9 @@ statcan_data <- function(tableNumber, lang)
 #' @return The output will be  a data table and csv file representing the data associated with the chosen table number.
 #' @export
 #' 
-#' @import  data.table
-#' @import  curl
+#' @import data.table
+#' @import curl
+#' @import tibble
 #'
 #' @examples
 #' mydata <- statcan_data('27-10-0014-01', 'eng')
@@ -267,11 +310,30 @@ statcan_download_data <- function(tableNumber, lang)
     can_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table
-    # Indicator defined by Statitics Canada and based on metadata file.
+    # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
+    
+    if(nchar(can_data[1,1])==9){
+      can_data$REF_DATE <- sub(".*/", "", can_data$REF_DATE)
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 3, 31, sep = "-"))
+      can_data <- tibble::add_column(can_data, REF_PERIOD = "Fiscal year", .before = 2) 
+    }
+    
+    else if(nchar(can_data[1,1])==7){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, sep = "-"))
+    }
+    
+    else if(nchar(can_data[1,1])==4){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, 1, sep = "-"))
+    }
+    
+    else{
+      can_data$REF_DATE <- as.Date(can_data$REF_DATE)
+    }
+    
     readr::write_csv(can_data, paste0("./statcan_",tableNumber,"_", lang,".csv"))
   }
   
@@ -297,11 +359,32 @@ statcan_download_data <- function(tableNumber, lang)
     can_data <- data.table::fread(csv_file)
     
     # adding to the data.frame or data.table the Official Data Table
-    # Indicator defined by Statitics Canada and based on metadata file.
+    # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
     can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
+    
+    can_data[,1] <- "REF_DATE"
+    
+    if(nchar(can_data[1,1])==9){
+      can_data$REF_DATE <- sub(".*/", "", can_data$REF_DATE)
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 3, 31, sep = "-"))
+      can_data <- tibble::add_column(can_data, REF_PERIOD = "Fiscal year", .before = 2) 
+    }
+    
+    else if(nchar(can_data[1,1])==7){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, sep = "-"))
+    }
+    
+    else if(nchar(can_data[1,1])==4){
+      can_data$REF_DATE <- as.Date(paste(can_data$REF_DATE, 1, 1, sep = "-"))
+    }
+    
+    else{
+      can_data$REF_DATE <- as.Date(can_data$REF_DATE)
+    }
+    
     readr::write_csv(can_data, paste0("./statcan_",tableNumber,"_", lang,".csv"))
   }
   
