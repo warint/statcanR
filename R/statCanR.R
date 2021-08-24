@@ -313,7 +313,7 @@ statcan_download_data <- function(tableNumber, lang)
     # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
-    can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
+    can_data$INDICATOR <- as.character(readr::read_csv(paste0(tempdir(), 
                                                               "/", tableNumber, "_MetaData.csv"))[1, 1])
     
     if(nchar(can_data[1,1])==9){
@@ -362,8 +362,8 @@ statcan_download_data <- function(tableNumber, lang)
     # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
-    can_data$INDICATOR <- as.character(utils::read.csv(paste0(tempdir(), 
-                                                              "/", tableNumber, "_MetaData.csv"))[1, 1])
+    can_data$INDICATOR <- as.character(readr::read_delim(paste0(tempdir(), 
+                                                              "/", tableNumber, "_MetaData.csv"), delim = ";", escape_double = FALSE, trim_ws = TRUE)[1, 1])
     
     can_data[,1] <- "REF_DATE"
     
