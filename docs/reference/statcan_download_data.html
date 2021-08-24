@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • statcanR</title>
+<title>statcanR download data function — statcan_download_data • statcanR</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="statcanR download data function — statcan_download_data" />
+<meta property="og:description" content="statcanR download data function" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -122,34 +123,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/warint/statcanR/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>statcanR download data function</h1>
+    <small class="dont-index">Source: <a href='https://github.com/warint/statcanR/blob/master/R/statCanR.R'><code>R/statCanR.R</code></a></small>
+    <div class="hidden name"><code>statcan_download_data.Rd</code></div>
     </div>
 
-    <div id="statcanr-022" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.2">
-<a href="#statcanr-022" class="anchor"></a>statcanR 0.2.2<small> Unreleased </small>
-</h1>
-<ul>
-<li>we replaced utils::read.csv by readr::read_csv to fix a random bug with some metadata tables.</li>
-</ul>
-</div>
-    <div id="statcanr-021" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.1">
-<a href="#statcanr-021" class="anchor"></a>statcanR 0.2.1<small> 2021-03-03 </small>
-</h1>
-<ul>
-<li>In this version, we have changed the name of the functions by withdrawing the sqs mentions. The old functions will remain available until the next update (deprecated).</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>statcanR download data function</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>statcan_download_data</span><span class='op'>(</span><span class='va'>tableNumber</span>, <span class='va'>lang</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>tableNumber</th>
+      <td><p>The table number of the Statistics Canada data table</p></td>
+    </tr>
+    <tr>
+      <th>lang</th>
+      <td><p>The language wanted</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The output will be  a data table and csv file representing the data associated with the chosen table number.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>mydata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='statcan_data.html'>statcan_data</a></span><span class='op'>(</span><span class='st'>'27-10-0014-01'</span>, <span class='st'>'eng'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'><span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>60</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>10</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span>
+#&gt; <span class='message'><span style='font-weight: bold;'>Delimiter:</span> ","</span>
+#&gt; <span class='message'><span style='color: #BB0000;'>chr</span>  (8): Cube Title, Product Id, CANSIM Id, URL, Cube Notes, Archive Status...</span>
+#&gt; <span class='message'><span style='color: #00BB00;'>dbl</span>  (1): Total number of dimensions</span>
+#&gt; <span class='message'><span style='color: #0000BB;'>date</span> (1): End Reference Period</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Use <span style='color: #262626; background-color: #DADADA;'>`spec()`</span> to retrieve the full column specification for this data.</span>
+#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Specify the column types or set <span style='color: #262626; background-color: #DADADA;'>`show_col_types = FALSE`</span> to quiet this message.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: One or more parsing issues, see `problems()` for details</span></div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
