@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,18 +34,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">statcanR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -65,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/warint/statcanR/">
+  <a href="https://github.com/warint/statcanR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,66 +79,66 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="statcanr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#statcanr" class="anchor"></a>statcanR</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="statcanr">statcanR<a class="anchor" aria-label="anchor" href="#statcanr"></a>
+</h1></div>
 <!-- badges: start -->
 
 <!-- badges: end -->
 </div>
-<div id="overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1>
+<div class="section level1">
+<h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h1>
 <p>Easily connect to Statistics Canada’s Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user’s R environment.</p>
-<div id="shiny-app--statcanr-explor" class="section level2">
-<h2 class="hasAnchor">
-<a href="#shiny-app--statcanr-explor" class="anchor"></a>Shiny App : statcanR ExploR</h2>
+<div class="section level2">
+<h2 id="shiny-app--statcanr-explor">Shiny App : statcanR ExploR<a class="anchor" aria-label="anchor" href="#shiny-app--statcanr-explor"></a>
+</h2>
 <p><img src="reference/figures/shiny.png"></p>
 <p>For people less comfortable with R and to allow more people to have access to our package, we have also developed a Shiny application.Through the same logic present in our package, researchers can retrieve data from Statistics Canada.</p>
-<p>statcanR EploR is available <a href="https://warin.ca/shiny/statcanr/"><span class="math display"><em>h</em><em>e</em><em>r</em><em>e</em></span></a></p>
+<p>statcanR EploR is available <a href="https://warin.ca/shiny/statcanr/" class="external-link">[here]</a></p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The released version of statcanR package is accessible through CRAN and devtools.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"statcanR"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"statcanR"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">'warint/statcanR'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'warint/statcanR'</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This section presents an example of how to use the <code>statcanR</code> R package and its function <code><a href="reference/statcan_data.html">statcan_data()</a></code> and <code><a href="reference/statcan_download_data.html">statcan_download_data()</a></code>.</p>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>This section presents an example of how to use the <code>statcanR</code> R package and its function <code><a href="reference/statcan_data.html">statcan_data()</a></code> and <code>statcan_download_data()</code>.</p>
 <p>The following example is provided to illustrate how to use the functions. It consists in collecting some descriptive statistics about the Canadian Labour Force at the federal, provincial and industrial levels, on a monthly basis.</p>
 <p>With a simple web search ‘statistics canada wages by industry metropolitan area monthly’, the table number can easily be found on Statisitcs Canada’s webpage. Here is below a figure that illustrates this example, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives.</p>
 <p>Once the table number is identified, the statcan_data() function is easy to use in order to collect the data, as following:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/warint/statcanR/">statcanR</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/warint/statcanR/" class="external-link">statcanR</a></span><span class="op">)</span>
 <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span>
 <span class="co"># sqs_statcandata will be deprecated </span>
-<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcanR-deprecated.html">sqs_statcan_data</a></span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span></code></pre></div>
-<p>For the <code><a href="reference/statcan_download_data.html">statcan_download_data()</a></code> function there is no difference on how to use it, the only difference is that this function allow you to download the data in a csv file on top of having the data in your environment.</p>
+<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">sqs_statcan_data</span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span></code></pre></div>
+<p>For the <code>statcan_download_data()</code> function there is no difference on how to use it, the only difference is that this function allow you to download the data in a csv file on top of having the data in your environment.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/warint/statcanR/">statcanR</a></span><span class="op">)</span>
-<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_download_data.html">statcan_download_data</a></span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span></code></pre></div>
-<div id="video-tutorial" class="section level3">
-<h3 class="hasAnchor">
-<a href="#video-tutorial" class="anchor"></a>Video Tutorial</h3>
-<p>Tutorial made by Professor Charles Saunders, Director of Master of Financial Economics Program at Western University <a href="https://economics.uwo.ca/people/faculty/saunders.html">biography</a></p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/warint/statcanR/" class="external-link">statcanR</a></span><span class="op">)</span>
+<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">statcan_download_data</span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span></code></pre></div>
+<div class="section level3">
+<h3 id="video-tutorial">Video Tutorial<a class="anchor" aria-label="anchor" href="#video-tutorial"></a>
+</h3>
+<p>Tutorial made by Professor Charles Saunders, Director of Master of Financial Economics Program at Western University <a href="https://economics.uwo.ca/people/faculty/saunders.html" class="external-link">biography</a></p>
 <p>Thanks!</p>
-<p><a href="https://www.youtube.com/embed/z9TDUlgT5lc" class="uri">https://www.youtube.com/embed/z9TDUlgT5lc</a></p>
+<p><a href="https://www.youtube.com/embed/z9TDUlgT5lc" class="external-link uri">https://www.youtube.com/embed/z9TDUlgT5lc</a></p>
 </div>
-<div id="statistics-canada-open-licence" class="section level3">
-<h3 class="hasAnchor">
-<a href="#statistics-canada-open-licence" class="anchor"></a>Statistics Canada Open Licence</h3>
+<div class="section level3">
+<h3 id="statistics-canada-open-licence">Statistics Canada Open Licence<a class="anchor" aria-label="anchor" href="#statistics-canada-open-licence"></a>
+</h3>
 <p>This licence is issued on behalf of Her Majesty the Queen in Right of Canada, as represented by the Minister for Statistics Canada (“Statistics Canada”) to you (an individual or a legal entity that you are authorized to represent).</p>
 <p>Statistics Canada may modify this licence at any time, and such modifications shall be effective immediately upon posting of the modified licence on the Statistics Canada website. Your use of the Information will be governed by the terms of the licence in force as of the date and time you accessed the Information.</p>
-<p>Please refer to the <a href="https://www.statcan.gc.ca/eng/reference/licence">terms of licence</a> before using the Information.</p>
-<div id="acknowledgment-of-source-according-to-statistics-canada-open-licence-agreement" class="section level5">
-<h5 class="hasAnchor">
-<a href="#acknowledgment-of-source-according-to-statistics-canada-open-licence-agreement" class="anchor"></a>Acknowledgment of Source according to Statistics Canada Open Licence Agreement</h5>
+<p>Please refer to the <a href="https://www.statcan.gc.ca/eng/reference/licence" class="external-link">terms of licence</a> before using the Information.</p>
+<div class="section level5">
+<h5 id="acknowledgment-of-source-according-to-statistics-canada-open-licence-agreement">Acknowledgment of Source according to Statistics Canada Open Licence Agreement<a class="anchor" aria-label="anchor" href="#acknowledgment-of-source-according-to-statistics-canada-open-licence-agreement"></a>
+</h5>
 <p>Statistics Canada has a specific procedure regarding the ackowledgment of source :</p>
 <p>You shall include and maintain the following notice on all licensed rights of the Information:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Source<span class="sc">:</span> Statistics Canada, name of product, reference date. Reproduced and distributed on an <span class="st">"as is"</span> basis with the permission of Statistics Canada.</span></code></pre></div>
@@ -150,9 +146,9 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.</span></code></pre></div>
 </div>
 </div>
-<div id="cite-statcanr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cite-statcanr" class="anchor"></a>Cite statcanR</h3>
+<div class="section level3">
+<h3 id="cite-statcanr">Cite statcanR<a class="anchor" aria-label="anchor" href="#cite-statcanr"></a>
+</h3>
 <p>To cite stantcanR package in your work:</p>
 <p>Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics Canada’s Open Economic Data. v0.1.0.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Manual{R<span class="sc">-</span>statcanR,</span>
@@ -164,9 +160,9 @@
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">   doi = "10.6084/m9.figshare.10544735.v1"</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st"> }</span></span></code></pre></div>
 </div>
-<div id="acknowledgments" class="section level3">
-<h3 class="hasAnchor">
-<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h3>
+<div class="section level3">
+<h3 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
+</h3>
 <p>The authors would like to thank the Center for Interuniversity Research and Analysis of Organizations (CIRANO, Montreal) for its support, as well as Thibault Senegas, Marine Leroi and Martin Paquette. However, errors and omissions are ours.</p>
 </div>
 </div>
@@ -176,51 +172,61 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=statcanR">https://​cloud.r-project.org/​package=statcanR</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/warint/statcanR/">https://​github.com/​warint/​statcanR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/warint/statcanR/issues/">https://​github.com/​warint/​statcanR/​issues/​</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=statcanR" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/warint/statcanR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/warint/statcanR/issues/" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Thierry Warin <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5921-3428" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing statcanR</a></li>
+</ul>
+</div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Thierry Warin <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5921-3428" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Romain Le Duc <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/warint/statcanR"><img src="https://travis-ci.com/warint/statcanR.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/warint/statcanR"><img src="https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
-<li><a href="https://github.com/SNStatComp/awesome-official-statistics-software"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome"></a></li>
-<li><a href="https://CRAN.R-project.org/package=statcanR"><img src="https://www.r-pkg.org/badges/version/statcanR" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/package=statcanR"><img src="https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue"></a></li>
+<li><a href="https://travis-ci.com/warint/statcanR" class="external-link"><img src="https://travis-ci.com/warint/statcanR.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/warint/statcanR" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
+<li><a href="https://github.com/SNStatComp/awesome-official-statistics-software" class="external-link"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome"></a></li>
+<li><a href="https://CRAN.R-project.org/package=statcanR" class="external-link"><img src="https://www.r-pkg.org/badges/version/statcanR" alt="CRAN status"></a></li>
+<li><a href="https://cran.r-project.org/package=statcanR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Thierry Warin, Romain Le Duc.</p>
+  <p></p>
+<p>Developed by Thierry Warin, Romain Le Duc.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -228,6 +234,8 @@
 
   
 
+
+  
 
   </body>
 </html>

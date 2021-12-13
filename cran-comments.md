@@ -3,7 +3,7 @@
 
 This is a resubmission (update). In this version I have :
 
-*  modified http to https and added trailing slashes.
+*  modified the download function to get an informative message if the table (which is an Internet) is not available instead of having an error message. The goal is that the package which use internet resources fail gracefully with and informative message instead of an error if internet resources not available.
 
 ## Test environments
 * local OS X install, R 3.6.1
