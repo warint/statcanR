@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">statcanR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.9000</span>
       </span>
     </div>
 
@@ -115,9 +115,7 @@
 <p>Once the table number is identified, the statcan_data() function is easy to use in order to collect the data, as following:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get data with statcan_data function</span>
-<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span><span class="op">)</span>
-<span class="co"># sqs_statcandata will be depricated </span>
-<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">sqs_statcan_data</span><span class="op">(</span><span class="st">"27-10-0014-01"</span>,<span class="st">"eng"</span><span class="op">)</span></code></pre></div>
+<span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span><span class="op">)</span></code></pre></div>
 <p>Should you want the same data in French, just replace the argument at the end of the function with “fra”.</p>
 <div class="section level2">
 <h2 id="code-architecture">Code architecture<a class="anchor" aria-label="anchor" href="#code-architecture"></a>
@@ -130,7 +128,7 @@
 </ol>
 <p>The ‘tableNumber’ argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as ‘27-10-0014-01’ for the Federal expenditures on science and technology, by socio-economic objectives, as an example.</p>
 <p>The second argument, ‘lang’, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c(“fra”, “eng”).</p>
-<p>The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada’s Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata from the .csv files. The final step is to load the statistics data into a data frame called ‘sqs_data’ and to add the official table indicator name in the new ‘INDICATOR’ column.</p>
+<p>The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada’s Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata from the .csv files. The final step is to load the statistics data into a data frame called ‘data’ and to add the official table indicator name in the new ‘INDICATOR’ column.</p>
 <p>To be more precise about the statcan_data() function, here is below some further code description:</p>
 <ul>
 <li><p><code>tableNumber &lt;- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))</code>: The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table. In addition, following the new Statistics Canada’s Web Data Service, the URL typology defined by REST API is stored in csv files by table numbers without a ‘-’. Also, the last 2 digits after the last ‘-’ refer to the specific excerpt of the original table. Therefore, following the Statistics Canada Web Data Service’s typology, the function first removes the ‘-’ and the last 2 digits from the user’s selection.</p></li>
@@ -139,7 +137,7 @@
 <li><p><code>download(urlFra, download_dir, mode = "wb")</code>: The fourth step is a simple downloading function that extracts .Zip file and download it into a temporary folder.</p></li>
 <li><p><code>unzip(zipfile = download_dir, exdir = unzip_dir)</code>: The fifth step consists in unzipping the .Zip file. The unzipping process gives access to two diffrent .csv files, such as the overall data table and the metadata table.</p></li>
 <li><p><code>data.table::fread(csv_file)</code>: The sixth step consists in loading the data table into a unique data frame. The fread() function from the data.table package is used for its higher performance.</p></li>
-<li><p><code>data$INDICATOR &lt;- as.character(0)</code> and <code>data$INDICATOR &lt;- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])</code>: The seventh step of the sqs_statcan_data() function consists in adding the name of the table from the metadata table.</p></li>
+<li><p><code>data$INDICATOR &lt;- as.character(0)</code> and <code>data$INDICATOR &lt;- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])</code>: The seventh step of the statcan_data() function consists in adding the name of the table from the metadata table.</p></li>
 <li><p><code>unlink(tempdir())</code>: The eighth step deletes the temporary folder used to download, unzip, extract and load the data.</p></li>
 <li><p><code>return(Data)</code>: Finally, the last step of the statcan_data() function allows to return the value into the user’s environment.</p></li>
 </ul>

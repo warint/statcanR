@@ -54,8 +54,7 @@ Once the table number is identified, the statcan_data() function is easy to use 
 ```{r, eval=FALSE}
 # Get data with statcan_data function
 mydata <- statcan_data("27-10-0014-01", "eng")
-# sqs_statcandata will be depricated 
-mydata <- sqs_statcan_data("27-10-0014-01","eng")
+
 ```
 
 Should you want the same data in French, just replace the argument at the end of the function with "fra".
@@ -75,7 +74,7 @@ The 'tableNumber' argument simply refers to the table number of the Statistics C
 
 The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
-The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'sqs_data' and to add the official table indicator name in the new 'INDICATOR' column.         
+The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'data' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
 To be more precise about the statcan_data() function, here is below some further code description:   
@@ -101,7 +100,7 @@ To be more precise about the statcan_data() function, here is below some further
   The sixth step consists in loading the data table into a unique data frame. The fread() function from the data.table package is used for its higher performance.   
     
   - `data$INDICATOR <- as.character(0)` and `data$INDICATOR <- as.character(read.csv(paste0(path,"/temp/", tableNumber, "_MetaData.csv"))[1,1])`:
-  The seventh step of the sqs_statcan_data() function consists in adding the name of the table from the metadata table. 
+  The seventh step of the statcan_data() function consists in adding the name of the table from the metadata table. 
   
   - `unlink(tempdir())`:
   The eighth step deletes the temporary folder used to download, unzip, extract and load the data.
