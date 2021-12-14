@@ -3,7 +3,7 @@
 
 This is a resubmission (update). In this version I have :
 
-*  modified the download function to get an informative message if the table (which is an Internet) is not available instead of having an error message. The goal is that the package which use internet resources fail gracefully with and informative message instead of an error if internet resources not available.
+*  Fix the version to a serious number from 0.2.3.9000 to 0.2.3 and corrected invalid url from readme.md
 
 ## Test environments
 * local OS X install, R 3.6.1
