@@ -59,7 +59,7 @@ levels, on a monthly basis.
 
 With a simple web search ‘statistics canada wages by industry
 metropolitan area monthly’, the table number can easily be found on
-Statisitcs Canada’s webpage. Here is below a figure that illustrates
+Statistics Canada’s webpage. Here is below a figure that illustrates
 this example, such as ‘27-10-0014-01’ for the Federal expenditures on
 science and technology, by socio-economic objectives.
 
