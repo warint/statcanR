@@ -23,7 +23,7 @@ library(statcanR)
 
 ## Overview
 
-statcanR provides the R user with a consistent process to collect data from Statistics Canada's data portal. It provides access to all Statistics Canada' open economic data (formerly known as CANSIM tables) now identified by product IDs (PID) by the new Statistics Canada's Web Data Service: <https://www150.statcan.gc.ca/n1/en/type/data>.
+statcanR provides the R user with a consistent process to identify and collect data from Statistics Canada's data portal. It allows users to search  for and access all of Statistics Canada' open economic data (formerly known as CANSIM tables) now identified by product IDs (PID) by the new Statistics Canada's Web Data Service: <https://www150.statcan.gc.ca/n1/en/type/data>.
 
 ## Quick start
 
@@ -42,15 +42,23 @@ library(statcanR)
 
 # Practical usage
 
-This section presents an example of how to use the statcanR R package and its function statcan_data().    
+This section presents an example of how to use the statcanR R package and its functions: statcan_search() and statcan_data().    
   
 
-The following example is provided to illustrate how to use the function. It consists in collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.  
+The following example is provided to illustrate how to use these functions. It consists of collecting some descriptive statistics about the Canadian labour force at the federal, provincial and industrial levels, on a monthly basis.  
 
-With a simple web search 'statistics canada wages by industry metropolitan area monthly', the table number can easily be found on Statisitcs Canada's webpage. Here is below a figure that illustrates this example, such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives.
+To identify a relevant table, the statcan_search() function can be used
+by using a keyword or set of keywords, depending on the language the user wishes to search in (between English and French). Below is an example that reveals
+the data tables we could be interested in:
+```{r, eval=FALSE}
+# Identify with statcan_search() function
+statcan_search(c("federal","expenditures","objectives"),"eng")
 
-Once the table number is identified, the statcan_data() function is easy to use in order to collect the data, as following:  
-  
+```
+
+
+Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus the first table out of the two that appear, which contains data on Federal expenditures onscience and technology, by socio-economic objectives. Once this table number is identified
+(‘27-10-0014-01’), the statcan_data() function is easy to use in order to collect the data, as following:   
 ```{r, eval=FALSE}
 # Get data with statcan_data function
 mydata <- statcan_data("27-10-0014-01", "eng")
@@ -63,6 +71,19 @@ Should you want the same data in French, just replace the argument at the end of
 
 This section describes the code architecture of the statcanR package.
 
+The statcan_search() function has 2 arguments:   
+  
+  1. keywords
+  2. lang
+
+The 'keywords' argument is useful for identifying what kind of open economic data Statistics Canada has available for users. It can take as inputs either a single word (i.e., statcan_search("expenditures")) or a vector of multiple keywords (such as: statcan_search(c("expenditures","federal","objectives"))).
+
+The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can see what data tables are avaialable in French or English by setting the lang argument with c("fra", "eng").
+
+
+
+
+For all data tables that contain these words in either their title or description, the resulting output will include four pieces of information: The name of the data table, its unique table number identifier, the description, and the release date.
 In details, the statcan_data() function has 2 arguments:   
   
   1. tableNumber
@@ -72,13 +93,35 @@ In details, the statcan_data() function has 2 arguments:
 The 'tableNumber' argument simply refers to the table number of the Statistics Canada data table a user wants to collect, such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives, as an example.
 
 
-The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
+Just as in the statcan_search() command, 'lang', refers to the language, and can be set to "eng" for English or "fra" for French. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
 The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'data' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
-To be more precise about the statcan_data() function, here is below some further code description:   
+To be more precise about the functions, below is some further code description:   
+
+### statcan_research()
+
+  - `  keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")`:
+  The first step is to paste (either individually or in vector format) the keywords the user is interested in
+
+  - ` matches <- apply(statcan_data, 1, function(row) {`
+   ` all(sapply(keywords, function(x) {`
+   `   grepl(x, paste(as.character(row), collapse = " "))`
+   ` }))`
+  ` }) `:
+  Next, the matching relies on the sapply function, which is applied to any character string in a row of a given observation. Therefore, the "keyword" could be found in the title column or the description column (technically, it could even be in the "release date" or "id" columns).
+
+-   ` filtered_data <- statcan_data[matches, ]`
+ The third step takes only the data where matches were found.
+ 
+-   ` datatable(filtered_data, options = list(pageLength = 10))`
+ Finally, the datatable command presents the filtered data in a clean table.
+ 
+
   
+### statcan_data()  
+
   - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
   The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table.
   In addition, following the new Statistics Canada's Web Data Service, the URL typology defined by REST API is stored in csv files by table numbers without a '-'. Also, the last 2 digits after the last '-' refer to the specific excerpt of the original table.

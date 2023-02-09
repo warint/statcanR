@@ -19,9 +19,9 @@ status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.o
 
 # Overview
 
-Easily connect to Statistics Canada’s Web Data Service with R. Open
-economic data (formerly known as CANSIM tables, now identified by
-Product IDs (PID)) are accessible as a data frame, directly in the
+Easily connect to Statistics Canada’s Web Data Service with R. Find and 
+access open economic data (formerly known as CANSIM tables, now identified by
+Product IDs (PID)) which are accessible as a data frame, directly in the
 user’s R environment.
 
 ## Shiny App : statcanR ExploR
@@ -50,20 +50,29 @@ devtools::install_github('warint/statcanR')
 ## Example
 
 This section presents an example of how to use the `statcanR` R package
-and its function `statcan_data()` and `statcan_download_data()`.
+and its functions: `statcan_search()`, `statcan_data()`, and 
+`statcan_download_data()`.
 
 The following example is provided to illustrate how to use the
 functions. It consists in collecting some descriptive statistics about
 the Canadian Labour Force at the federal, provincial and industrial
 levels, on a monthly basis.
 
-With a simple web search ‘statistics canada wages by industry
-metropolitan area monthly’, the table number can easily be found on
-Statistics Canada’s webpage. Here is below a figure that illustrates
-this example, such as ‘27-10-0014-01’ for the Federal expenditures on
-science and technology, by socio-economic objectives.
+To identify a relevant table, the statcan_search() function can be used
+by using a keyword or set of keywords and specifying the language in which the 
+data will be presented (English or French). Below is an example that reveals
+the data tables we could be interested in:
 
-Once the table number is identified, the statcan_data() function is easy
+``` r
+library(statcanR)
+statcan_search(c("federal","expenditures","objectives"),"eng")
+```
+
+Notice that for each corresponding table, the unique table number identifier is 
+also presented. Let's focus the first table out of the two that appear, which 
+contains data on Federal expenditures on science and technology,
+by socio-economic objectives. Once this table number is identified
+(‘27-10-0014-01’), the statcan_data() function is easy
 to use in order to collect the data, as following:
 
 ``` r

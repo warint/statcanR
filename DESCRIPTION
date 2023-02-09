@@ -17,6 +17,7 @@ Suggests:
 VignetteBuilder: knitr
 Imports:
     data.table,
+    DT,
     curl,
     httr,
     readr,
