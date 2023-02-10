@@ -57,12 +57,11 @@ statcan_search(c("federal","expenditures","objectives"),"eng")
 ```
 
 
-Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus the first table out of the two that appear, which contains data on Federal expenditures onscience and technology, by socio-economic objectives. Once this table number is identified
+Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus on the first table out of the two that appear, which contains data on Federal expenditures onscience and technology, by socio-economic objectives. Once this table number is identified
 (‘27-10-0014-01’), the statcan_data() function is easy to use in order to collect the data, as following:   
 ```{r, eval=FALSE}
 # Get data with statcan_data function
 mydata <- statcan_data("27-10-0014-01", "eng")
-
 ```
 
 Should you want the same data in French, just replace the argument at the end of the function with "fra".

@@ -27,6 +27,7 @@
 #' @import data.table
 #' @import curl
 #' @import tibble
+#' @import qpdf
 #' @importFrom httr http_error
 #'
 #' @examples

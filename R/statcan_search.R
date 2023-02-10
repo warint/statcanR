@@ -19,7 +19,7 @@
 #' @import data.table
 #' @import DT
 #' @import curl
-#' 
+#' @import qpdf
 #'
 #' @examples 
 #' statcan_search(c("economy","export","link"),"eng")
@@ -44,8 +44,8 @@ statcan_search <- function(keywords,lang)
     path <- file.path(tempdir(), "temp.csv")
     curl::curl_download(url, path)
     csv_file <- file.path(paste0(tempdir(), "/temp.csv"))
-    statcan_data <- readr::read_csv(csv_file)
-    
+    statcan_data <- readr::read_csv(csv_file,col_types = readr::cols(release_date = readr::col_character()))
+
     
     # Creating the keyword matches
     keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
@@ -79,8 +79,8 @@ statcan_search <- function(keywords,lang)
       path <- file.path(tempdir(), "temp.csv")
       curl::curl_download(url, path)
       csv_file <- file.path(paste0(tempdir(), "/temp.csv"))
-      statcan_data <- readr::read_csv(csv_file)
-      
+      statcan_data <- readr::read_csv(csv_file,col_types = readr::cols(release_date = readr::col_character()))
+
       
       # Creating the keyword matches
       keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
