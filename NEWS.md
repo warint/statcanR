@@ -1,3 +1,7 @@
+# statcanR 0.2.4
+
+* we have added the function statcan_search() to identify economic data tables available on Statistics Canada's website.
+
 # statcanR 0.2.3
 
 * we have modified the function to get an informative message if the table is not available instead of having an error message.

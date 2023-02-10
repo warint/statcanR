@@ -102,7 +102,7 @@ Thanks!
 
 ### Statistics Canada Open Licence
 
-This licence is issued on behalf of Her Majesty the Queen in Right of
+This licence is issued on behalf of His Majesty the King in Right of
 Canada, as represented by the Minister for Statistics Canada
 (“Statistics Canada”) to you (an individual or a legal entity that you
 are authorized to represent).

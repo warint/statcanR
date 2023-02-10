@@ -8,7 +8,7 @@ message: 'To cite package "statcanR" in publications use:'
 type: software
 license: MIT
 title: 'statcanR: Client for Statistics Canada''s Open Economic Data'
-version: 0.2.3
+version: 0.2.4
 abstract: An easy connection with R to Statistics Canada's Web Data Service. Open
   economic data (formerly known as CANSIM tables, now identified by Product IDs (PID))
   are accessible as a data frame, directly in the user's R environment. Warin, Le
