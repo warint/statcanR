@@ -136,23 +136,22 @@ shall include on such Value-added Product the following notice:
 
 To cite stantcanR package in your work:
 
-Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics
-Canada’s Open Economic Data. v0.1.0.
+Warin, T. (2023). statcanR: Client for Statistics
+Canada’s Open Economic Data. v0.3.
 
 ``` r
 @Manual{R-statcanR,
    title = {statcanR: Client for Statistics Canada's Open Economic Data},
-   author = {Thierry Warin and Romain {Le Duc}},
-   note = {R package version 0.1.0},
+   author = {Thierry Warin},
+   note = {R package version 0.3},
    url = {https://github.com/warint/statcanR},
-   year = {2019},
-   doi = "10.6084/m9.figshare.10544735.v1"
+   year = {2023}"
  }
 ```
 
 ### Acknowledgments
 
-The authors would like to thank the Center for Interuniversity Research
+The author would like to thank the Center for Interuniversity Research
 and Analysis of Organizations (CIRANO, Montreal) for its support, as
-well as Thibault Senegas, Marine Leroi and Martin Paquette. However,
-errors and omissions are ours.
+well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However,
+errors and omissions are his.
