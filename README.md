@@ -119,7 +119,7 @@ the Information.
 
 ##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
 
-Statistics Canada has a specific procedure regarding the ackowledgment
+Statistics Canada has a specific procedure regarding the acknowledgment
 of source :
 
 You shall include and maintain the following notice on all licensed

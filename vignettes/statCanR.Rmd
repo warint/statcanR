@@ -57,7 +57,7 @@ statcan_search(c("federal","expenditures","objectives"),"eng")
 ```
 
 
-Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus on the first table out of the two that appear, which contains data on Federal expenditures onscience and technology, by socio-economic objectives. Once this table number is identified
+Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus on the first table out of the two that appear, which contains data on Federal expenditures on science and technology, by socio-economic objectives. Once this table number is identified
 (‘27-10-0014-01’), the statcan_data() function is easy to use in order to collect the data, as following:   
 ```{r, eval=FALSE}
 # Get data with statcan_data function
@@ -77,7 +77,7 @@ The statcan_search() function has 2 arguments:
 
 The 'keywords' argument is useful for identifying what kind of open economic data Statistics Canada has available for users. It can take as inputs either a single word (i.e., statcan_search("expenditures")) or a vector of multiple keywords (such as: statcan_search(c("expenditures","federal","objectives"))).
 
-The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can see what data tables are avaialable in French or English by setting the lang argument with c("fra", "eng").
+The second argument, 'lang', refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages. Therefore, users can see what data tables are available in French or English by setting the lang argument with c("fra", "eng").
 
 
 
@@ -136,7 +136,7 @@ To be more precise about the functions, below is some further code description:
   The fourth step is a simple downloading function that extracts .Zip file and download it into a temporary folder.
   
   - `unzip(zipfile = download_dir, exdir = unzip_dir)`:
-  The fifth step consists in unzipping the .Zip file. The unzipping process gives access to two diffrent .csv files, such as the overall data table and the metadata table.
+  The fifth step consists in unzipping the .Zip file. The unzipping process gives access to two different .csv files, such as the overall data table and the metadata table.
     
   - `data.table::fread(csv_file)`:
   The sixth step consists in loading the data table into a unique data frame. The fread() function from the data.table package is used for its higher performance.   
