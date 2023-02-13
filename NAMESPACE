@@ -2,10 +2,11 @@
 
 export(statcan_data)
 export(statcan_download_data)
-export(statcan_search)
+export(url)
 import(DT)
 import(curl)
 import(data.table)
 import(qpdf)
+import(qs)
 import(tibble)
 importFrom(httr,http_error)

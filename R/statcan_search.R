@@ -20,10 +20,23 @@
 #' @import DT
 #' @import curl
 #' @import qpdf
-#'
+#' @import qs
 #' @examples 
 #' statcan_search(c("economy","export","link"),"eng")
 
+# downloading the data file in English version
+url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
+
+if (httr::http_error(url)) 
+{ # network is down = message (not an error anymore)
+  message("No tables with this combination of keywords")
+} else{ 
+  path <- file.path(tempdir(), "temp.qs")
+  curl::curl_download(url, path)
+  qs_file <- file.path(paste0(tempdir(), "/temp.qs"))
+  statcandata <- qs::qread(qs_file)
+  
+}
 
 statcan_search <- function(keywords,lang)
 {
@@ -32,58 +45,26 @@ statcan_search <- function(keywords,lang)
   if (lang == "eng")
   {
     
-    # downloading the data file in English version
-    url <- paste0("https://warin.ca/datalake/statcanR/statcan_database.csv")
-    
-    if (httr::http_error(url)) 
-    { # network is down = message (not an error anymore)
-      message("No tables with this combination of keywords")
-    }
-    
-    else{ 
-      path <- file.path(tempdir(), "temp.csv")
-      curl::curl_download(url, path)
-      csv_file <- file.path(paste0(tempdir(), "/temp.csv"))
-      statcan_data <- readr::read_csv("statcan_database_en.csv")
-      
-      
       # Creating the keyword matches
       keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
       
-      matches <- apply(statcan_data, 1, function(row) {
+      matches <- apply(statcandata, 1, function(row) {
         all(sapply(keywords, function(x) {
           grepl(x, paste(as.character(row), collapse = " "))
         }))
       })
       
-      
       # Keep only obs with matched keywords and create datatable 
-      filtered_data <- statcan_data[matches, ]
-      datatable(filtered_data, options = list(pageLength = 10))
-    }
-  } 
+      filtered_data <- statcandata[matches, ]
+      print(filtered_data)
+  }
   
   if (lang == "fra") {
-    
-    # downloading the data file in English version
-    url <- paste0("https://warin.ca/datalake/statcanR/statcan_database_fr.csv")
-    
-    if (httr::http_error(url)) 
-    { # network is down = message (not an error anymore)
-      message("No tables with this combination of keywords")
-    }
-    
-    else{ 
-      path <- file.path(tempdir(), "temp.csv")
-      curl::curl_download(url, path)
-      csv_file <- file.path(paste0(tempdir(), "/temp.csv"))
-      statcan_data <- readr::read_csv("statcan_database_fr.csv")
-      
       
       # Creating the keyword matches
       keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
       
-      matches <- apply(statcan_data, 1, function(row) {
+      matches <- apply(statcandata, 1, function(row) {
         all(sapply(keywords, function(x) {
           grepl(x, paste(as.character(row), collapse = " "))
         }))
@@ -91,9 +72,9 @@ statcan_search <- function(keywords,lang)
       
       
       # Keep only obs with matched keywords and create datatable 
-      filtered_data <- statcan_data[matches, ]
-      datatable(filtered_data, options = list(pageLength = 10))
-    }
-  } 
-}
+      filtered_data <- statcandata[matches, ]
+      print(filtered_data)
+  }
+} 
+
   

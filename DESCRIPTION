@@ -18,6 +18,7 @@ Suggests:
 VignetteBuilder: knitr
 Imports:
     data.table,
+    qs,
     qpdf,
     DT,
     curl,
