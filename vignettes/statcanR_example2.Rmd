@@ -1,11 +1,11 @@
 ---
-title: "statcanR Vignette: statcanR Example 2"
+title: "statcanR Vignette: Example 2"
 author: "Thierry Warin"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{statcanR Vignette: statcanR Example 2}
+  %\VignetteIndexEntry{statcanR Vignette: Example 2}
   %\VignetteEncoding{UTF-8}
 ---
 
