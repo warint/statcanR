@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">statcanR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.4</span>
       </span>
     </div>
 
@@ -26,13 +26,16 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/statCanR.html">statCanR</a>
+    </li>
+    <li>
+      <a href="../articles/vignettes.html">vignettes</a>
     </li>
   </ul></li>
 <li>
@@ -63,40 +66,26 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">statcan_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">statcan_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>tableNumber</dt>
 <dd><p>The table number of the Statistics Canada data table</p></dd>
+
+
 <dt>lang</dt>
 <dd><p>The language wanted</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The output will be a data table representing the data associated with the chosen table number.</p>
-    </div>
-    <div id="details">
-    <h2>Details</h2>
-    <p>The
-<code>statcan_data()</code> function has 2 arguments to fulfill to get data: tableNumber &amp; lang.</p>
+    
 
-<p>The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
-such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives, as an example.</p>
-
-<p>To get the table number: <a href="https://www150.statcan.gc.ca/n1/en/type/data" class="external-link">https://www150.statcan.gc.ca/n1/en/type/data</a>.</p>
-<p>The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
-Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').</p>
+<p>The output will be a data table representing the data associated with the chosen table number.</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">statcan_data</span><span class="op">(</span><span class="st">'27-10-0014-01'</span>, <span class="st">'eng'</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No Internet connection or incorrect statcan table number or Statistics Canada website under maintenance.</span>
-<span class="r-in"></span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -109,7 +98,7 @@ Therefore, users can choose to collect satistics data tables in French or Englis
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

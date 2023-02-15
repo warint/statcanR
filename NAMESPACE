@@ -2,7 +2,7 @@
 
 export(statcan_data)
 export(statcan_download_data)
-export(url)
+export(statcan_search)
 import(DT)
 import(curl)
 import(data.table)

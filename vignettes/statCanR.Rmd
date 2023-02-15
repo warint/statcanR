@@ -53,7 +53,6 @@ the data tables we could be interested in:
 ```{r, eval=FALSE}
 # Identify with statcan_search() function
 statcan_search(c("federal","expenditures","objectives"),"eng")
-
 ```
 
 
@@ -61,7 +60,7 @@ Notice that for each corresponding table, the unique table number identifier is 
 (‘27-10-0014-01’), the statcan_data() function is easy to use in order to collect the data, as following:   
 ```{r, eval=FALSE}
 # Get data with statcan_data function
-mydata <- statcan_data("27-10-0014-01", "eng")
+mydata <- statcan_download_data("27-10-0014-01", "eng")
 ```
 
 Should you want the same data in French, just replace the argument at the end of the function with "fra".
@@ -83,7 +82,7 @@ The second argument, 'lang', refers to the language. As Canada is a bilingual co
 
 
 For all data tables that contain these words in either their title or description, the resulting output will include four pieces of information: The name of the data table, its unique table number identifier, the description, and the release date.
-In details, the statcan_data() function has 2 arguments:   
+In details, the statcan_download_data() function has 2 arguments:   
   
   1. tableNumber
   2. lang
@@ -94,12 +93,12 @@ The 'tableNumber' argument simply refers to the table number of the Statistics C
 
 Just as in the statcan_search() command, 'lang', refers to the language, and can be set to "eng" for English or "fra" for French. Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c("fra", "eng").
 
-The code architecture of the statcan_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'data' and to add the official table indicator name in the new 'INDICATOR' column.         
+The code architecture of the statcan_download_data() function is as follows. The first step if to clean the table number in order to align it with the official typology of Statistics Canada's Web Data Service. The second step is to create a temporary folder where all the data wrangling operations are performed. The third step is to check and select the correct language. The fourth step is to define the right URL where the actual data table is stored and  then to download the .Zip container. The fifth step is to unzip the previously downloaded .Zip file to extract the data and metadata  from the .csv files. The final step is to load the statistics data into a data frame called 'data' and to add the official table indicator name in the new 'INDICATOR' column.         
   
 
 To be more precise about the functions, below is some further code description:   
 
-### statcan_research()
+### statcan_search()
 
   - `  keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")`:
   The first step is to paste (either individually or in vector format) the keywords the user is interested in
@@ -119,7 +118,7 @@ To be more precise about the functions, below is some further code description:
  
 
   
-### statcan_data()  
+### statcan_download_data()  
 
   - `tableNumber <- gsub("-", "", substr(tableNumber, 1, nchar(tableNumber)-2))`:
   The first step is to clean the table number provided by the user in order to collect the overall data table related to the specific indicator the user is interested in. In fact, each indicator is an excerpt of the overall table.
