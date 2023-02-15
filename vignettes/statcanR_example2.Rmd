@@ -1,5 +1,5 @@
 ---
-title: "statcanR Vignette: Example 2"
+title: "statcanR Vignette: statcanR Example 2"
 author: "Thierry Warin"
 data: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
