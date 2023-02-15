@@ -18,6 +18,9 @@ Suggests:
 VignetteBuilder: knitr
 Imports:
     data.table,
+    dplyr,
+    ggplot2,
+    reshape2,
     qs,
     qpdf,
     DT,

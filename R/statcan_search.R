@@ -31,11 +31,14 @@ if (httr::http_error(url))
 #' @return The output will be the title, id, description, and release date of a table
 #' @export
 #'
-#' @import data.table
+#' 
 #' @import DT
 #' @import curl
 #' @import qpdf
 #' @import qs
+#' @import dplyr
+#' @import ggplot2
+#' @import reshape2
 #' @examples statcan_search(c("economy","export","link"),"eng")
 
 
