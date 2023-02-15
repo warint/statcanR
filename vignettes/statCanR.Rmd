@@ -52,7 +52,7 @@ by using a keyword or set of keywords, depending on the language the user wishes
 the data tables we could be interested in:
 ```{r, eval=FALSE}
 # Identify with statcan_search() function
-statcan_search(c("federal","expenditures","objectives"),"eng")
+statcan_search(c("federal","expenditures"),"eng")
 ```
 
 
