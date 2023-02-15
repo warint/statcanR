@@ -137,13 +137,13 @@ shall include on such Value-added Product the following notice:
 To cite stantcanR package in your work:
 
 Warin, T. (2023). statcanR: Client for Statistics
-Canada’s Open Economic Data. v0.3.
+Canada’s Open Economic Data. v0.2.4.
 
 ``` r
 @Manual{R-statcanR,
    title = {statcanR: Client for Statistics Canada's Open Economic Data},
    author = {Thierry Warin},
-   note = {R package version 0.3},
+   note = {R package version 0.2.4},
    url = {https://github.com/warint/statcanR},
    year = {2023}"
  }
