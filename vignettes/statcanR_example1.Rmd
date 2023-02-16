@@ -23,11 +23,6 @@ We are interested in exploring how different organizations are succeeding in ado
 #### Data identification: Using the statcan_search() command 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=FALSE}
 library(statcanR)
-library(dplyr)
-library(DT)
-library(curl)
-library(data.table)
-library(qs)
 
 url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
 
@@ -85,10 +80,6 @@ statcan_search <- function(keywords,lang) {
 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=TRUE}
 library(statcanR)
-library(dplyr)
-library(DT)
-library(curl)
-library(data.table)
 # Search for data table with keywords 
 statcan_search(c("green","business"),"eng")
 ```
@@ -122,9 +113,6 @@ Let's first look at how covid is preventing sustainability adoption across diffe
 
 
 ```{r, fig.height=5, fig.width=13, eval = TRUE, warning = FALSE, message = FALSE, echo=TRUE}
-library(reshape2)
-library(ggplot2)
-
 
 # Filter for COVID barrier
 covid_barrier <-biz_barriers %>% 

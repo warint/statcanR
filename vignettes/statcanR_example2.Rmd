@@ -23,10 +23,6 @@ Let's say we are interested in understanding how much spending goes into researc
 #### Data identification: Using the statcan_search() command 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=FALSE}
 library(statcanR)
-library(dplyr)
-library(DT)
-library(curl)
-library(qs)
 
 url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
 
@@ -89,6 +85,7 @@ library(DT)
 library(curl)
 
 
+
 # Enter keywords and preferred language ("eng" for Enlgish or "fra" for French)
 statcan_search(c("expenditure","research and development","province"),"eng")
 ```
@@ -119,8 +116,6 @@ Which provinces receive the most public investment for research and development?
 
 #### Government R&D: Total Spending, by Province
 ```{r, fig.height=5, fig.width=12.5, fig.align = 'center',eval = TRUE, warning = FALSE, message = FALSE, echo=TRUE}
-library(reshape2)
-library(ggplot2)
 
 # Filter for COVID barrier
 rd_cangov <-rd %>% 

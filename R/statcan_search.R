@@ -57,7 +57,7 @@ statcan_search <- function(keywords,lang) {
       
       # Keep only obs with matched keywords and create datatable 
       filtered_data <- statcandata[matches, ]
-      print(filtered_data)
+      return(datatable(filtered_data,options = list(pageLength = 5)))  
   }
   
   if (lang == "fra") {
@@ -74,7 +74,7 @@ statcan_search <- function(keywords,lang) {
       
       # Keep only obs with matched keywords and create datatable 
       filtered_data <- statcandata[matches, ]
-      print(filtered_data)
+      return(datatable(filtered_data,options = list(pageLength = 5)))  
   }
 } 
 
