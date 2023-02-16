@@ -36,7 +36,6 @@ if (httr::http_error(url))
 #' @import curl
 #' @import qpdf
 #' @import qs
-#' @import data.table
 #' @import dplyr
 #' @import ggplot2
 #' @import reshape2

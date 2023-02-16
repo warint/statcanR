@@ -24,12 +24,13 @@
 #' @return The output will be a data table representing the data associated with the chosen table number.
 #' @export
 #'
-#' @import data.table
 #' @import curl
 #' @import tibble
 #' @import qpdf
 #' @importFrom httr http_error
-#'
+#' @importFrom data.table fread
+#' @importFrom data.table setDF
+#' 
 #' @examples
 #' mydata <- statcan_data('27-10-0014-01', 'eng')
 #'
@@ -182,10 +183,12 @@ statcan_data <- function(tableNumber, lang)
 #' @return The output will be  a data table and csv file representing the data associated with the chosen table number.
 #' @export
 #' 
-#' @import data.table
+#' 
 #' @import curl
 #' @import tibble
 #' @importFrom httr http_error
+#' @importFrom data.table fread
+#' @importFrom data.table setDF
 #'
 #' @examples
 #' mydata <- statcan_data('27-10-0014-01', 'eng')
