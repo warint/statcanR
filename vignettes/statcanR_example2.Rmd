@@ -23,6 +23,13 @@ Let's say we are interested in understanding how much spending goes into researc
 #### Data identification: Using the statcan_search() command 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=FALSE}
 library(statcanR)
+library(dplyr)
+library(DT)
+library(curl)
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
 
 url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
 
@@ -83,7 +90,9 @@ library(statcanR)
 library(dplyr)
 library(DT)
 library(curl)
-
+library(dplyr)
+library(ggplot2)
+library(reshape2)
 
 
 # Enter keywords and preferred language ("eng" for Enlgish or "fra" for French)

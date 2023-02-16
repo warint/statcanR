@@ -23,6 +23,13 @@ We are interested in exploring how different organizations are succeeding in ado
 #### Data identification: Using the statcan_search() command 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=FALSE}
 library(statcanR)
+library(dplyr)
+library(DT)
+library(curl)
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
 
 url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
 
@@ -80,6 +87,13 @@ statcan_search <- function(keywords,lang) {
 
 ```{r eval = TRUE, warning = FALSE, message = FALSE, echo=TRUE}
 library(statcanR)
+library(dplyr)
+library(DT)
+library(curl)
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
 # Search for data table with keywords 
 statcan_search(c("green","business"),"eng")
 ```
