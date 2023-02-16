@@ -144,7 +144,7 @@ ind_comparison <- subset(covid_barrier, `Business characteristics` == "Finance a
   select(biz_type,GEO,VALUE)
 
 # Plot data
-ggplot(ind_comparison,aes(x = GEO,y = VALUE),) + 
+ggplot2::ggplot(ind_comparison,aes(x = GEO,y = VALUE),) + 
     geom_bar(aes(fill = biz_type),stat = "identity",position = "dodge", width = 0.5) +
     theme(axis.text = element_text(size = 7)) +
     ylab("Percent of businesses") +

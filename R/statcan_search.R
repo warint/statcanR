@@ -36,9 +36,7 @@ if (httr::http_error(url))
 #' @import curl
 #' @import qpdf
 #' @import qs
-#' @import dplyr
-#' @import ggplot2
-#' @import reshape2
+#' @import data.table
 #' @examples statcan_search(c("economy","export","link"),"eng")
 
 
