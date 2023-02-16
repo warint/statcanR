@@ -3,8 +3,8 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   statCanR: statCanR.html
-  statCanR Example 1: statcanR_example1.html
-  statCanR Example 2: statcanR_example2.html
+  statcanR_example1: statcanR_example1.html
+  statcanR_example2: statcanR_example2.html
   vignettes: vignettes.html
-last_built: 2023-02-15T16:39Z
+last_built: 2023-02-16T15:07Z
 
