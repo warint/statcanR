@@ -134,7 +134,7 @@ shall include on such Value-added Product the following notice:
 
 ### Cite statcanR
 
-To cite stantcanR package in your work:
+To cite statcanR package in your work:
 
 Warin, T. (2023). statcanR: Client for Statistics
 Canada’s Open Economic Data. v0.2.4.
