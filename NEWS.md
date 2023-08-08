@@ -1,3 +1,7 @@
+# statcanR 0.2.5
+
+* We have corrected statcan_search() function by removing top level code. You can now install statcanR package without an internet connection
+
 # statcanR 0.2.4
 
 * we have added the function statcan_search() to identify economic data tables available on Statistics Canada's website.

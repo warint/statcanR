@@ -1,7 +1,7 @@
 Package: statcanR
 Type: Package
 Title: Client for Statistics Canada's Open Economic Data
-Version: 0.2.4
+Version: 0.2.5
 Authors@R: c(
     person("Thierry", "Warin", email = "thierry.warin@hec.ca", role =c("aut", "cre"), comment = c(ORCID = "0000-0002-5921-3428") ),
     person("Romain", "Le Duc", role = "aut"))
