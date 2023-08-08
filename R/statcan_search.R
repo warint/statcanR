@@ -1,18 +1,3 @@
-# downloading the data file in English version
-url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
-
-if (httr::http_error(url)) 
-{ # network is down = message (not an error anymore)
-  message("No tables with this combination of keywords")
-} else{ 
-  path <- file.path(tempdir(), "temp.qs")
-  curl::curl_download(url, path)
-  qs_file <- file.path(paste0(tempdir(), "/temp.qs"))
-  statcandata <- qs::qread(qs_file)
-  
-}
-
-
 #' Searching function for statcanR
 #'
 #'
@@ -45,9 +30,22 @@ if (httr::http_error(url))
 
 statcan_search <- function(keywords,lang) {
   
+  # Get the whole list of available tables from statCan into a temp forlder
+  url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
+  
+  if (httr::http_error(url)) 
+  { # network is down = message (not an error anymore)
+    message("No tables with this combination of keywords")
+  } else{ 
+    path <- file.path(tempdir(), "temp.qs")
+    curl::curl_download(url, path)
+    qs_file <- file.path(paste0(tempdir(), "/temp.qs"))
+    statcandata <- qs::qread(qs_file)
+    
+  }
+  
   # Loading data
-  if (lang == "eng")
-  {
+  if (lang == "eng") {
     
       # Creating the keyword matches
       keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
