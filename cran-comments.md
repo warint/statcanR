@@ -1,3 +1,11 @@
+## Resubmission
+
+This is a resubmission to correct things ask by CRAN team. In this version I have:
+
+
+* Fix statcan_search function and remove top level code so internet connection is not needed to install the package
+
+
 
 ## Resubmission
 
