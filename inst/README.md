@@ -19,9 +19,9 @@ status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.o
 
 # Overview
 
-Easily connect to Statistics Canada’s Web Data Service with R. Find and 
-access open economic data (formerly known as CANSIM tables, now identified by
-Product IDs (PID)) which are accessible as a data frame, directly in the
+Easily connect to Statistics Canada’s Web Data Service with R. Open
+economic data (formerly known as CANSIM tables, now identified by
+Product IDs (PID)) are accessible as a data frame, directly in the
 user’s R environment.
 
 ## Shiny App : statcanR ExploR
@@ -50,29 +50,20 @@ devtools::install_github('warint/statcanR')
 ## Example
 
 This section presents an example of how to use the `statcanR` R package
-and its functions: `statcan_search()`, `statcan_data()`, and 
-`statcan_download_data()`.
+and its function `statcan_data()` and `statcan_download_data()`.
 
 The following example is provided to illustrate how to use the
 functions. It consists in collecting some descriptive statistics about
 the Canadian Labour Force at the federal, provincial and industrial
 levels, on a monthly basis.
 
-To identify a relevant table, the statcan_search() function can be used
-by using a keyword or set of keywords and specifying the language in which the 
-data will be presented (English or French). Below is an example that reveals
-the data tables we could be interested in:
+With a simple web search ‘statistics canada wages by industry
+metropolitan area monthly’, the table number can easily be found on
+Statisitcs Canada’s webpage. Here is below a figure that illustrates
+this example, such as ‘27-10-0014-01’ for the Federal expenditures on
+science and technology, by socio-economic objectives.
 
-``` r
-library(statcanR)
-statcan_search(c("federal","expenditures","objectives"),"eng")
-```
-
-Notice that for each corresponding table, the unique table number identifier is 
-also presented. Let's focus the first table out of the two that appear, which 
-contains data on Federal expenditures on science and technology,
-by socio-economic objectives. Once this table number is identified
-(‘27-10-0014-01’), the statcan_data() function is easy
+Once the table number is identified, the statcan_data() function is easy
 to use in order to collect the data, as following:
 
 ``` r
@@ -102,7 +93,7 @@ Thanks!
 
 ### Statistics Canada Open Licence
 
-This licence is issued on behalf of His Majesty the King in Right of
+This licence is issued on behalf of Her Majesty the Queen in Right of
 Canada, as represented by the Minister for Statistics Canada
 (“Statistics Canada”) to you (an individual or a legal entity that you
 are authorized to represent).
@@ -119,7 +110,7 @@ the Information.
 
 ##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
 
-Statistics Canada has a specific procedure regarding the acknowledgment
+Statistics Canada has a specific procedure regarding the ackowledgment
 of source :
 
 You shall include and maintain the following notice on all licensed
@@ -134,24 +125,25 @@ shall include on such Value-added Product the following notice:
 
 ### Cite statcanR
 
-To cite statcanR package in your work:
+To cite stantcanR package in your work:
 
-Warin, T. (2023). statcanR: Client for Statistics
-Canada’s Open Economic Data. v0.2.4.
+Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics
+Canada’s Open Economic Data. v0.1.0.
 
 ``` r
 @Manual{R-statcanR,
    title = {statcanR: Client for Statistics Canada's Open Economic Data},
-   author = {Thierry Warin},
-   note = {R package version 0.2.4},
+   author = {Thierry Warin and Romain {Le Duc}},
+   note = {R package version 0.1.0},
    url = {https://github.com/warint/statcanR},
-   year = {2023}"
+   year = {2019},
+   doi = "10.6084/m9.figshare.10544735.v1"
  }
 ```
 
 ### Acknowledgments
 
-The author would like to thank the Center for Interuniversity Research
+The authors would like to thank the Center for Interuniversity Research
 and Analysis of Organizations (CIRANO, Montreal) for its support, as
-well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However,
-errors and omissions are his.
+well as Thibault Senegas, Marine Leroi and Martin Paquette. However,
+errors and omissions are ours.

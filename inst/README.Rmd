@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![Travis build status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://travis-ci.org/github/warint/statcanR)
+[![Travis build status](https://travis-ci.com/warint/statcanR.svg?branch=master)](https://app.travis-ci.com/github/warint/statcanR)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
 [![Mentioned in Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
 [![CRAN status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
