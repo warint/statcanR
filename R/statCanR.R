@@ -32,7 +32,7 @@
 #' @importFrom data.table setDF
 #' 
 #' @examples
-#' mydata <- statcan_data('27-10-0014-01', 'eng')
+#' #mydata <- statcan_data('27-10-0014-01', 'eng')
 #'
 
 

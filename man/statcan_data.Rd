@@ -32,6 +32,6 @@ The second argument, lang, refers to the language. As Canada is a bilingual coun
 Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').
 }
 \examples{
-mydata <- statcan_data('27-10-0014-01', 'eng')
+#mydata <- statcan_data('27-10-0014-01', 'eng')
 
 }
