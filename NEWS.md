@@ -1,6 +1,6 @@
-# 0.2.9000
+# statcanR 0.2.6
 
-* Dev version
+* fix server issue
 
 # statcanR 0.2.5
 
