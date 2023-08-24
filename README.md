@@ -155,3 +155,21 @@ The author would like to thank the Center for Interuniversity Research
 and Analysis of Organizations (CIRANO, Montreal) for its support, as
 well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However,
 errors and omissions are his.
+
+
+### Contributing to the package
+#### Bug reports
+
+When you file a bug report, please spend some time making it easy for me to follow and reproduce. The more time you spend on making the bug report coherent, the more time I can dedicate to investigate the bug as opposed to the bug report.
+
+##### Contributing to the package development
+
+To get started, consider either adding a new example or enhancing the existing documentation.
+
+If you're interested in submitting a Pull Request to include your own functions, please include the following:
+
+    - The code for the new function(s), complete with roxygen annotations and sample usage.
+    - A dedicated section in the relevant vignette that explains how to utilize the new function.
+
+To ensure your changes are compliant, run rhub::check_for_cran() using rhub. After submission, your Pull Request will undergo automated evaluation via GitHub Actions, allowing you to monitor for any issues.
+
