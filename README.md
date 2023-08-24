@@ -168,8 +168,8 @@ To get started, consider either adding a new example or enhancing the existing d
 
 If you're interested in submitting a Pull Request to include your own functions, please include the following:
 
-    - The code for the new function(s), complete with roxygen annotations and sample usage.
-    - A dedicated section in the relevant vignette that explains how to utilize the new function.
+- The code for the new function(s), complete with roxygen annotations and sample usage.
+- A dedicated section in the relevant vignette that explains how to utilize the new function.
 
 To ensure your changes are compliant, run rhub::check_for_cran() using rhub. After submission, your Pull Request will undergo automated evaluation via GitHub Actions, allowing you to monitor for any issues.
 
