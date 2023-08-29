@@ -28,6 +28,6 @@ Imports:
     httr,
     readr,
     tibble
-URL: https://github.com/warint/statcanR/
-BugReports: https://github.com/warint/statcanR/issues/
+URL: https://warint.github.io/statcanR/, https://github.com/warint/statcanR
+BugReports: https://github.com/warint/statcanR/issues
 Config/testthat/edition: 3
