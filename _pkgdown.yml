@@ -1,1 +1,4 @@
-destination: docs
+url: https://warint.github.io/statcanR/
+
+template:
+  bootstrap: 5
