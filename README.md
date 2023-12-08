@@ -24,7 +24,7 @@ access open economic data (formerly known as CANSIM tables, now identified by
 Product IDs (PID)) which are accessible as a data frame, directly in the
 user’s R environment.
 
-[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/warint/langs)](https://githubtrends.io)
+[![GitHub Trends SVG](https://api.githubtrends.io/user/svg/avgupta456/langs)](https://githubtrends.io)
 
 ## Shiny App : statcanR ExploR
 
