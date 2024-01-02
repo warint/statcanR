@@ -80,7 +80,10 @@ statcan_data <- function(tableNumber, lang)
     # Indicator defined by Statistics Canada and based on metadata file.
     can_data$INDICATOR <- as.character(0)
     can_data$COORDINATE <- as.character(can_data$COORDINATE)
-    metadata <- readr::read_csv(file.path(unzip_dir, paste0(tableNumber, "_MetaData.csv")), n_max = 1)
+    lines <- readLines(file.path(unzip_dir, paste0(tableNumber, "_MetaData.csv")), n = 2)
+    # Remove terminal comma from metadata
+    lines[2] <- sub(",$", "", lines[2])
+    metadata <- readr::read_csv(I(lines), show_col_types = FALSE)
     probs <- problems(metadata)
     can_data$INDICATOR <- as.character(metadata[1, 1])
     
