@@ -138,17 +138,24 @@ shall include on such Value-added Product the following notice:
 
 To cite statcanR package in your work:
 
-Warin, T. (2023). statcanR: Client for Statistics
-Canada’s Open Economic Data. v0.2.4.
+Warin, T. (2024). Access Statistics Canada’s Open Economic Data for Statistics and Data Science Courses. Technology Innovations in Statistics Education, 15(1). http://dx.doi.org/10.5070/T5.1868 Retrieved from https://escholarship.org/uc/item/9jr7k5hp
 
 ``` r
-@Manual{R-statcanR,
-   title = {statcanR: Client for Statistics Canada's Open Economic Data},
-   author = {Thierry Warin},
-   note = {R package version 0.2.4},
-   url = {https://github.com/warint/statcanR},
-   year = {2023}"
- }
+@article{warin_access_2024,
+	title = {Access {Statistics} {Canada}’s {Open} {Economic} {Data} for {Statistics} and {Data} {Science} {Courses}},
+	volume = {15},
+	url = {https://escholarship.org/uc/item/9jr7k5hp},
+	doi = {10.5070/T5.1868},
+	abstract = {This article is about the two conflicting goals when teaching statistics or data science courses based on real-world data in a business school environment. We propose to look at structured socio-economic data about the Canadian economy. Canada was ranked 8th in 2017 by Open Data Watch (Government of Canada) for its data accessibility policy. Statistics Canada offers several ways to access data across its over 11,000 data tables. We built an R package to ease access to Statistics Canada's open economic data. With this package, we offer students another option to collect data about the Canadian economy.},
+	language = {en},
+	number = {1},
+	urldate = {2024-01-17},
+	journal = {Technology Innovations in Statistics Education},
+	author = {Warin, Thierry},
+	month = jan,
+	year = {2024},
+	file = {Full Text PDF:/Users/thierrywarin/Zotero/storage/7LNXFPKL/Warin - 2024 - Access Statistics Canada’s Open Economic Data for .pdf:application/pdf},
+}
 ```
 
 ### Acknowledgments
