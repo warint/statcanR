@@ -35,7 +35,7 @@ access to our package, we have also developed a Shiny
 application.Through the same logic present in our package, researchers
 can retrieve data from Statistics Canada.
 
-statcanR EploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
+statcanR ExploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
 
 ## Installation
 
