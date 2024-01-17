@@ -160,10 +160,7 @@ Warin, T. (2024). Access Statistics Canada’s Open Economic Data for Statistics
 
 ### Acknowledgments
 
-The author would like to thank the Center for Interuniversity Research
-and Analysis of Organizations (CIRANO, Montreal) for its support, as
-well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However,
-errors and omissions are his.
+A previous version of this package was developed with Romain Le Duc. This version has benefitted from Thibault Senegas's contribution. The author would like to thank the Center for Interuniversity Research and Analysis of Organizations (CIRANO, Montreal) for its support, as well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However, errors and omissions are his.
 
 
 ### Contributing to the package
