@@ -50,6 +50,7 @@ The following example is provided to illustrate how to use these functions. It c
 To identify a relevant table, the statcan_search() function can be used
 by using a keyword or set of keywords, depending on the language the user wishes to search in (between English and French). Below is an example that reveals
 the data tables we could be interested in:
+
 ```{r, eval=FALSE}
 # Identify with statcan_search() function
 statcan_search(c("federal","expenditures"),"eng")
@@ -58,6 +59,7 @@ statcan_search(c("federal","expenditures"),"eng")
 
 Notice that for each corresponding table, the unique table number identifier is also presented. Let's focus on the first table out of the two that appear, which contains data on Federal expenditures on science and technology, by socio-economic objectives. Once this table number is identified
 (‘27-10-0014-01’), the statcan_data() function is easy to use in order to collect the data, as following:   
+
 ```{r, eval=FALSE}
 # Get data with statcan_data function
 mydata <- statcan_download_data("27-10-0014-01", "eng")
