@@ -7,19 +7,14 @@ cff-version: 1.2.0
 message: 'To cite package "statcanR" in publications use:'
 type: software
 license: MIT
-title: 'statcanR: Client for Statistics Canada''s Open Economic Data'
-version: 0.2.4
-abstract: An easy connection with R to Statistics Canada's Web Data Service. Open
-  economic data (formerly known as CANSIM tables, now identified by Product IDs (PID))
-  are accessible as a data frame, directly in the user's R environment. Warin, Le
-  Duc (2019) <doi:10.6084/m9.figshare.10544735>.
+title: 'Access Statistics Canada’s Open Economic Data for Statistics and Data Science Courses'
+version: 0.2.5
+abstract: This article is about the two conflicting goals when teaching statistics or data science courses based on real-world data in a business school environment. We propose to look at structured socio-economic data about the Canadian economy. Canada was ranked 8th in 2017 by Open Data Watch (Government of Canada) for its data accessibility policy. Statistics Canada offers several ways to access data across its over 11,000 data tables. We built an R package to ease access to Statistics Canada's open economic data. With this package, we offer students another option to collect data about the Canadian economy. Warin (2024) <doi:10.5070/T5.1868>.
 authors:
 - family-names: Warin
   given-names: Thierry
   email: thierry.warin@hec.ca
   orcid: https://orcid.org/0000-0002-5921-3428
-- family-names: Le Duc
-  given-names: Romain
 repository: https://CRAN.R-project.org/package=statcanR
 repository-code: https://github.com/warint/statcanR/issues/
 url: https://github.com/warint/statcanR/
