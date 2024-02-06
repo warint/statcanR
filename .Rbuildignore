@@ -13,3 +13,4 @@
 ^LICENSE\.md$
 ^CRAN-SUBMISSION$
 ^CITATION\.cff$
+^\.github$

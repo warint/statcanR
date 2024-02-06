@@ -14,7 +14,7 @@ Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
-
+[![R-CMD-check](https://github.com/warint/statcanR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/warint/statcanR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # Overview
