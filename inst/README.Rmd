@@ -107,18 +107,7 @@ Where any Information is contained within a Value-added Product, you shall inclu
 
 To cite stantcanR package in your work:
 
-Warin, T., Romain Le Duc (2019). statcanR: Client for Statistics Canada's Open Economic Data. v0.1.0.
-
-```{r,eval=FALSE}
-@Manual{R-statcanR,
-   title = {statcanR: Client for Statistics Canada's Open Economic Data},
-   author = {Thierry Warin and Romain {Le Duc}},
-   note = {R package version 0.1.0},
-   url = {https://github.com/warint/statcanR},
-   year = {2019},
-   doi = "10.6084/m9.figshare.10544735.v1"
- }
-```
+Warin, T. (2024). Access Statistics Canada’s Open Economic Data for Statistics and Data Science Courses. Technology Innovations in Statistics Education, 15(1). http://dx.doi.org/10.5070/T5.1868 Retrieved from https://escholarship.org/uc/item/9jr7k5hp
 
 ### Acknowledgments
 
