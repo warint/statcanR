@@ -20,7 +20,7 @@
 #' @import DT
 #' @import curl
 #' @import qpdf
-#' @import qs
+#' @import qs2
 #' @import dplyr
 #' @import ggplot2
 #' @import reshape2
@@ -40,7 +40,7 @@ statcan_search <- function(keywords,lang) {
     path <- file.path(tempdir(), "temp.qs")
     curl::curl_download(url, path)
     qs_file <- file.path(paste0(tempdir(), "/temp.qs"))
-    statcandata <- qs::qread(qs_file)
+    statcandata <- qs2::qread(qs_file)
     
   }
   

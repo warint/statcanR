@@ -21,7 +21,7 @@ Imports:
     dplyr,
     ggplot2,
     reshape2,
-    qs,
+    qs2,
     qpdf,
     DT,
     curl,
