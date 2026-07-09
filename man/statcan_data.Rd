@@ -2,9 +2,12 @@
 % Please edit documentation in R/statCanR.R
 \name{statcan_data}
 \alias{statcan_data}
+\alias{statcan_download_data}
 \title{statcanR}
 \usage{
 statcan_data(tableNumber, lang)
+
+statcan_download_data(tableNumber, lang)
 }
 \arguments{
 \item{tableNumber}{The table number of the Statistics Canada data table}
