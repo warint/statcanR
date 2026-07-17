@@ -4,21 +4,23 @@
 
 `statcanR` connects R to [Statistics Canada’s Web Data Service
 (WDS)](https://www.statcan.gc.ca/en/developers/wds). This vignette walks
-through a complete workflow: finding a table, understanding its
-identifier, downloading it, inspecting the result, and optionally saving
-a CSV copy.
+through a complete workflow: describing the data you need, choosing a
+table, understanding its identifier, downloading it, inspecting the
+result, and optionally saving a CSV copy.
 
-The package supports three common tasks:
+The package supports four common tasks:
 
-1.  Search the official catalogue of Statistics Canada tables.
-2.  Download a complete table in English or French into R.
-3.  Save the downloaded table as a CSV file.
+1.  Find likely tables from an ordinary-language description.
+2.  Search for exact keywords in the official table catalogue.
+3.  Download a complete table in English or French into R.
+4.  Save the downloaded table as a CSV file.
 
-The three public functions have distinct purposes:
+The four public functions have distinct purposes:
 
 | Function | Use it when… | Result |
 |----|----|----|
-| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | You know the topic but not the table identifier | An interactive table of matching catalogue entries |
+| [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md) | You can describe the subject, geography, or period you need | A ranked data frame of likely tables and reasons for each match |
+| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | You know words that occur in the official table title | An interactive table of exact keyword matches |
 | [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md) | You want the complete table in R | A data frame |
 | [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | You want the data frame and a CSV copy | A data frame with the saved file path attached |
 
@@ -83,12 +85,67 @@ or
 [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md)
 continues to work.
 
-## Step 1: search the table catalogue
+## Step 1: describe the table you need
+
+Use
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+when you know what data you want but do not know the official title or
+table number. Write a short request containing as much of the subject,
+Canadian geography, and period as you know:
+
+``` r
+
+matches <- statcan_find(
+  "R&D expenditures in Quebec since 2020",
+  lang = "eng",
+  n = 5
+)
+
+matches[, c("title", "id", "score", "match_reason")]
+```
+
+This request is interpreted as:
+
+- a **subject**: research and development expenditures;
+- a **geography**: Quebec; and
+- a **date requirement**: the table must include 2020.
+
+The result is an ordinary data frame. `rank` orders the candidates,
+`score` summarizes the strength of each match, and `match_reason` states
+which clues were confirmed. The score helps with discovery; it is not a
+measure of data quality. Read the candidate titles because two tables
+can represent different valid interpretations of the same short request.
+
+When a province or territory appears in the query,
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+checks WDS metadata to confirm that the table includes it. `start_date`
+and `end_date` describe the coverage of the **whole table**. These
+checks help choose a table; they do not select rows. The download
+functions still retrieve the complete table, after which you filter its
+geography and reference-period columns.
+
+French requests and French catalogue titles are supported too:
+
+``` r
+
+matches_fr <- statcan_find(
+  "Dépenses de R-D au Québec depuis 2020",
+  lang = "fra"
+)
+```
+
+The parser recognizes common wording and abbreviations, but it is
+deliberately simple and predictable. A concise request generally works
+better than a long question. If the results are too broad, add a more
+specific subject term. If there are no results, remove a detail or try
+an official keyword.
+
+### Search exact title keywords
 
 Use
 [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
-when you know the subject you need but not the table number. It searches
-titles without regard to letter case:
+when you know words that occur in the official title. It searches titles
+without regard to letter case:
 
 ``` r
 
@@ -123,19 +180,29 @@ statcan_search(c("dépenses", "fédérales"), lang = "fra")
 ```
 
 The catalogue is cached for 24 hours in R’s platform-appropriate user
-cache directory. The cache makes repeated searches faster and avoids
-unnecessary requests to Statistics Canada. Set `refresh = TRUE` only
-when you specifically need a fresh catalogue:
+cache directory.
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+caches the table metadata used for geography checks for seven days.
+These caches make repeated searches faster and avoid unnecessary
+requests to Statistics Canada. Set `refresh = TRUE` only when you
+specifically need fresh information:
 
 ``` r
 
-statcan_search("population", lang = "eng", refresh = TRUE)
+statcan_find(
+  "population in Alberta since 2021",
+  lang = "eng",
+  refresh = TRUE
+)
 ```
 
-If WDS is temporarily unavailable,
-[`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
-uses the most recent valid cache and issues a warning. If no valid cache
-exists, it stops with an informative error.
+If WDS is temporarily unavailable, catalogue searches use the most
+recent valid cache and issue a warning. If geography metadata cannot be
+refreshed,
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+uses valid cached metadata where possible. Candidates whose geography
+could not be checked have `geography_match = NA`; the match explanation
+makes that uncertainty explicit.
 
 ## Step 2: download a complete table
 
@@ -258,7 +325,8 @@ service problems explicitly. Common issues include:
 
 | Message or symptom | What to check |
 |----|----|
-| No search results | Try fewer keywords, check the selected language, or use a broader term |
+| No natural-language results | Keep a clear subject, but remove a geography or date constraint; then inspect broader candidates |
+| No exact keyword results | Try fewer keywords, check the selected language, or use a broader official term |
 | Invalid `tableNumber` | Use a displayed number such as `10-10-0001-01` or an eight-digit PID such as `10100001` |
 | Invalid `lang` | Use exactly `"eng"` or `"fra"` |
 | Output directory does not exist | Create the directory before supplying it through `path` |

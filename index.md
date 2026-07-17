@@ -6,11 +6,12 @@ Statistics Canada. It connects to the official [Web Data Service
 French, and returns ordinary data frames that can be analysed with base
 R or your preferred R packages.
 
-The package has three main functions:
+The package has four main functions:
 
 | If you want to… | Use… | What you get |
 |----|----|----|
-| Find a relevant Statistics Canada table | [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | An interactive table of matching titles and identifiers |
+| Describe the data you need in ordinary language | [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md) | Ranked table choices, identifiers, and an explanation of each match |
+| Search for exact words in table titles | [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | An interactive table of matching titles and identifiers |
 | Load a complete table into R | [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md) | A data frame |
 | Load a table and also save a CSV copy | [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | A data frame and a UTF-8 CSV file |
 
@@ -49,7 +50,10 @@ Version 0.3.0 keeps the established calls to
 [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md),
 and
 [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md),
-so scripts written for earlier releases continue to work.
+so scripts written for earlier releases continue to work. The new
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+function adds a more conversational way to discover a table without
+changing those functions.
 
 ## A first workflow
 
@@ -62,8 +66,42 @@ library(statcanR)
 
 ### 1. Find a table
 
-Search the official catalogue when you do not yet know the table
-identifier:
+Describe the subject, place, and period you need when you do not yet
+know the table identifier:
+
+``` r
+
+matches <- statcan_find(
+  "R&D expenditures in Quebec since 2020",
+  lang = "eng",
+  n = 5
+)
+
+matches[, c("title", "id", "score", "match_reason")]
+```
+
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+interprets this request as three clues:
+
+1.  **Subject:** research and development expenditures;
+2.  **Geography:** Quebec; and
+3.  **Coverage:** a table containing data for 2020.
+
+It returns an ordinary data frame, ranked from the strongest match to
+the weakest. The `id` column contains the identifier needed by the
+download functions. The `match_reason` column explains why each table
+was included, so read the titles before selecting one. Several tables
+can answer different interpretations of the same request.
+
+The geography and date are used to check the **table as a whole**. They
+do not filter the observations that will later be downloaded. After
+downloading, select Quebec and the years from 2020 onward using the
+relevant columns in that particular table.
+
+If you already know the exact words used in a Statistics Canada title,
+use
+[`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
+instead:
 
 ``` r
 
@@ -72,10 +110,6 @@ statcan_search(
   lang = "eng"
 )
 ```
-
-The result opens as an interactive table in the RStudio Viewer or your
-browser. Its `id` column contains the identifier needed for the download
-functions.
 
 Searches are case-insensitive. When you supply several keywords,
 **every** keyword must appear in the title. If a search is too narrow,
@@ -165,21 +199,31 @@ attr(table_data, "statcan_file")
 The function still returns the data frame. The `statcan_file` attribute
 records the exact path of the saved CSV file.
 
-## Catalogue caching and connection problems
+## Catalogue and metadata caching
 
 The table catalogue is cached for 24 hours so repeated searches are
-fast. Use `refresh = TRUE` only when you need the newest catalogue:
+fast.
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+also caches the candidate metadata used to verify a geography for seven
+days. Use `refresh = TRUE` only when you need the newest catalogue and
+metadata:
 
 ``` r
 
-statcan_search("population", lang = "eng", refresh = TRUE)
+statcan_find(
+  "population in Alberta since 2021",
+  lang = "eng",
+  refresh = TRUE
+)
 ```
 
 Downloading and refreshing require an internet connection. If Statistics
 Canada’s service is temporarily unavailable, searches can use an
-existing valid cache; otherwise, the package stops with an informative
-error rather than leaving a partial result. Confirm that the identifier,
-language, and output directory are correct before retrying.
+existing valid cache. A natural-language search can still return
+candidates when geography metadata is unavailable; in that case,
+`geography_match` is `NA` and the explanation says that the geography
+could not be verified. Confirm the table title, identifier, language,
+and output directory before retrying.
 
 For the complete walkthrough, open the installed vignette:
 

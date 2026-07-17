@@ -64,7 +64,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="search-0-3-0">Search<a class="anchor" aria-label="anchor" href="#search-0-3-0"></a></h3>
-<ul><li>
+<ul><li>Added <code><a href="../reference/statcan_find.html">statcan_find()</a></code>, which interprets an English or French description of a subject, Canadian geography, and date range and returns ranked table candidates with an explanation of each match.</li>
+<li>Geography constraints are checked against official WDS table metadata. This metadata is cached for seven days, with graceful fallback when it cannot be refreshed.</li>
+<li>
 <code><a href="../reference/statcan_search.html">statcan_search()</a></code> retrieves the official table catalogue from Statistics Canada’s Web Data Service instead of shipping a static data file.</li>
 <li>The catalogue is cached as an RDS file for 24 hours in the platform-specific user cache directory. A valid stale cache is used when WDS is temporarily unavailable.</li>
 <li>Searches are case-insensitive, require all supplied keywords, and return an empty table when there are no matches.</li>

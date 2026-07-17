@@ -2,6 +2,8 @@
 
 ## Find tables
 
+- [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  : Find Statistics Canada tables using a natural-language query
 - [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
   : Search Statistics Canada data tables
 

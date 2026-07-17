@@ -39,6 +39,14 @@
 
 ### Search
 
+- Added
+  [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md),
+  which interprets an English or French description of a subject,
+  Canadian geography, and date range and returns ranked table candidates
+  with an explanation of each match.
+- Geography constraints are checked against official WDS table metadata.
+  This metadata is cached for seven days, with graceful fallback when it
+  cannot be refreshed.
 - [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
   retrieves the official table catalogue from Statistics Canada’s Web
   Data Service instead of shipping a static data file.

@@ -80,15 +80,17 @@ Warin</h4>
 </h2>
 <p><code>statcanR</code> connects R to <a href="https://www.statcan.gc.ca/en/developers/wds" class="external-link">Statistics Canada’s
 Web Data Service (WDS)</a>. This vignette walks through a complete
-workflow: finding a table, understanding its identifier, downloading it,
-inspecting the result, and optionally saving a CSV copy.</p>
-<p>The package supports three common tasks:</p>
+workflow: describing the data you need, choosing a table, understanding
+its identifier, downloading it, inspecting the result, and optionally
+saving a CSV copy.</p>
+<p>The package supports four common tasks:</p>
 <ol style="list-style-type: decimal">
-<li>Search the official catalogue of Statistics Canada tables.</li>
+<li>Find likely tables from an ordinary-language description.</li>
+<li>Search for exact keywords in the official table catalogue.</li>
 <li>Download a complete table in English or French into R.</li>
 <li>Save the downloaded table as a CSV file.</li>
 </ol>
-<p>The three public functions have distinct purposes:</p>
+<p>The four public functions have distinct purposes:</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -102,16 +104,21 @@ inspecting the result, and optionally saving a CSV copy.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code><a href="../reference/statcan_search.html">statcan_search()</a></code></td>
-<td>You know the topic but not the table identifier</td>
-<td>An interactive table of matching catalogue entries</td>
+<td><code><a href="../reference/statcan_find.html">statcan_find()</a></code></td>
+<td>You can describe the subject, geography, or period you need</td>
+<td>A ranked data frame of likely tables and reasons for each match</td>
 </tr>
 <tr class="even">
+<td><code><a href="../reference/statcan_search.html">statcan_search()</a></code></td>
+<td>You know words that occur in the official table title</td>
+<td>An interactive table of exact keyword matches</td>
+</tr>
+<tr class="odd">
 <td><code><a href="../reference/statcan_data.html">statcan_data()</a></code></td>
 <td>You want the complete table in R</td>
 <td>A data frame</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code></td>
 <td>You want the data frame and a CSV copy</td>
 <td>A data frame with the saved file path attached</td>
@@ -169,12 +176,59 @@ particular, code that supplies a table number and a language to
 continues to work.</p>
 </div>
 <div class="section level2">
-<h2 id="step-1-search-the-table-catalogue">Step 1: search the table catalogue<a class="anchor" aria-label="anchor" href="#step-1-search-the-table-catalogue"></a>
+<h2 id="step-1-describe-the-table-you-need">Step 1: describe the table you need<a class="anchor" aria-label="anchor" href="#step-1-describe-the-table-you-need"></a>
 </h2>
-<p>Use <code><a href="../reference/statcan_search.html">statcan_search()</a></code> when you know the subject you need
-but not the table number. It searches titles without regard to letter
-case:</p>
+<p>Use <code><a href="../reference/statcan_find.html">statcan_find()</a></code> when you know what data you want but
+do not know the official title or table number. Write a short request
+containing as much of the subject, Canadian geography, and period as you
+know:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">matches</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_find.html">statcan_find</a></span><span class="op">(</span></span>
+<span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
+<span>  lang <span class="op">=</span> <span class="st">"eng"</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">matches</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"id"</span>, <span class="st">"score"</span>, <span class="st">"match_reason"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p>This request is interpreted as:</p>
+<ul>
+<li>a <strong>subject</strong>: research and development
+expenditures;</li>
+<li>a <strong>geography</strong>: Quebec; and</li>
+<li>a <strong>date requirement</strong>: the table must include
+2020.</li>
+</ul>
+<p>The result is an ordinary data frame. <code>rank</code> orders the
+candidates, <code>score</code> summarizes the strength of each match,
+and <code>match_reason</code> states which clues were confirmed. The
+score helps with discovery; it is not a measure of data quality. Read
+the candidate titles because two tables can represent different valid
+interpretations of the same short request.</p>
+<p>When a province or territory appears in the query,
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code> checks WDS metadata to confirm that the
+table includes it. <code>start_date</code> and <code>end_date</code>
+describe the coverage of the <strong>whole table</strong>. These checks
+help choose a table; they do not select rows. The download functions
+still retrieve the complete table, after which you filter its geography
+and reference-period columns.</p>
+<p>French requests and French catalogue titles are supported too:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">matches_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_find.html">statcan_find</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Dépenses de R-D au Québec depuis 2020"</span>,</span>
+<span>  lang <span class="op">=</span> <span class="st">"fra"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The parser recognizes common wording and abbreviations, but it is
+deliberately simple and predictable. A concise request generally works
+better than a long question. If the results are too broad, add a more
+specific subject term. If there are no results, remove a detail or try
+an official keyword.</p>
+<div class="section level3">
+<h3 id="search-exact-title-keywords">Search exact title keywords<a class="anchor" aria-label="anchor" href="#search-exact-title-keywords"></a>
+</h3>
+<p>Use <code><a href="../reference/statcan_search.html">statcan_search()</a></code> when you know words that occur in
+the official title. It searches titles without regard to letter
+case:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_search.html">statcan_search</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"federal"</span>, <span class="st">"expenditures"</span>, <span class="st">"objectives"</span><span class="op">)</span>,</span>
 <span>  lang <span class="op">=</span> <span class="st">"eng"</span></span>
@@ -196,21 +250,30 @@ function;</li>
 occur in the title. This makes searches precise, but it can also produce
 no matches. If that happens, remove one keyword or use a broader
 term:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_search.html">statcan_search</a></span><span class="op">(</span><span class="st">"expenditures"</span>, lang <span class="op">=</span> <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
 <p>Search French titles by using <code>lang = "fra"</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_search.html">statcan_search</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dépenses"</span>, <span class="st">"fédérales"</span><span class="op">)</span>, lang <span class="op">=</span> <span class="st">"fra"</span><span class="op">)</span></span></code></pre></div>
 <p>The catalogue is cached for 24 hours in R’s platform-appropriate user
-cache directory. The cache makes repeated searches faster and avoids
-unnecessary requests to Statistics Canada. Set
-<code>refresh = TRUE</code> only when you specifically need a fresh
-catalogue:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_search.html">statcan_search</a></span><span class="op">(</span><span class="st">"population"</span>, lang <span class="op">=</span> <span class="st">"eng"</span>, refresh <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>If WDS is temporarily unavailable, <code><a href="../reference/statcan_search.html">statcan_search()</a></code> uses
-the most recent valid cache and issues a warning. If no valid cache
-exists, it stops with an informative error.</p>
+cache directory. <code><a href="../reference/statcan_find.html">statcan_find()</a></code> caches the table metadata
+used for geography checks for seven days. These caches make repeated
+searches faster and avoid unnecessary requests to Statistics Canada. Set
+<code>refresh = TRUE</code> only when you specifically need fresh
+information:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_find.html">statcan_find</a></span><span class="op">(</span></span>
+<span>  <span class="st">"population in Alberta since 2021"</span>,</span>
+<span>  lang <span class="op">=</span> <span class="st">"eng"</span>,</span>
+<span>  refresh <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>If WDS is temporarily unavailable, catalogue searches use the most
+recent valid cache and issue a warning. If geography metadata cannot be
+refreshed, <code><a href="../reference/statcan_find.html">statcan_find()</a></code> uses valid cached metadata where
+possible. Candidates whose geography could not be checked have
+<code>geography_match = NA</code>; the match explanation makes that
+uncertainty explicit.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="step-2-download-a-complete-table">Step 2: download a complete table<a class="anchor" aria-label="anchor" href="#step-2-download-a-complete-table"></a>
@@ -218,12 +281,12 @@ exists, it stops with an informative error.</p>
 <p>After choosing an identifier, pass it and the desired language to
 <code><a href="../reference/statcan_data.html">statcan_data()</a></code>. This example uses a relatively small table
 that is convenient for learning:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, lang <span class="op">=</span> <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
 <p>The function downloads and unpacks the current full-table CSV
 archive, then returns a data frame. Start by examining its dimensions,
 names, and first observations:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span></code></pre></div>
@@ -241,13 +304,13 @@ its metadata.</li>
 </ul>
 <p>For example, you can select observations from 2020 onward with
 ordinary R subsetting:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recent_data</span> <span class="op">&lt;-</span> <span class="va">table_data</span><span class="op">[</span></span>
 <span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">$</span><span class="va">REF_DATE</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>    <span class="va">table_data</span><span class="op">$</span><span class="va">REF_DATE</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span>,</span>
 <span><span class="op">]</span></span></code></pre></div>
 <p>To download the French version of the table, change the language:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, lang <span class="op">=</span> <span class="st">"fra"</span><span class="op">)</span></span></code></pre></div>
 <p>Most source column names remain in the selected language, so do not
 assume that every English column name has an identical French
@@ -261,13 +324,13 @@ equivalent.</p>
 <code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code> when you also need a CSV file.</p>
 <p>Existing two-argument calls save the file in the current working
 directory:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_download_data.html">statcan_download_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This creates <code>statcan_10100001_eng.csv</code>. To keep project
 files organized, create a dedicated directory and pass it through
 <code>path</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"statcanR-data"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">output_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -288,7 +351,7 @@ fields.</p>
 <h2 id="compatibility-with-earlier-statcanr-scripts">Compatibility with earlier statcanR scripts<a class="anchor" aria-label="anchor" href="#compatibility-with-earlier-statcanr-scripts"></a>
 </h2>
 <p>The update does not require you to rewrite established calls:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This familiar two-argument form remains valid.</span></span>
 <span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span></span>
@@ -315,35 +378,40 @@ or service problems explicitly. Common issues include:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>No search results</td>
-<td>Try fewer keywords, check the selected language, or use a broader
-term</td>
+<td>No natural-language results</td>
+<td>Keep a clear subject, but remove a geography or date constraint;
+then inspect broader candidates</td>
 </tr>
 <tr class="even">
+<td>No exact keyword results</td>
+<td>Try fewer keywords, check the selected language, or use a broader
+official term</td>
+</tr>
+<tr class="odd">
 <td>Invalid <code>tableNumber</code>
 </td>
 <td>Use a displayed number such as <code>10-10-0001-01</code> or an
 eight-digit PID such as <code>10100001</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Invalid <code>lang</code>
 </td>
 <td>Use exactly <code>"eng"</code> or <code>"fra"</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Output directory does not exist</td>
 <td>Create the directory before supplying it through
 <code>path</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>WDS is unavailable</td>
 <td>Check the internet connection and try again later; catalogue search
 may use a valid cache</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Download takes a long time</td>
 <td>The function retrieves the complete table, which may be large</td>
 </tr>
@@ -375,7 +443,7 @@ data licence.</li>
 <p>Review the <a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence" class="external-link">Statistics
 Canada Open Licence</a> before redistributing downloaded data. To obtain
 the package’s current citation, run:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"statcanR"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
