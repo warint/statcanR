@@ -20,6 +20,7 @@ Imports:
     data.table,
     dplyr,
     ggplot2,
+    jsonlite,
     reshape2,
     qs2,
     qpdf,

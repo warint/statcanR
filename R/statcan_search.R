@@ -1,82 +1,134 @@
-#' Searching function for statcanR
+#' Search Statistics Canada data tables
 #'
+#' Search the catalogue of tables published through Statistics Canada's Web
+#' Data Service (WDS). The catalogue is cached for 24 hours in the user's cache
+#' directory. If WDS is temporarily unavailable, the most recent cache is used.
 #'
-#' Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+#' @param keywords Character vector of words that must appear in the table
+#'   title.
+#' @param lang Language of the returned titles: `"eng"` or `"fra"`.
+#' @param refresh Logical; if `TRUE`, ignore a fresh cache and request the
+#'   catalogue from WDS.
 #'
-#'
-#' @description The \code{statcan_search()} function has 2 arguments to fulfill to find a database: {keywords} and {lang}.
-#' The keywords argument refers to words that can be found in either the title or the description of the database. For example, inserting the keywords
-#' "economy","export",and "link" will bring up the title, table id, description, and release date for databases that include these keywords. In this case, only one data table ("Supply and use tables, link-1997 level")
-#' would be returned as it is the only data table containing all three words.
-#'
-#'
-#' @param keywords The words that appear in the title or description of the data table
-#' @param lang The language wanted
-#'
-#' @return The output will be the title, id, description, and release date of a table
+#' @return A `DT::datatable` containing matching table titles, identifiers,
+#'   release dates, and language.
 #' @export
 #'
-#' 
-#' @import DT
-#' @import curl
-#' @import qpdf
-#' @import qs2
-#' @import dplyr
-#' @import ggplot2
-#' @import reshape2
+#' @examples
+#' \dontrun{
+#' statcan_search(c("economy", "export"), "eng")
+#' }
+statcan_search <- function(keywords, lang = c("eng", "fra"),
+                           refresh = FALSE) {
+  lang <- match.arg(lang)
 
-#' @examples statcan_search(c("economy","export","link"),"eng")
-
-
-statcan_search <- function(keywords,lang) {
-  
-  # Get the whole list of available tables from statCan into a temp forlder
-  url <- paste0("https://warin.ca/datalake/statcanR/statcan_data.qs")
-  
-  if (httr::http_error(url)) 
-  { # network is down = message (not an error anymore)
-    message("No tables with this combination of keywords")
-  } else{ 
-    path <- file.path(tempdir(), "temp.qs")
-    curl::curl_download(url, path)
-    qs_file <- file.path(paste0(tempdir(), "/temp.qs"))
-    statcandata <- qs2::qread(qs_file)
-    
+  if (!is.character(keywords) || !length(keywords) ||
+      anyNA(keywords) || any(!nzchar(keywords))) {
+    stop("`keywords` must be a non-empty character vector.", call. = FALSE)
   }
-  
-  # Loading data
-  if (lang == "eng") {
-    
-      # Creating the keyword matches
-      keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
-      
-      matches <- apply(statcandata, 1, function(row) {
-        all(sapply(keywords, function(x) {
-          grepl(x, paste(as.character(row), collapse = " "))
-        }))
-      })
-      
-      # Keep only obs with matched keywords and create datatable 
-      filtered_data <- statcandata[matches, ]
-      return(datatable(filtered_data,options = list(pageLength = 5)))  
+  if (!is.logical(refresh) || length(refresh) != 1L || is.na(refresh)) {
+    stop("`refresh` must be TRUE or FALSE.", call. = FALSE)
   }
-  
-  if (lang == "fra") {
-      
-      # Creating the keyword matches
-      keyword_regex <- paste0("(", paste(keywords, collapse = "|"), ")", collapse = ".*")
-      
-      matches <- apply(statcandata, 1, function(row) {
-        all(sapply(keywords, function(x) {
-          grepl(x, paste(as.character(row), collapse = " "))
-        }))
-      })
-      
-      
-      # Keep only obs with matched keywords and create datatable 
-      filtered_data <- statcandata[matches, ]
-      return(datatable(filtered_data,options = list(pageLength = 5)))  
-  }
-} 
 
-  
+  catalogue <- statcan_catalogue(refresh = refresh)
+  title_column <- if (lang == "eng") "title_eng" else "title_fra"
+
+  searchable <- catalogue[[title_column]]
+  matches <- Reduce(`&`, lapply(keywords, function(keyword) {
+    grepl(keyword, searchable, fixed = TRUE, ignore.case = TRUE)
+  }))
+
+  results <- data.frame(
+    title = catalogue[[title_column]][matches],
+    id = catalogue$id[matches],
+    description = NA_character_,
+    release_date = catalogue$release_date[matches],
+    lang = lang,
+    stringsAsFactors = FALSE
+  )
+
+  DT::datatable(results, options = list(pageLength = 5))
+}
+
+
+# Retrieve and cache the WDS table catalogue.
+statcan_catalogue <- function(refresh = FALSE) {
+  cache_dir <- tools::R_user_dir("statcanR", which = "cache")
+  cache_file <- file.path(cache_dir, "statcan_catalogue.qs2")
+  cache_ttl <- 24 * 60 * 60
+
+  cache_is_fresh <- file.exists(cache_file) &&
+    as.numeric(difftime(Sys.time(), file.info(cache_file)$mtime,
+                        units = "secs")) < cache_ttl
+
+  if (!refresh && cache_is_fresh) {
+    return(qs2::qs_read(cache_file, validate_checksum = TRUE))
+  }
+
+  url <- paste0(
+    "https://www150.statcan.gc.ca/",
+    "t1/wds/rest/getAllCubesListLite"
+  )
+
+  downloaded <- tryCatch({
+    response <- httr::GET(
+      url,
+      httr::timeout(60),
+      httr::user_agent("statcanR (https://github.com/warint/statcanR)")
+    )
+    httr::stop_for_status(response)
+
+    payload <- jsonlite::fromJSON(
+      httr::content(response, as = "text", encoding = "UTF-8"),
+      simplifyDataFrame = TRUE
+    )
+    normalize_statcan_catalogue(payload)
+  }, error = function(error) {
+    if (file.exists(cache_file)) {
+      warning(
+        "Statistics Canada WDS is unavailable; using the cached catalogue. ",
+        conditionMessage(error),
+        call. = FALSE
+      )
+      return(qs2::qs_read(cache_file, validate_checksum = TRUE))
+    }
+
+    stop(
+      "Unable to retrieve the Statistics Canada table catalogue and no ",
+      "cached catalogue is available. ", conditionMessage(error),
+      call. = FALSE
+    )
+  })
+
+  dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+  qs2::qs_save(downloaded, cache_file)
+  downloaded
+}
+
+
+# Convert the WDS response to a stable, package-owned schema.
+normalize_statcan_catalogue <- function(payload) {
+  required <- c("productId", "cubeTitleEn", "cubeTitleFr", "releaseTime")
+  missing <- setdiff(required, names(payload))
+  if (length(missing)) {
+    stop(
+      "Unexpected response from Statistics Canada WDS; missing field(s): ",
+      paste(missing, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  product_id <- sprintf("%08.0f", as.numeric(payload$productId))
+
+  data.frame(
+    title_eng = payload$cubeTitleEn,
+    title_fra = payload$cubeTitleFr,
+    id = paste0(
+      substr(product_id, 1L, 2L), "-",
+      substr(product_id, 3L, 4L), "-",
+      substr(product_id, 5L, 8L), "-01"
+    ),
+    release_date = as.Date(substr(payload$releaseTime, 1L, 10L)),
+    stringsAsFactors = FALSE
+  )
+}

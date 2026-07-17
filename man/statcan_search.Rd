@@ -2,27 +2,30 @@
 % Please edit documentation in R/statcan_search.R
 \name{statcan_search}
 \alias{statcan_search}
-\title{Searching function for statcanR}
+\title{Search Statistics Canada data tables}
 \usage{
-statcan_search(keywords, lang)
+statcan_search(keywords, lang = c("eng", "fra"), refresh = FALSE)
 }
 \arguments{
-\item{keywords}{The words that appear in the title or description of the data table}
+\item{keywords}{Character vector of words that must appear in the table
+title.}
 
-\item{lang}{The language wanted}
+\item{lang}{Language of the returned titles: \code{"eng"} or \code{"fra"}.}
+
+\item{refresh}{Logical; if \code{TRUE}, ignore a fresh cache and request the
+catalogue from WDS.}
 }
 \value{
-The output will be the title, id, description, and release date of a table
+A \code{DT::datatable} containing matching table titles, identifiers,
+release dates, and language.
 }
 \description{
-The \code{statcan_search()} function has 2 arguments to fulfill to find a database: {keywords} and {lang}.
-The keywords argument refers to words that can be found in either the title or the description of the database. For example, inserting the keywords
-"economy","export",and "link" will bring up the title, table id, description, and release date for databases that include these keywords. In this case, only one data table ("Supply and use tables, link-1997 level")
-would be returned as it is the only data table containing all three words.
-}
-\details{
-Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+Search the catalogue of tables published through Statistics Canada's Web
+Data Service (WDS). The catalogue is cached for 24 hours in the user's cache
+directory. If WDS is temporarily unavailable, the most recent cache is used.
 }
 \examples{
-statcan_search(c("economy","export","link"),"eng")
+\dontrun{
+statcan_search(c("economy", "export"), "eng")
+}
 }
