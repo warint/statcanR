@@ -1,8 +1,9 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.6.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
-  statCanR: statCanR.html
-  vignettes: vignettes.html
-last_built: 2023-08-14T13:51Z
-
+  getting-started: getting-started.html
+last_built: 2026-07-17T12:03Z
+urls:
+  reference: https://warint.github.io/statcanR/reference
+  article: https://warint.github.io/statcanR/articles

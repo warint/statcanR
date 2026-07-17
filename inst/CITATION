@@ -1,0 +1,15 @@
+citHeader("To cite statcanR in publications, please use:")
+
+bibentry(
+  bibtype = "Article",
+  title = paste(
+    "Access Statistics Canada's Open Economic Data for Statistics and",
+    "Data Science Courses"
+  ),
+  author = c(person("Thierry", "Warin")),
+  journal = "Technology Innovations in Statistics Education",
+  year = "2024",
+  volume = "15",
+  number = "1",
+  doi = "10.5070/T5.1868"
+)

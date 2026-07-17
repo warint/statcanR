@@ -1,1 +1,34 @@
-destination: docs
+url: https://warint.github.io/statcanR/
+
+template:
+  bootstrap: 5
+  light-switch: true
+
+development:
+  mode: auto
+
+home:
+  title: "statcanR • Statistics Canada data in R"
+  description: >
+    Find and download Statistics Canada data tables in English or French.
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github, lightswitch]
+
+reference:
+- title: "Find tables"
+  contents:
+  - statcan_find
+  - statcan_search
+- title: "Download data"
+  contents:
+  - statcan_data
+  - statcan_download_data
+
+articles:
+- title: "Get started"
+  navbar: ~
+  contents:
+  - getting-started

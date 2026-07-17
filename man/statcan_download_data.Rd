@@ -2,21 +2,34 @@
 % Please edit documentation in R/statCanR.R
 \name{statcan_download_data}
 \alias{statcan_download_data}
-\title{statcanR download data function}
+\title{Download a Statistics Canada table and save a CSV file}
 \usage{
-statcan_download_data(tableNumber, lang)
+statcan_download_data(tableNumber, lang, path = ".")
 }
 \arguments{
-\item{tableNumber}{The table number of the Statistics Canada data table}
+\item{tableNumber}{A Statistics Canada table number or Product ID. Both
+\code{"27-10-0014-01"} and \code{"27100014"} are accepted.}
 
-\item{lang}{The language wanted}
+\item{lang}{Language of the downloaded table: \code{"eng"} or \code{"fra"}.}
+
+\item{path}{Directory in which to save the CSV file. The directory must
+already exist. Defaults to the current working directory.}
 }
 \value{
-The output will be  a data table and csv file representing the data associated with the chosen table number.
+The downloaded table. The CSV path is available in the
+\code{statcan_file} attribute of the returned data frame.
 }
 \description{
-statcanR download data function
+Calls \code{\link[=statcan_data]{statcan_data()}} and also writes the returned table to a CSV file.
+Existing calls with only \code{tableNumber} and \code{lang} remain supported; \code{path}
+can be used to select a different output directory.
 }
 \examples{
-mydata <- statcan_data('27-10-0014-01', 'eng')
+\dontrun{
+science <- statcan_download_data("27-10-0014-01", "eng")
+science <- statcan_download_data(
+  "27-10-0014-01", "eng", path = tempdir()
+)
+attr(science, "statcan_file")
+}
 }

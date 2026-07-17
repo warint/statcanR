@@ -1,179 +1,248 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit README.Rmd. -->
 
 # statcanR
 
 <!-- badges: start -->
 
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/warint/statcanR?branch=master&svg=true)](https://ci.appveyor.com/project/warint/statcanR)
-[![Mentioned in
-Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
+[![R-CMD-check](https://github.com/warint/statcanR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/warint/statcanR/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcanR)](https://CRAN.R-project.org/package=statcanR)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
-
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/statcanR?color=blue)](https://cran.r-project.org/package=statcanR)
+[![Mentioned in
+Awesome](https://awesome.re/mentioned-badge.svg)](https://github.com/SNStatComp/awesome-official-statistics-software)
 <!-- badges: end -->
 
-# Overview
+`statcanR` helps you find and download data tables published by
+Statistics Canada. It connects to the official [Web Data Service
+(WDS)](https://www.statcan.gc.ca/en/developers/wds), works in English or
+French, and returns ordinary data frames that can be analysed with base
+R or your preferred R packages.
 
-Easily connect to Statistics Canada’s Web Data Service with R. Find and 
-access open economic data (formerly known as CANSIM tables, now identified by
-Product IDs (PID)) which are accessible as a data frame, directly in the
-user’s R environment.
+The package has four main functions:
 
+| If you want to… | Use… | What you get |
+|----|----|----|
+| Describe the data you need in ordinary language | `statcan_find()` | Ranked table choices, identifiers, and an explanation of each match |
+| Search for exact words in table titles | `statcan_search()` | An interactive table of matching titles and identifiers |
+| Load a complete table into R | `statcan_data()` | A data frame |
+| Load a table and also save a CSV copy | `statcan_download_data()` | A data frame and a UTF-8 CSV file |
 
+`statcanR` downloads the **complete** Statistics Canada table. Some
+tables are large, so check that the table is appropriate for your needs
+before downloading it.
 
-## Shiny App : statcanR ExploR
+## Installation and upgrades
 
-<img src="man/figures/shiny.png" />
-
-For people less comfortable with R and to allow more people to have
-access to our package, we have also developed a Shiny
-application.Through the same logic present in our package, researchers
-can retrieve data from Statistics Canada.
-
-statcanR ExploR is available [\[here\]](https://warin.ca/shiny/statcanr/)
-
-## Installation
-
-The released version of statcanR package is accessible through CRAN and
-devtools.
+Install or upgrade the released package with the same command:
 
 ``` r
 install.packages("statcanR")
-
-install.packages("devtools")
-devtools::install_github('warint/statcanR')
 ```
 
-## Example
+To install the development version from GitHub:
 
-This section presents an example of how to use the `statcanR` R package
-and its functions: `statcan_search()`, `statcan_data()`, and 
-`statcan_download_data()`.
+``` r
+install.packages("remotes")
+remotes::install_github("warint/statcanR")
+```
 
-The following example is provided to illustrate how to use the
-functions. It consists in collecting some descriptive statistics about
-the Canadian Labour Force at the federal, provincial and industrial
-levels, on a monthly basis.
+If you upgrade while `statcanR` is already loaded, restart your R
+session before loading it again. You can confirm the installed version
+with:
 
-To identify a relevant table, the statcan_search() function can be used
-by using a keyword or set of keywords and specifying the language in which the 
-data will be presented (English or French). Below is an example that reveals
-the data tables we could be interested in:
+``` r
+packageVersion("statcanR")
+```
+
+Version 0.3.0 keeps the established calls to `statcan_search()`,
+`statcan_data()`, and `statcan_download_data()`, so scripts written for
+earlier releases continue to work. The new `statcan_find()` function
+adds a more conversational way to discover a table without changing
+those functions.
+
+## A first workflow
+
+Start by loading the package:
 
 ``` r
 library(statcanR)
-statcan_search(c("federal","expenditures","objectives"),"eng")
 ```
 
-Notice that for each corresponding table, the unique table number identifier is 
-also presented. Let's focus the first table out of the two that appear, which 
-contains data on Federal expenditures on science and technology,
-by socio-economic objectives. Once this table number is identified
-(‘27-10-0014-01’), the statcan_data() function is easy
-to use in order to collect the data, as following:
+### 1. Find a table
+
+Describe the subject, place, and period you need when you do not yet
+know the table identifier:
 
 ``` r
-library(statcanR)
-mydata <- statcan_data("27-10-0014-01","eng")
+matches <- statcan_find(
+  "R&D expenditures in Quebec since 2020",
+  lang = "eng",
+  n = 5
+)
+
+matches[, c("title", "id", "score", "match_reason")]
 ```
 
-For the `statcan_download_data()` function there is no difference on how
-to use it, the only difference is that this function allow you to
-download the data in a csv file on top of having the data in your
-environment.
+`statcan_find()` interprets this request as three clues:
+
+1.  **Subject:** research and development expenditures;
+2.  **Geography:** Quebec; and
+3.  **Coverage:** a table containing data for 2020.
+
+It returns an ordinary data frame, ranked from the strongest match to
+the weakest. The `id` column contains the identifier needed by the
+download functions. The `match_reason` column explains why each table
+was included, so read the titles before selecting one. Several tables
+can answer different interpretations of the same request.
+
+The geography and date are used to check the **table as a whole**. They
+do not filter the observations that will later be downloaded. After
+downloading, select Quebec and the years from 2020 onward using the
+relevant columns in that particular table.
+
+If you already know the exact words used in a Statistics Canada title,
+use `statcan_search()` instead:
 
 ``` r
-library(statcanR)
-mydata <- statcan_download_data("27-10-0014-01","eng")
+statcan_search(
+  c("federal", "expenditures", "objectives"),
+  lang = "eng"
+)
 ```
 
-### Video Tutorial
+Searches are case-insensitive. When you supply several keywords,
+**every** keyword must appear in the title. If a search is too narrow,
+try fewer or more general words. To search French titles, use
+`lang = "fra"`.
 
-Tutorial made by Professor Charles Saunders, Director of Master of
-Financial Economics Program at Western University
-[biography](https://economics.uwo.ca/people/faculty/saunders.html)
+### 2. Download the table into R
 
-Thanks!
-
-<https://www.youtube.com/embed/z9TDUlgT5lc>
-
-### Statistics Canada Open Licence
-
-This licence is issued on behalf of His Majesty the King in Right of
-Canada, as represented by the Minister for Statistics Canada
-(“Statistics Canada”) to you (an individual or a legal entity that you
-are authorized to represent).
-
-Statistics Canada may modify this licence at any time, and such
-modifications shall be effective immediately upon posting of the
-modified licence on the Statistics Canada website. Your use of the
-Information will be governed by the terms of the licence in force as of
-the date and time you accessed the Information.
-
-Please refer to the [terms of
-licence](https://www.statcan.gc.ca/eng/reference/licence) before using
-the Information.
-
-##### Acknowledgment of Source according to Statistics Canada Open Licence Agreement
-
-Statistics Canada has a specific procedure regarding the acknowledgment
-of source :
-
-You shall include and maintain the following notice on all licensed
-rights of the Information:
-
-    Source: Statistics Canada, name of product, reference date. Reproduced and distributed on an "as is" basis with the permission of Statistics Canada.
-
-Where any Information is contained within a Value-added Product, you
-shall include on such Value-added Product the following notice:
-
-    Adapted from Statistics Canada, name of product, reference date. This does not constitute an endorsement by Statistics Canada of this product.
-
-### Cite statcanR
-
-To cite statcanR package in your work:
-
-Warin, T. (2024). Access Statistics Canada’s Open Economic Data for Statistics and Data Science Courses. Technology Innovations in Statistics Education, 15(1). http://dx.doi.org/10.5070/T5.1868 Retrieved from https://escholarship.org/uc/item/9jr7k5hp
+Copy an identifier from the search result and pass it to
+`statcan_data()`. The example below uses a small table so it is
+convenient to try:
 
 ``` r
-@article{warin_access_2024,
-	title = {Access {Statistics} {Canada}’s {Open} {Economic} {Data} for {Statistics} and {Data} {Science} {Courses}},
-	volume = {15},
-	url = {https://escholarship.org/uc/item/9jr7k5hp},
-	doi = {10.5070/T5.1868},
-	abstract = {This article is about the two conflicting goals when teaching statistics or data science courses based on real-world data in a business school environment. We propose to look at structured socio-economic data about the Canadian economy. Canada was ranked 8th in 2017 by Open Data Watch (Government of Canada) for its data accessibility policy. Statistics Canada offers several ways to access data across its over 11,000 data tables. We built an R package to ease access to Statistics Canada's open economic data. With this package, we offer students another option to collect data about the Canadian economy.},
-	language = {en},
-	number = {1},
-	urldate = {2024-01-17},
-	journal = {Technology Innovations in Statistics Education},
-	author = {Warin, Thierry},
-	month = jan,
-	year = {2024},
-	file = {Full Text PDF:/Users/thierrywarin/Zotero/storage/7LNXFPKL/Warin - 2024 - Access Statistics Canada’s Open Economic Data for .pdf:application/pdf},
-}
+table_data <- statcan_data("10-10-0001-01", lang = "eng")
 ```
 
-### Acknowledgments
+The result is a data frame. Inspect its size, column names, and first
+rows before beginning an analysis:
 
-A previous version of this package was developed with Romain Le Duc. This version has benefitted from Thibault Senegas's contribution. The author would like to thank the Center for Interuniversity Research and Analysis of Organizations (CIRANO, Montreal) for its support, as well as Thibault Senegas, Jeremy Schneider, Marine Leroi, Martin Paquette and Romain Le Duc. However, errors and omissions are his.
+``` r
+dim(table_data)
+names(table_data)
+head(table_data)
+```
 
+`REF_DATE` contains the reference period and is converted to a `Date`
+when the source format can be interpreted safely. Coordinate columns
+remain character values, and `INDICATOR` contains the official table
+title.
 
-### Contributing to the package
-#### Bug reports
+### 3. Understand table identifiers and languages
 
-When you file a bug report, please spend some time making it easy for me to follow and reproduce. The more time you spend on making the bug report coherent, the more time I can dedicate to investigate the bug as opposed to the bug report.
+Statistics Canada displays identifiers such as `10-10-0001-01`. The
+corresponding eight-digit Product ID (PID) is `10100001`. `statcanR`
+accepts either form, so these calls request the same table:
 
-##### Contributing to the package development
+``` r
+table_data <- statcan_data("10-10-0001-01", "eng")
+table_data <- statcan_data("10100001", "eng")
+```
 
-To get started, consider either adding a new example or enhancing the existing documentation.
+Use `lang = "eng"` for English or `lang = "fra"` for French:
 
-If you're interested in submitting a Pull Request to include your own functions, please include the following:
+``` r
+table_fr <- statcan_data("10-10-0001-01", "fra")
+```
 
-- The code for the new function(s), complete with roxygen annotations and sample usage.
-- A dedicated section in the relevant vignette that explains how to utilize the new function.
+Column labels supplied by Statistics Canada may differ between the
+English and French tables.
 
-To ensure your changes are compliant, run rhub::check_for_cran() using rhub. After submission, your Pull Request will undergo automated evaluation via GitHub Actions, allowing you to monitor for any issues.
+## Save a CSV file
 
+Use `statcan_data()` when you only need the data in R. Use
+`statcan_download_data()` when you also want a CSV copy. Earlier
+two-argument calls remain valid and save into the current working
+directory:
+
+``` r
+table_data <- statcan_download_data("10-10-0001-01", "eng")
+getwd()
+```
+
+For clearer file management, create an output directory and provide it
+with `path`:
+
+``` r
+output_dir <- file.path(tempdir(), "statcanR-data")
+dir.create(output_dir, showWarnings = FALSE)
+
+table_data <- statcan_download_data(
+  "10-10-0001-01",
+  "eng",
+  path = output_dir
+)
+
+attr(table_data, "statcan_file")
+```
+
+The function still returns the data frame. The `statcan_file` attribute
+records the exact path of the saved CSV file.
+
+## Catalogue and metadata caching
+
+The table catalogue is cached for 24 hours so repeated searches are
+fast. `statcan_find()` also caches the candidate metadata used to verify
+a geography for seven days. Use `refresh = TRUE` only when you need the
+newest catalogue and metadata:
+
+``` r
+statcan_find(
+  "population in Alberta since 2021",
+  lang = "eng",
+  refresh = TRUE
+)
+```
+
+Downloading and refreshing require an internet connection. If Statistics
+Canada’s service is temporarily unavailable, searches can use an
+existing valid cache. A natural-language search can still return
+candidates when geography metadata is unavailable; in that case,
+`geography_match` is `NA` and the explanation says that the geography
+could not be verified. Confirm the table title, identifier, language,
+and output directory before retrying.
+
+For the complete walkthrough, open the installed vignette:
+
+``` r
+vignette("getting-started", package = "statcanR")
+```
+
+## Licence and citation
+
+Statistics Canada data are provided under the [Statistics Canada Open
+Licence](https://www.statcan.gc.ca/en/terms-conditions/open-licence).
+The `statcanR` package is released under the MIT licence.
+
+To cite the package and its methodology, run:
+
+``` r
+citation("statcanR")
+```
+
+The preferred methodological reference is:
+
+> Warin, T. (2024). Access Statistics Canada’s Open Economic Data for
+> Statistics and Data Science Courses. *Technology Innovations in
+> Statistics Education*, 15(1). <https://doi.org/10.5070/T5.1868>
+
+## Acknowledgements
+
+The author thanks the Center for Interuniversity Research and Analysis
+of Organizations (CIRANO) for its support, along with Thibault Senegas,
+Jeremy Schneider, Marine Leroi, Martin Paquette, and contributors to
+earlier versions of the package. Errors and omissions remain the
+author’s.

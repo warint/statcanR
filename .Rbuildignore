@@ -3,13 +3,7 @@
 ^README\.Rmd$
 ^_pkgdown\.yml$
 ^docs$
-^pkgdown$
-^\.travis\.yml$
-^appveyor\.yml$
-^codecov\.yml$
-^cran-comments\.Rmd$
-^CRAN-RELEASE$
+^\.github$
 ^cran-comments\.md$
 ^LICENSE\.md$
-^CRAN-SUBMISSION$
 ^CITATION\.cff$

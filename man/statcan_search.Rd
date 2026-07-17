@@ -8,7 +8,7 @@ statcan_search(keywords, lang = c("eng", "fra"), refresh = FALSE)
 }
 \arguments{
 \item{keywords}{Character vector of words that must appear in the table
-title.}
+title. Matching is case-insensitive.}
 
 \item{lang}{Language of the returned titles: \code{"eng"} or \code{"fra"}.}
 
@@ -16,16 +16,18 @@ title.}
 catalogue from WDS.}
 }
 \value{
-A \code{DT::datatable} containing matching table titles, identifiers,
+A \code{DT::datatable} containing matching table titles, Product IDs,
 release dates, and language.
 }
 \description{
-Search the catalogue of tables published through Statistics Canada's Web
+Searches the catalogue of tables published through Statistics Canada's Web
 Data Service (WDS). The catalogue is cached for 24 hours in the user's cache
-directory. If WDS is temporarily unavailable, the most recent cache is used.
+directory. If WDS is temporarily unavailable, the most recent valid cache is
+used.
 }
 \examples{
 \dontrun{
 statcan_search(c("economy", "export"), "eng")
+statcan_search("population", "fra")
 }
 }

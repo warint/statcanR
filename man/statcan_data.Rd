@@ -2,36 +2,34 @@
 % Please edit documentation in R/statCanR.R
 \name{statcan_data}
 \alias{statcan_data}
-\title{statcanR}
+\title{Download a Statistics Canada data table}
 \usage{
 statcan_data(tableNumber, lang)
 }
 \arguments{
-\item{tableNumber}{The table number of the Statistics Canada data table}
+\item{tableNumber}{A Statistics Canada table number or Product ID. Both
+\code{"27-10-0014-01"} and \code{"27100014"} are accepted.}
 
-\item{lang}{The language wanted}
+\item{lang}{Language of the downloaded table: \code{"eng"} or \code{"fra"}.}
 }
 \value{
-The output will be a data table representing the data associated with the chosen table number.
+A data frame containing the complete Statistics Canada table.
 }
 \description{
-Easily connect to Statistics Canada's Web Data Service with R. Open economic data (formerly known as CANSIM tables, now identified by Product IDs (PID)) are accessible as a data frame, directly in the user's R environment.
+Downloads a complete table from Statistics Canada's Web Data Service (WDS)
+and returns it as a data frame. Product IDs can be supplied in the familiar
+hyphenated form (for example, \code{"27-10-0014-01"}) or as an eight-digit PID
+(for example, \code{"27100014"}).
 }
 \details{
-The
-\code{statcan_data()} function has 2 arguments to fulfill to get data: {tableNumber} & {lang}.
-
-
-The tableNumber argument simply refers to the table number of the Statistics Canada data table a user wants to collect,
-such as '27-10-0014-01' for the Federal expenditures on science and technology, by socio-economic objectives, as an example.
-
-
-To get the table number: \url{https://www150.statcan.gc.ca/n1/en/type/data}.
-
-The second argument, lang, refers to the language. As Canada is a bilingual country, Statistics Canada displays all the economic data in both languages.
-Therefore, users can choose to collect satistics data tables in French or English by setting the lang argument with c('fra', 'eng').
+The function keeps the interface used by earlier statcanR releases. English
+and French downloads share the same processing rules. In particular, the
+first column is named \code{REF_DATE}, coordinates are stored as character, and
+the table title from the metadata file is added as \code{INDICATOR}.
 }
 \examples{
-#mydata <- statcan_data('27-10-0014-01', 'eng')
-
+\dontrun{
+science <- statcan_data("27-10-0014-01", "eng")
+science_fr <- statcan_data("27100014", "fra")
+}
 }

@@ -2,11 +2,5 @@
 
 export(statcan_data)
 export(statcan_download_data)
+export(statcan_find)
 export(statcan_search)
-import(DT)
-import(curl)
-import(qs2)
-import(tibble)
-importFrom(data.table,fread)
-importFrom(data.table,setDF)
-importFrom(httr,http_error)
