@@ -26,7 +26,6 @@
 #'
 #' @import curl
 #' @import tibble
-#' @import qpdf
 #' @importFrom httr http_error
 #' @importFrom data.table fread
 #' @importFrom data.table setDF

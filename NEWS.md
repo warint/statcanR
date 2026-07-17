@@ -1,3 +1,16 @@
+# statcanR 0.3.0
+
+* `statcan_search()` now retrieves the official table catalogue from Statistics
+  Canada's Web Data Service instead of downloading a static `qs` file.
+* Catalogue responses are cached locally in `qs2` format for 24 hours. A valid
+  stale cache is used when the service is temporarily unavailable.
+* Searches are case-insensitive and return an empty table when there are no
+  matches.
+* Corrupt or incompatible catalogue caches are ignored and rebuilt
+  automatically.
+* Removed the obsolete `qs` dependency and unused package dependencies.
+* Updated package authorship and release metadata.
+
 # statcanR 0.2.6
 
 * fix server issue

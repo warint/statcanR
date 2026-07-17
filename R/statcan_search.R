@@ -33,19 +33,7 @@ statcan_search <- function(keywords, lang = c("eng", "fra"),
   catalogue <- statcan_catalogue(refresh = refresh)
   title_column <- if (lang == "eng") "title_eng" else "title_fra"
 
-  searchable <- catalogue[[title_column]]
-  matches <- Reduce(`&`, lapply(keywords, function(keyword) {
-    grepl(keyword, searchable, fixed = TRUE, ignore.case = TRUE)
-  }))
-
-  results <- data.frame(
-    title = catalogue[[title_column]][matches],
-    id = catalogue$id[matches],
-    description = NA_character_,
-    release_date = catalogue$release_date[matches],
-    lang = lang,
-    stringsAsFactors = FALSE
-  )
+  results <- filter_statcan_catalogue(catalogue, keywords, lang)
 
   DT::datatable(results, options = list(pageLength = 5))
 }
@@ -62,7 +50,13 @@ statcan_catalogue <- function(refresh = FALSE) {
                         units = "secs")) < cache_ttl
 
   if (!refresh && cache_is_fresh) {
-    return(qs2::qs_read(cache_file, validate_checksum = TRUE))
+    cached <- tryCatch(
+      qs2::qs_read(cache_file, validate_checksum = TRUE),
+      error = function(error) NULL
+    )
+    if (is_valid_statcan_catalogue(cached)) {
+      return(cached)
+    }
   }
 
   url <- paste0(
@@ -85,12 +79,18 @@ statcan_catalogue <- function(refresh = FALSE) {
     normalize_statcan_catalogue(payload)
   }, error = function(error) {
     if (file.exists(cache_file)) {
-      warning(
-        "Statistics Canada WDS is unavailable; using the cached catalogue. ",
-        conditionMessage(error),
-        call. = FALSE
+      cached <- tryCatch(
+        qs2::qs_read(cache_file, validate_checksum = TRUE),
+        error = function(cache_error) NULL
       )
-      return(qs2::qs_read(cache_file, validate_checksum = TRUE))
+      if (is_valid_statcan_catalogue(cached)) {
+        warning(
+          "Statistics Canada WDS is unavailable; using the cached catalogue. ",
+          conditionMessage(error),
+          call. = FALSE
+        )
+        return(cached)
+      }
     }
 
     stop(
@@ -120,7 +120,7 @@ normalize_statcan_catalogue <- function(payload) {
 
   product_id <- sprintf("%08.0f", as.numeric(payload$productId))
 
-  data.frame(
+  catalogue <- data.frame(
     title_eng = payload$cubeTitleEn,
     title_fra = payload$cubeTitleFr,
     id = paste0(
@@ -131,4 +131,43 @@ normalize_statcan_catalogue <- function(payload) {
     release_date = as.Date(substr(payload$releaseTime, 1L, 10L)),
     stringsAsFactors = FALSE
   )
+
+  if (!is_valid_statcan_catalogue(catalogue)) {
+    stop("Statistics Canada WDS returned an invalid catalogue.", call. = FALSE)
+  }
+
+  catalogue
+}
+
+
+# Filter a normalized catalogue without making a network request.
+filter_statcan_catalogue <- function(catalogue, keywords, lang) {
+  title_column <- if (lang == "eng") "title_eng" else "title_fra"
+  searchable <- tolower(catalogue[[title_column]])
+  keywords <- tolower(keywords)
+
+  matches <- Reduce(`&`, lapply(keywords, function(keyword) {
+    grepl(keyword, searchable, fixed = TRUE)
+  }))
+  number_of_matches <- sum(matches)
+
+  data.frame(
+    title = catalogue[[title_column]][matches],
+    id = catalogue$id[matches],
+    description = rep(NA_character_, number_of_matches),
+    release_date = catalogue$release_date[matches],
+    lang = rep(lang, number_of_matches),
+    stringsAsFactors = FALSE
+  )
+}
+
+
+# Reject corrupt caches and caches created with an incompatible schema.
+is_valid_statcan_catalogue <- function(catalogue) {
+  required <- c("title_eng", "title_fra", "id", "release_date")
+
+  is.data.frame(catalogue) &&
+    identical(names(catalogue), required) &&
+    inherits(catalogue$release_date, "Date") &&
+    all(grepl("^[0-9]{2}-[0-9]{2}-[0-9]{4}-01$", catalogue$id))
 }
