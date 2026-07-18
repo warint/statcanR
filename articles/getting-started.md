@@ -39,7 +39,6 @@ first eight digits form the WDS Product ID (PID), `10100001`; the final
 displayed table number or the eight-digit PID:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", "eng")
 table_data <- statcan_data("10100001", "eng")
 ```
@@ -58,14 +57,12 @@ The command used for a first installation also upgrades an older CRAN
 installation:
 
 ``` r
-
 install.packages("statcanR")
 ```
 
 Then load the package:
 
 ``` r
-
 library(statcanR)
 ```
 
@@ -74,7 +71,6 @@ before calling [`library(statcanR)`](https://warint.github.io/statcanR/)
 again. Check which version R will use with:
 
 ``` r
-
 packageVersion("statcanR")
 ```
 
@@ -94,7 +90,6 @@ table number. Write a short request containing as much of the subject,
 Canadian geography, and period as you know:
 
 ``` r
-
 matches <- statcan_find(
   "R&D expenditures in Quebec since 2020",
   lang = "eng",
@@ -127,7 +122,6 @@ geography and reference-period columns.
 French requests and French catalogue titles are supported too:
 
 ``` r
-
 matches_fr <- statcan_find(
   "Dépenses de R-D au Québec depuis 2020",
   lang = "fra"
@@ -148,7 +142,6 @@ when you know words that occur in the official title. It searches titles
 without regard to letter case:
 
 ``` r
-
 statcan_search(
   c("federal", "expenditures", "objectives"),
   lang = "eng"
@@ -168,14 +161,12 @@ title. This makes searches precise, but it can also produce no matches.
 If that happens, remove one keyword or use a broader term:
 
 ``` r
-
 statcan_search("expenditures", lang = "eng")
 ```
 
 Search French titles by using `lang = "fra"`:
 
 ``` r
-
 statcan_search(c("dépenses", "fédérales"), lang = "fra")
 ```
 
@@ -188,7 +179,6 @@ requests to Statistics Canada. Set `refresh = TRUE` only when you
 specifically need fresh information:
 
 ``` r
-
 statcan_find(
   "population in Alberta since 2021",
   lang = "eng",
@@ -212,7 +202,6 @@ This example uses a relatively small table that is convenient for
 learning:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", lang = "eng")
 ```
 
@@ -221,7 +210,6 @@ then returns a data frame. Start by examining its dimensions, names, and
 first observations:
 
 ``` r
-
 dim(table_data)
 names(table_data)
 head(table_data)
@@ -241,7 +229,6 @@ For example, you can select observations from 2020 onward with ordinary
 R subsetting:
 
 ``` r
-
 recent_data <- table_data[
   !is.na(table_data$REF_DATE) &
     table_data$REF_DATE >= as.Date("2020-01-01"),
@@ -251,7 +238,6 @@ recent_data <- table_data[
 To download the French version of the table, change the language:
 
 ``` r
-
 table_fr <- statcan_data("10-10-0001-01", lang = "fra")
 ```
 
@@ -271,7 +257,6 @@ Existing two-argument calls save the file in the current working
 directory:
 
 ``` r
-
 table_data <- statcan_download_data("10-10-0001-01", "eng")
 getwd()
 ```
@@ -280,7 +265,6 @@ This creates `statcan_10100001_eng.csv`. To keep project files
 organized, create a dedicated directory and pass it through `path`:
 
 ``` r
-
 output_dir <- file.path(tempdir(), "statcanR-data")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -305,7 +289,6 @@ empty fields.
 The update does not require you to rewrite established calls:
 
 ``` r
-
 # This familiar two-argument form remains valid.
 table_data <- statcan_data("10-10-0001-01", "eng")
 
@@ -358,6 +341,5 @@ before redistributing downloaded data. To obtain the package’s current
 citation, run:
 
 ``` r
-
 citation("statcanR")
 ```

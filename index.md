@@ -24,14 +24,12 @@ before downloading it.
 Install or upgrade the released package with the same command:
 
 ``` r
-
 install.packages("statcanR")
 ```
 
 To install the development version from GitHub:
 
 ``` r
-
 install.packages("remotes")
 remotes::install_github("warint/statcanR")
 ```
@@ -41,7 +39,6 @@ session before loading it again. You can confirm the installed version
 with:
 
 ``` r
-
 packageVersion("statcanR")
 ```
 
@@ -60,7 +57,6 @@ changing those functions.
 Start by loading the package:
 
 ``` r
-
 library(statcanR)
 ```
 
@@ -70,7 +66,6 @@ Describe the subject, place, and period you need when you do not yet
 know the table identifier:
 
 ``` r
-
 matches <- statcan_find(
   "R&D expenditures in Quebec since 2020",
   lang = "eng",
@@ -104,7 +99,6 @@ use
 instead:
 
 ``` r
-
 statcan_search(
   c("federal", "expenditures", "objectives"),
   lang = "eng"
@@ -123,7 +117,6 @@ Copy an identifier from the search result and pass it to
 The example below uses a small table so it is convenient to try:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", lang = "eng")
 ```
 
@@ -131,7 +124,6 @@ The result is a data frame. Inspect its size, column names, and first
 rows before beginning an analysis:
 
 ``` r
-
 dim(table_data)
 names(table_data)
 head(table_data)
@@ -149,7 +141,6 @@ corresponding eight-digit Product ID (PID) is `10100001`. `statcanR`
 accepts either form, so these calls request the same table:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", "eng")
 table_data <- statcan_data("10100001", "eng")
 ```
@@ -157,7 +148,6 @@ table_data <- statcan_data("10100001", "eng")
 Use `lang = "eng"` for English or `lang = "fra"` for French:
 
 ``` r
-
 table_fr <- statcan_data("10-10-0001-01", "fra")
 ```
 
@@ -174,7 +164,6 @@ when you also want a CSV copy. Earlier two-argument calls remain valid
 and save into the current working directory:
 
 ``` r
-
 table_data <- statcan_download_data("10-10-0001-01", "eng")
 getwd()
 ```
@@ -183,7 +172,6 @@ For clearer file management, create an output directory and provide it
 with `path`:
 
 ``` r
-
 output_dir <- file.path(tempdir(), "statcanR-data")
 dir.create(output_dir, showWarnings = FALSE)
 
@@ -209,7 +197,6 @@ days. Use `refresh = TRUE` only when you need the newest catalogue and
 metadata:
 
 ``` r
-
 statcan_find(
   "population in Alberta since 2021",
   lang = "eng",
@@ -228,7 +215,6 @@ and output directory before retrying.
 For the complete walkthrough, open the installed vignette:
 
 ``` r
-
 vignette("getting-started", package = "statcanR")
 ```
 
@@ -241,7 +227,6 @@ The `statcanR` package is released under the MIT licence.
 To cite the package and its methodology, run:
 
 ``` r
-
 citation("statcanR")
 ```
 

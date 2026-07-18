@@ -2,8 +2,6 @@
 
 ## statcanR 0.3.0
 
-CRAN release: 2026-07-17
-
 ### Compatibility
 
 - Existing calls to
@@ -101,7 +99,9 @@ CRAN release: 2021-12-14
 
 ## statcanR 0.2.2
 
-- Used `readr::read_csv()` for metadata tables.
+- Used
+  [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
+  for metadata tables.
 
 ## statcanR 0.2.1
 

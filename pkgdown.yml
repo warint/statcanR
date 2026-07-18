@@ -1,9 +1,9 @@
-pandoc: 3.8.3
+pandoc: 3.6.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-last_built: 2026-07-18T05:34Z
+last_built: 2026-07-17T12:03Z
 urls:
   reference: https://warint.github.io/statcanR/reference
   article: https://warint.github.io/statcanR/articles
