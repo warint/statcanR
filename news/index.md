@@ -2,6 +2,8 @@
 
 ## statcanR 0.3.0
 
+CRAN release: 2026-07-17
+
 ### Compatibility
 
 - Existing calls to

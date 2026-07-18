@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/warint/statcanR/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/warint/statcanR/blob/v0.3.0/inst/CITATION)
 
 Warin T (2024). “Access Statistics Canada's Open Economic Data for
 Statistics and Data Science Courses.” *Technology Innovations in
