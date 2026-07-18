@@ -116,7 +116,41 @@ statcan_catalogue <- function(refresh = FALSE) {
 
 
 read_cached_catalogue <- function(cache_file) {
-  tryCatch(readRDS(cache_file), error = function(error) NULL)
+  catalogue <- tryCatch(readRDS(cache_file), error = function(error) NULL)
+  if (is.data.frame(catalogue)) {
+    title_columns <- intersect(c("title_eng", "title_fra"), names(catalogue))
+    for (title_column in title_columns) {
+      if (is.character(catalogue[[title_column]])) {
+        catalogue[[title_column]] <- decode_statcan_entities(
+          catalogue[[title_column]]
+        )
+      }
+    }
+  }
+  catalogue
+}
+
+
+# Decode the XML entities used in some WDS catalogue titles. Ampersands are
+# decoded last so text that was deliberately escaped twice is only decoded by
+# one layer.
+decode_statcan_entities <- function(text) {
+  replacements <- c(
+    "&quot;" = "\"",
+    "&#34;" = "\"",
+    "&apos;" = "'",
+    "&#39;" = "'",
+    "&#039;" = "'",
+    "&lt;" = "<",
+    "&gt;" = ">",
+    "&nbsp;" = "\u00a0",
+    "&amp;" = "&"
+  )
+  result <- as.character(text)
+  for (entity in names(replacements)) {
+    result <- gsub(entity, replacements[[entity]], result, fixed = TRUE)
+  }
+  result
 }
 
 
@@ -158,8 +192,8 @@ normalize_statcan_catalogue <- function(payload) {
     rep(NA_integer_, nrow(payload))
   }
   catalogue <- data.frame(
-    title_eng = as.character(payload$cubeTitleEn),
-    title_fra = as.character(payload$cubeTitleFr),
+    title_eng = decode_statcan_entities(payload$cubeTitleEn),
+    title_fra = decode_statcan_entities(payload$cubeTitleFr),
     id = product_id,
     start_date = start_date,
     end_date = end_date,

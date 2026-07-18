@@ -34,6 +34,33 @@ test_that("wrapped catalogue responses are normalized", {
   expect_identical(result$id, "10-10-0004-01")
 })
 
+test_that("catalogue title entities are decoded", {
+  payload <- data.frame(
+    productId = 27100363,
+    cubeTitleEn = "Research &amp; development (R&amp;D)",
+    cubeTitleFr = "Recherche &amp; développement (R&amp;D)",
+    releaseTime = "2026-07-17T08:30:00Z"
+  )
+
+  result <- statcanR:::normalize_statcan_catalogue(payload)
+
+  expect_identical(result$title_eng, "Research & development (R&D)")
+  expect_identical(result$title_fra, "Recherche & développement (R&D)")
+})
+
+test_that("title entities in an existing catalogue cache are decoded", {
+  cached <- sample_catalogue()
+  cached$title_eng[[1L]] <- "Research &amp; development"
+  cache_file <- tempfile(fileext = ".rds")
+  on.exit(unlink(cache_file), add = TRUE)
+  saveRDS(cached, cache_file)
+
+  result <- statcanR:::read_cached_catalogue(cache_file)
+
+  expect_identical(result$title_eng[[1L]], "Research & development")
+  expect_true(statcanR:::is_valid_statcan_catalogue(result))
+})
+
 test_that("search filtering is case-insensitive", {
   result <- statcanR:::filter_statcan_catalogue(
     sample_catalogue(),

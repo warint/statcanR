@@ -841,8 +841,12 @@ normalize_statcan_cube_metadata <- function(payload) {
     }
     metadata <- list(
       id = product_id,
-      title_eng = metadata_scalar_character(object$cubeTitleEn),
-      title_fra = metadata_scalar_character(object$cubeTitleFr),
+      title_eng = decode_statcan_entities(
+        metadata_scalar_character(object$cubeTitleEn)
+      ),
+      title_fra = decode_statcan_entities(
+        metadata_scalar_character(object$cubeTitleFr)
+      ),
       start_date = metadata_scalar_date(object$cubeStartDate),
       end_date = metadata_scalar_date(object$cubeEndDate),
       archived = archived,
