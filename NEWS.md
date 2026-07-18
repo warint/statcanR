@@ -1,3 +1,10 @@
+# statcanR 0.3.0.9000
+
+## Search
+
+* Table titles returned by `statcan_find()` and `statcan_search()` now display HTML/XML characters normally (for example, `R&D` instead of `R&amp;D`).
+* Existing catalogue caches are corrected automatically when they are read.
+
 # statcanR 0.3.0
 
 ## Compatibility
