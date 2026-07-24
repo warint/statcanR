@@ -40,6 +40,59 @@ test_that("reference periods are converted to stable dates", {
   )
 })
 
+test_that("multi-section metadata files yield the cube title (issue #8)", {
+  metadata_file <- tempfile(fileext = ".csv")
+  on.exit(unlink(metadata_file), add = TRUE)
+
+  # Mirror the real "_MetaData.csv" layout: a header and one cube row, then a
+  # blank line and further sections with different column counts. The cube row
+  # has a comma-bearing quoted title and an unquoted, semicolon-separated field.
+  writeLines(
+    c(
+      paste0(
+        '"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes",',
+        '"Archive Status",Frequency,"Start Reference Period",',
+        '"End Reference Period","Total number of dimensions"'
+      ),
+      paste0(
+        '"Life expectancy, single-year estimates, Canada, all provinces ',
+        'except Prince Edward Island","13100837",,',
+        '"https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1310083701",',
+        '1;2;3;13,"CURRENT - a cube available to the public and that is ',
+        'current","Annual","1980-01-01","2024-01-01","4",'
+      ),
+      "",
+      '"Dimension ID","Dimension name","Dimension Notes","Dimension Definitions"',
+      '1,"Geography",,',
+      '2,"Age group",,'
+    ),
+    metadata_file,
+    useBytes = TRUE
+  )
+
+  metadata <- statcanR:::read_statcan_metadata(metadata_file)
+
+  # Exactly the cube row: if later sections bled in, nrow would exceed 1.
+  expect_identical(nrow(metadata), 1L)
+  expect_identical(
+    as.character(metadata[[1L]][1L]),
+    paste0(
+      "Life expectancy, single-year estimates, Canada, all provinces ",
+      "except Prince Edward Island"
+    )
+  )
+})
+
+test_that("empty or truncated metadata files return an empty table", {
+  short_file <- tempfile(fileext = ".csv")
+  on.exit(unlink(short_file), add = TRUE)
+  writeLines('"Cube Title","Product Id"', short_file)
+
+  metadata <- statcanR:::read_statcan_metadata(short_file)
+  expect_s3_class(metadata, "data.frame")
+  expect_identical(nrow(metadata), 0L)
+})
+
 test_that("download output paths must already exist", {
   expect_identical(statcanR:::normalize_output_path(tempdir()), tempdir())
   expect_error(

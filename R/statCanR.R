@@ -309,21 +309,17 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
     encoding = "UTF-8",
     showProgress = FALSE
   )
-  metadata <- data.table::fread(
-    metadata_file,
-    nrows = 1L,
-    fill = TRUE,
-    encoding = "UTF-8",
-    showProgress = FALSE
-  )
+  metadata <- read_statcan_metadata(metadata_file)
   if (!ncol(can_data) || !nrow(metadata) || !ncol(metadata)) {
     stop("Statistics Canada returned an empty data or metadata file.",
          call. = FALSE)
   }
 
-  raw_reference_date <- can_data[[1L]]
   data.table::setnames(can_data, 1L, "REF_DATE")
-  can_data[["REF_DATE"]] <- parse_reference_dates(can_data[["REF_DATE"]])
+  reference_dates <- parse_reference_dates(can_data[["REF_DATE"]])
+  has_fiscal <- isTRUE(attr(reference_dates, "statcan_has_fiscal"))
+  attr(reference_dates, "statcan_has_fiscal") <- NULL
+  can_data[["REF_DATE"]] <- reference_dates
   coordinate_columns <- intersect(
     c("COORDINATE", "COORDONN\u00c9ES", "COORDONNEES"),
     names(can_data)
@@ -333,7 +329,7 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
   }
   can_data[["INDICATOR"]] <- as.character(metadata[[1L]][1L])
 
-  if (is_fiscal_reference(raw_reference_date)) {
+  if (has_fiscal) {
     can_data[["REF_PERIOD"]] <- if (lang == "eng") {
       "Fiscal year"
     } else {
@@ -348,6 +344,46 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
 
   data.table::setDF(can_data)
   can_data
+}
+
+
+# Read the cube-level row from a Statistics Canada "_MetaData.csv" file.
+#
+# These files are not a single rectangular table: a header and one cube row are
+# followed by a blank line and further sections (dimensions, members, ...) that
+# have different column counts. data.table::fread() samples the whole file to
+# detect its shape, so the ragged later sections can make it stop early and
+# return nothing even with nrows = 1 (see issue #8). We only need the first
+# section, so we hand fread() just the header and the cube row.
+read_statcan_metadata <- function(metadata_file) {
+  lines <- tryCatch(
+    readLines(metadata_file, encoding = "UTF-8", warn = FALSE),
+    error = function(error) character()
+  )
+
+  # Sections are separated by a blank line, so the header and cube row are
+  # everything before the first blank line. Slicing here (rather than reading a
+  # fixed two lines) keeps the cube row intact even if a title ever spans more
+  # than one physical line.
+  blank <- which(!nzchar(trimws(lines)))
+  first_section <- if (length(blank)) {
+    lines[seq_len(blank[[1L]] - 1L)]
+  } else {
+    lines
+  }
+  if (length(first_section) < 2L) {
+    return(data.table::data.table())
+  }
+
+  tryCatch(
+    data.table::fread(
+      text = first_section,
+      fill = TRUE,
+      encoding = "UTF-8",
+      showProgress = FALSE
+    ),
+    error = function(error) data.table::data.table()
+  )
 }
 
 
@@ -388,11 +424,8 @@ parse_reference_dates <- function(reference_date) {
     )
   }
 
+  # Expose whether any fiscal-year values were seen so the caller need not
+  # rescan the whole reference-date column to decide on the REF_PERIOD label.
+  attr(result, "statcan_has_fiscal") <- any(fiscal)
   result
-}
-
-
-is_fiscal_reference <- function(reference_date) {
-  reference_date <- as.character(reference_date)
-  any(grepl("^[0-9]{4}/[0-9]{4}$", reference_date), na.rm = TRUE)
 }

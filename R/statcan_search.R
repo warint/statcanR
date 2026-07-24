@@ -135,6 +135,16 @@ read_cached_catalogue <- function(cache_file) {
 # decoded last so text that was deliberately escaped twice is only decoded by
 # one layer.
 decode_statcan_entities <- function(text) {
+  result <- as.character(text)
+  # Every entity we decode begins with "&", so titles without one need no work.
+  # Almost no catalogue titles contain entities, so restricting the fixed-string
+  # substitutions to that subset avoids scanning tens of thousands of strings on
+  # every cache read.
+  candidates <- grepl("&", result, fixed = TRUE)
+  if (!any(candidates)) {
+    return(result)
+  }
+
   replacements <- c(
     "&quot;" = "\"",
     "&#34;" = "\"",
@@ -146,10 +156,11 @@ decode_statcan_entities <- function(text) {
     "&nbsp;" = "\u00a0",
     "&amp;" = "&"
   )
-  result <- as.character(text)
+  subset <- result[candidates]
   for (entity in names(replacements)) {
-    result <- gsub(entity, replacements[[entity]], result, fixed = TRUE)
+    subset <- gsub(entity, replacements[[entity]], subset, fixed = TRUE)
   }
+  result[candidates] <- subset
   result
 }
 

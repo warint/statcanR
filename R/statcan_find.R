@@ -576,16 +576,7 @@ rank_statcan_catalogue <- function(catalogue, parsed, lang) {
   title_terms <- statcan_catalogue_tokens(catalogue, lang)
   query_terms <- parsed$topic_terms
 
-  matched_count <- vapply(
-    title_terms,
-    function(terms) sum(vapply(
-      query_terms,
-      term_matches_statcan_title,
-      logical(1),
-      title_terms = terms
-    )),
-    integer(1)
-  )
+  matched_count <- statcan_matched_term_counts(title_terms, query_terms)
   match_ratio <- matched_count / length(query_terms)
   title_term_count <- vapply(
     title_terms,
@@ -640,20 +631,35 @@ rank_statcan_catalogue <- function(catalogue, parsed, lang) {
 }
 
 
-term_matches_statcan_title <- function(term, title_terms) {
-  if (term %in% title_terms) {
-    return(TRUE)
-  }
-  if (nchar(term) < 5L || !length(title_terms)) {
-    return(FALSE)
-  }
-  any(vapply(
-    title_terms[nchar(title_terms) >= 5L],
-    function(title_term) {
-      startsWith(title_term, term) || startsWith(term, title_term)
+# For each title, count how many query terms it matches. A term matches on an
+# exact token hit, or (for terms of five or more characters) when it shares a
+# prefix with a title token of five or more characters. The per-title long-token
+# filter and the query-term lengths are computed once, and the prefix test is
+# vectorized over a title's tokens, so the work does not scale with
+# titles * query_terms the way a naive nested loop would.
+statcan_matched_term_counts <- function(title_terms, query_terms) {
+  query_is_long <- nchar(query_terms) >= 5L
+  n_query <- length(query_terms)
+  vapply(
+    title_terms,
+    function(terms) {
+      long_terms <- terms[nchar(terms) >= 5L]
+      have_long <- length(long_terms) > 0L
+      count <- 0L
+      for (i in seq_len(n_query)) {
+        term <- query_terms[[i]]
+        if (term %in% terms) {
+          count <- count + 1L
+        } else if (query_is_long[[i]] && have_long &&
+                   any(startsWith(long_terms, term) |
+                       startsWith(term, long_terms))) {
+          count <- count + 1L
+        }
+      }
+      count
     },
-    logical(1)
-  ))
+    integer(1)
+  )
 }
 
 
