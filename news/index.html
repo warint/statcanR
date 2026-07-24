@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,14 @@
       <small>Source: <a href="https://github.com/warint/statcanR/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.6" id="statcanr-036">statcanR 0.3.6<a class="anchor" aria-label="anchor" href="#statcanr-036"></a></h2>
+<div class="section level3">
+<h3 id="performance-0-3-6">Performance<a class="anchor" aria-label="anchor" href="#performance-0-3-6"></a></h3>
+<ul><li>
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code> no longer re-tokenizes the entire table catalogue on every call. The per-title tokens are computed once and reused, both within a session and across sessions via a new cache file (<code>statcan_catalogue_tokens.rds</code>) stored alongside the cached catalogue. Repeat searches are roughly four times faster (about 2.4s to 0.6s on the current catalogue). The token cache is keyed on both the catalogue titles and the package version, so it is rebuilt automatically whenever the catalogue refreshes or the package is updated.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.5" id="statcanr-035">statcanR 0.3.5<a class="anchor" aria-label="anchor" href="#statcanr-035"></a></h2>
 <div class="section level3">
