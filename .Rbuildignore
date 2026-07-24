@@ -4,6 +4,7 @@
 ^_pkgdown\.yml$
 ^docs$
 ^\.github$
+^\.claude$
 ^cran-comments\.md$
 ^LICENSE\.md$
 ^CITATION\.cff$

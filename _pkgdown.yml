@@ -26,6 +26,9 @@ reference:
   contents:
   - statcan_data
   - statcan_download_data
+- title: "Chat (optional)"
+  contents:
+  - statcan_chat
 
 articles:
 - title: "Get started"

@@ -323,15 +323,15 @@ statcan_geography_dictionary <- function() {
     list(eng = "Saint John", fra = "Saint John", aliases = c("saint john")),
     list(eng = "Saguenay", fra = "Saguenay", aliases = c("saguenay")),
     list(
-      eng = "Quebec City", fra = "Québec",
+      eng = "Quebec City", fra = "Qu\u00e9bec",
       aliases = c("quebec city")
     ),
     list(eng = "Sherbrooke", fra = "Sherbrooke", aliases = c("sherbrooke")),
     list(
-      eng = "Trois-Rivières", fra = "Trois-Rivières",
+      eng = "Trois-Rivi\u00e8res", fra = "Trois-Rivi\u00e8res",
       aliases = c("trois rivieres")
     ),
-    list(eng = "Montreal", fra = "Montréal", aliases = c("montreal")),
+    list(eng = "Montreal", fra = "Montr\u00e9al", aliases = c("montreal")),
     list(
       eng = "Ottawa - Gatineau", fra = "Ottawa - Gatineau",
       aliases = c("ottawa gatineau", "ottawa", "gatineau")
