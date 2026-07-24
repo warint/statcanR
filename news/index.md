@@ -1,5 +1,34 @@
 # Changelog
 
+## statcanR 0.3.7
+
+### Bug fixes
+
+- [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)
+  and
+  [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md)
+  again work for tables whose `_MetaData.csv` file contains several
+  sections with differing column counts (for example, table
+  13-10-0837-01). The metadata reader now parses only the first section
+  (the header and cube row), so
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html)
+  no longer stops early and reports the table as an empty data or
+  metadata file ([\#8](https://github.com/warint/statcanR/issues/8)).
+
+### Performance
+
+- [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  ranking is faster: the per-title term matching hoists its long-token
+  filter out of the inner loop and vectorizes the prefix test, so it no
+  longer scales with titles times query terms. Combined with the token
+  cache from 0.3.6, a warm search dropped from roughly 2.4s to about
+  0.15s on the current catalogue.
+- Decoding HTML entities in catalogue titles now skips titles that
+  contain no entity, avoiding repeated substitutions over the whole
+  catalogue on every cache read.
+- Downloading a table no longer scans the reference-date column twice to
+  detect fiscal-year periods.
+
 ## statcanR 0.3.6
 
 ### Performance

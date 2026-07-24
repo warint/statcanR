@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,21 @@
       <small>Source: <a href="https://github.com/warint/statcanR/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.7" id="statcanr-037">statcanR 0.3.7<a class="anchor" aria-label="anchor" href="#statcanr-037"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-7"></a></h3>
+<ul><li>
+<code><a href="../reference/statcan_data.html">statcan_data()</a></code> and <code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code> again work for tables whose <code>_MetaData.csv</code> file contains several sections with differing column counts (for example, table 13-10-0837-01). The metadata reader now parses only the first section (the header and cube row), so <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code> no longer stops early and reports the table as an empty data or metadata file (<a href="https://github.com/warint/statcanR/issues/8" class="external-link">#8</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="performance-0-3-7">Performance<a class="anchor" aria-label="anchor" href="#performance-0-3-7"></a></h3>
+<ul><li>
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code> ranking is faster: the per-title term matching hoists its long-token filter out of the inner loop and vectorizes the prefix test, so it no longer scales with titles times query terms. Combined with the token cache from 0.3.6, a warm search dropped from roughly 2.4s to about 0.15s on the current catalogue.</li>
+<li>Decoding HTML entities in catalogue titles now skips titles that contain no entity, avoiding repeated substitutions over the whole catalogue on every cache read.</li>
+<li>Downloading a table no longer scans the reference-date column twice to detect fiscal-year periods.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6" id="statcanr-036">statcanR 0.3.6<a class="anchor" aria-label="anchor" href="#statcanr-036"></a></h2>
 <div class="section level3">
