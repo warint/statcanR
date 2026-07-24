@@ -514,10 +514,66 @@ extract_statcan_query_dates <- function(normalized_query, lang) {
 }
 
 
+# Tokenizing every catalogue title is the dominant cost of statcan_find(), yet
+# the tokens are a pure function of the title text and change only when the
+# 24-hour catalogue cache is refreshed. Compute them once per catalogue and
+# reuse them, both within the session (a package environment) and across
+# sessions (a cache file beside the catalogue). Both layers are validated by
+# comparing the stored titles to the current catalogue titles, so any catalogue
+# change transparently invalidates stale tokens.
+statcan_token_cache <- new.env(parent = emptyenv())
+
+statcan_catalogue_tokens <- function(catalogue, lang) {
+  title_column <- if (lang == "eng") "title_eng" else "title_fra"
+  titles <- catalogue[[title_column]]
+  # Tokens depend on the title text *and* on the tokenizer (stopwords,
+  # synonyms, normalization). StatCan titles are stable for months, so keying
+  # only on titles would silently serve tokens from an older tokenizer after an
+  # upgrade. Stamping each entry with the package version fails safe: an
+  # unrelated release triggers one harmless rebuild instead of stale rankings.
+  version <- as.character(utils::packageVersion("statcanR"))
+
+  memo <- statcan_token_cache[[lang]]
+  if (is.list(memo) && identical(memo$version, version) &&
+      identical(memo$titles, titles)) {
+    return(memo$tokens)
+  }
+
+  cache_dir <- tools::R_user_dir("statcanR", which = "cache")
+  cache_file <- file.path(cache_dir, "statcan_catalogue_tokens.rds")
+  disk <- if (file.exists(cache_file)) {
+    tryCatch(readRDS(cache_file), error = function(error) NULL)
+  } else {
+    NULL
+  }
+  entry <- if (is.list(disk)) disk[[lang]] else NULL
+  if (is.list(entry) && identical(entry$version, version) &&
+      is.character(entry$titles) && identical(entry$titles, titles) &&
+      is.list(entry$tokens) && length(entry$tokens) == length(titles)) {
+    statcan_token_cache[[lang]] <- entry
+    return(entry$tokens)
+  }
+
+  tokens <- lapply(titles, canonical_statcan_tokens)
+  entry <- list(version = version, titles = titles, tokens = tokens)
+  statcan_token_cache[[lang]] <- entry
+
+  updated <- if (is.list(disk)) disk else list()
+  updated[[lang]] <- entry
+  dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+  tryCatch(
+    saveRDS(updated, cache_file, version = 3L),
+    error = function(error) NULL
+  )
+
+  tokens
+}
+
+
 rank_statcan_catalogue <- function(catalogue, parsed, lang) {
   title_column <- if (lang == "eng") "title_eng" else "title_fra"
   titles <- catalogue[[title_column]]
-  title_terms <- lapply(titles, canonical_statcan_tokens)
+  title_terms <- statcan_catalogue_tokens(catalogue, lang)
   query_terms <- parsed$topic_terms
 
   matched_count <- vapply(

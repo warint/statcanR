@@ -1,3 +1,16 @@
+# statcanR 0.3.6
+
+## Performance
+
+* `statcan_find()` no longer re-tokenizes the entire table catalogue on
+  every call. The per-title tokens are computed once and reused, both
+  within a session and across sessions via a new cache file
+  (`statcan_catalogue_tokens.rds`) stored alongside the cached catalogue.
+  Repeat searches are roughly four times faster (about 2.4s to 0.6s on
+  the current catalogue). The token cache is keyed on both the catalogue
+  titles and the package version, so it is rebuilt automatically whenever
+  the catalogue refreshes or the package is updated.
+
 # statcanR 0.3.5
 
 ## Documentation

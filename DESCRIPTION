@@ -1,7 +1,7 @@
 Package: statcanR
 Type: Package
 Title: Client for Statistics Canada's Open Economic Data
-Version: 0.3.5
+Version: 0.3.6
 Authors@R: c(
     person("Thierry", "Warin", email = "thierry.warin@hec.ca",
            role = c("aut", "cre"),
@@ -17,10 +17,11 @@ Depends:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 VignetteBuilder: knitr
 Imports:
     data.table,

@@ -45,6 +45,55 @@ test_that("catalogue candidates are ranked by topic and date coverage", {
   expect_true(result$date_match[[1L]])
 })
 
+test_that("catalogue tokens are cached and invalidated when titles change", {
+  catalogue <- sample_catalogue()
+
+  first <- statcanR:::statcan_catalogue_tokens(catalogue, "eng")
+  expect_identical(
+    first,
+    lapply(catalogue$title_eng, statcanR:::canonical_statcan_tokens)
+  )
+
+  cache_file <- file.path(
+    tools::R_user_dir("statcanR", which = "cache"),
+    "statcan_catalogue_tokens.rds"
+  )
+  expect_true(file.exists(cache_file))
+
+  # A second call reuses the cache and returns the same tokens.
+  expect_identical(
+    statcanR:::statcan_catalogue_tokens(catalogue, "eng"),
+    first
+  )
+
+  # Changing a title must invalidate the stale tokens for that row.
+  changed <- catalogue
+  changed$title_eng[[1L]] <- "Household spending on tomatoes"
+  refreshed <- statcanR:::statcan_catalogue_tokens(changed, "eng")
+  expect_identical(
+    refreshed[[1L]],
+    statcanR:::canonical_statcan_tokens(changed$title_eng[[1L]])
+  )
+  expect_false(identical(refreshed[[1L]], first[[1L]]))
+
+  # A cache written by a different package version must be rebuilt, even when
+  # the titles are unchanged (the tokenizer itself may have changed).
+  rm(list = ls(statcanR:::statcan_token_cache), envir = statcanR:::statcan_token_cache)
+  saveRDS(
+    list(eng = list(
+      version = "0.0.0",
+      titles = catalogue$title_eng,
+      tokens = rep(list("stale"), nrow(catalogue))
+    )),
+    cache_file,
+    version = 3L
+  )
+  expect_identical(
+    statcanR:::statcan_catalogue_tokens(catalogue, "eng"),
+    lapply(catalogue$title_eng, statcanR:::canonical_statcan_tokens)
+  )
+})
+
 test_that("cube metadata exposes geography members", {
   payload <- list(list(
     status = "SUCCESS",
