@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,14 @@
       <small>Source: <a href="https://github.com/warint/statcanR/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.2" id="statcanr-032">statcanR 0.3.2<a class="anchor" aria-label="anchor" href="#statcanr-032"></a></h2>
+<div class="section level3">
+<h3 id="chat-optional-0-3-2">Chat (optional)<a class="anchor" aria-label="anchor" href="#chat-optional-0-3-2"></a></h3>
+<ul><li>Added <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code>, an optional layer over <code><a href="../reference/statcan_find.html">statcan_find()</a></code> that sends the query and its ranked candidates to a user-configured, OpenAI-compatible chat-completions endpoint. The model explains the best match and asks a clarifying question when the query is ambiguous, but it can never invent a table number or reason over downloaded data — those always come from <code><a href="../reference/statcan_find.html">statcan_find()</a></code> itself.</li>
+<li>This feature adds no new package dependencies and makes no network request unless <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> is called directly. Configure the endpoint, API key, and model via function arguments, <code>options(statcanR.llm_endpoint = , statcanR.llm_api_key = , statcanR.llm_model = )</code>, or <code>Sys.setenv(STATCANR_LLM_ENDPOINT = , STATCANR_LLM_API_KEY = , STATCANR_LLM_MODEL = )</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="statcanr-031">statcanR 0.3.1<a class="anchor" aria-label="anchor" href="#statcanr-031"></a></h2>
 <div class="section level3">
