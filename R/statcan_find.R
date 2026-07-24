@@ -218,6 +218,7 @@ canonical_statcan_tokens <- function(text) {
   if (!nzchar(normalized)) {
     return(character())
   }
+  normalized <- expand_statcan_acronyms(normalized)
   tokens <- unlist(strsplit(normalized, " ", fixed = TRUE), use.names = FALSE)
   dictionary <- c(
     research = "research",
@@ -250,6 +251,27 @@ canonical_statcan_tokens <- function(text) {
       !tokens %in% stopwords &
       !grepl("^(?:19|20)[0-9]{2}$", tokens)
   ])
+}
+
+
+expand_statcan_acronyms <- function(text) {
+  acronyms <- c(
+    gdp = "gross domestic product",
+    pib = "produit interieur brut",
+    cpi = "consumer price index",
+    ipc = "indice des prix a la consommation",
+    ippi = "industrial product price index",
+    ppi = "industrial product price index"
+  )
+  for (acronym in names(acronyms)) {
+    text <- gsub(
+      paste0("\\b", acronym, "\\b"),
+      acronyms[[acronym]],
+      text,
+      perl = TRUE
+    )
+  }
+  trimws(gsub("[[:space:]]+", " ", text))
 }
 
 
@@ -294,7 +316,76 @@ statcan_geography_dictionary <- function() {
       eng = "Northwest Territories", fra = "Territoires du Nord-Ouest",
       aliases = c("northwest territories", "territoires du nord ouest")
     ),
-    list(eng = "Nunavut", fra = "Nunavut", aliases = c("nunavut"))
+    list(eng = "Nunavut", fra = "Nunavut", aliases = c("nunavut")),
+    list(eng = "St. John's", fra = "St. John's", aliases = c("st johns")),
+    list(eng = "Halifax", fra = "Halifax", aliases = c("halifax")),
+    list(eng = "Moncton", fra = "Moncton", aliases = c("moncton")),
+    list(eng = "Saint John", fra = "Saint John", aliases = c("saint john")),
+    list(eng = "Saguenay", fra = "Saguenay", aliases = c("saguenay")),
+    list(
+      eng = "Quebec City", fra = "Québec",
+      aliases = c("quebec city")
+    ),
+    list(eng = "Sherbrooke", fra = "Sherbrooke", aliases = c("sherbrooke")),
+    list(
+      eng = "Trois-Rivières", fra = "Trois-Rivières",
+      aliases = c("trois rivieres")
+    ),
+    list(eng = "Montreal", fra = "Montréal", aliases = c("montreal")),
+    list(
+      eng = "Ottawa - Gatineau", fra = "Ottawa - Gatineau",
+      aliases = c("ottawa gatineau", "ottawa", "gatineau")
+    ),
+    list(eng = "Kingston", fra = "Kingston", aliases = c("kingston")),
+    list(eng = "Belleville", fra = "Belleville", aliases = c("belleville")),
+    list(
+      eng = "Peterborough", fra = "Peterborough",
+      aliases = c("peterborough")
+    ),
+    list(eng = "Oshawa", fra = "Oshawa", aliases = c("oshawa")),
+    list(eng = "Toronto", fra = "Toronto", aliases = c("toronto")),
+    list(eng = "Hamilton", fra = "Hamilton", aliases = c("hamilton")),
+    list(
+      eng = "St. Catharines - Niagara",
+      fra = "St. Catharines - Niagara",
+      aliases = c("st catharines niagara", "st catharines")
+    ),
+    list(
+      eng = "Kitchener - Cambridge - Waterloo",
+      fra = "Kitchener - Cambridge - Waterloo",
+      aliases = c(
+        "kitchener cambridge waterloo", "kitchener", "cambridge", "waterloo"
+      )
+    ),
+    list(eng = "Brantford", fra = "Brantford", aliases = c("brantford")),
+    list(eng = "Guelph", fra = "Guelph", aliases = c("guelph")),
+    list(eng = "London", fra = "London", aliases = c("london")),
+    list(eng = "Windsor", fra = "Windsor", aliases = c("windsor")),
+    list(eng = "Barrie", fra = "Barrie", aliases = c("barrie")),
+    list(
+      eng = "Greater Sudbury", fra = "Grand Sudbury",
+      aliases = c("greater sudbury", "grand sudbury", "sudbury")
+    ),
+    list(
+      eng = "Thunder Bay", fra = "Thunder Bay",
+      aliases = c("thunder bay")
+    ),
+    list(eng = "Winnipeg", fra = "Winnipeg", aliases = c("winnipeg")),
+    list(eng = "Regina", fra = "Regina", aliases = c("regina")),
+    list(eng = "Saskatoon", fra = "Saskatoon", aliases = c("saskatoon")),
+    list(eng = "Calgary", fra = "Calgary", aliases = c("calgary")),
+    list(eng = "Edmonton", fra = "Edmonton", aliases = c("edmonton")),
+    list(eng = "Lethbridge", fra = "Lethbridge", aliases = c("lethbridge")),
+    list(eng = "Kelowna", fra = "Kelowna", aliases = c("kelowna")),
+    list(
+      eng = "Abbotsford - Mission", fra = "Abbotsford - Mission",
+      aliases = c("abbotsford mission", "abbotsford")
+    ),
+    list(eng = "Vancouver", fra = "Vancouver", aliases = c("vancouver")),
+    list(eng = "Victoria", fra = "Victoria", aliases = c("victoria")),
+    list(eng = "Nanaimo", fra = "Nanaimo", aliases = c("nanaimo")),
+    list(eng = "Chilliwack", fra = "Chilliwack", aliases = c("chilliwack")),
+    list(eng = "Kamloops", fra = "Kamloops", aliases = c("kamloops"))
   )
 }
 
