@@ -1,5 +1,20 @@
 # Changelog
 
+## statcanR 0.3.5
+
+### Documentation
+
+- Documented how to access the candidates returned by
+  [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md).
+  A new README subsection and expanded
+  [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+  examples explain that the result carries the full ranked
+  [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  data frame in `$candidates`, and show how to feed
+  `result$candidates$id[1]` straight into
+  [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)
+  without retyping a table number.
+
 ## statcanR 0.3.4
 
 ### Chat (optional)
