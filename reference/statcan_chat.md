@@ -99,6 +99,18 @@ options(
   statcanR.llm_api_key = "sk-...",
   statcanR.llm_model = "gpt-4o-mini"
 )
-statcan_chat("R&D expenditures in Quebec since 2020")
+
+# statcan_chat() returns several ranked candidates, not a single table:
+# the model explains them but never picks or invents one for you.
+result <- statcan_chat("R&D expenditures in Quebec since 2020")
+
+# The candidates are already a data frame, so you never retype an id.
+result$candidates          # the full statcan_find() data frame
+result$candidates$id       # every candidate id, best-ranked first
+result$candidates$id[1]    # just the top-ranked id
+result$explanation         # the model's plain-language explanation
+
+# Feed the chosen id straight into statcan_data() -- nothing copied by hand.
+table_data <- statcan_data(result$candidates$id[1], lang = "eng")
 } # }
 ```
