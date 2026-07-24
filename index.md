@@ -46,12 +46,13 @@ with:
 packageVersion("statcanR")
 ```
 
-Version 0.3.x keeps the established calls to
+Starting with version 0.3.x, the established calls to
 [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md),
 [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md),
 and
-[`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md),
-so scripts written for earlier releases continue to work. The new
+[`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md)
+are unchanged, so scripts written for earlier releases continue to work.
+The new
 [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
 function adds a more conversational way to discover a table without
 changing those functions.
