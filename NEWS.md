@@ -1,3 +1,23 @@
+# statcanR 0.3.9
+
+## LLM providers
+
+* `statcan_chat()` gains a `provider` argument so you can choose which
+  language-model provider to connect to. Two providers ship built in:
+  `"openai"` (the default, unchanged behaviour) and `"anthropic"` (Claude).
+  The `"openai"` provider also covers any OpenAI-compatible server -- Groq,
+  Together, OpenRouter, Mistral, vLLM, or a local open-source model served
+  by Ollama or LM Studio -- by pointing `endpoint` at it.
+
+* The endpoint now defaults to the chosen provider, so you no longer have to
+  set it for OpenAI or Anthropic; only an API key and model are required.
+
+* The API key is now also read from the provider's native environment
+  variable (`OPENAI_API_KEY` or `ANTHROPIC_API_KEY`), in addition to the
+  `STATCANR_LLM_API_KEY` variable and the `api_key` argument. As before, the
+  key is never read from `options()`. For Anthropic the key is sent as an
+  `x-api-key` header; for OpenAI it is sent as `Authorization: Bearer`.
+
 # statcanR 0.3.8
 
 ## Data

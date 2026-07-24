@@ -1,24 +1,36 @@
 #' Get an LLM's help interpreting a natural-language table search
 #'
 #' Sends the query and the ranked candidates from [statcan_find()] to a
-#' user-configured, OpenAI-compatible chat-completion endpoint, which
-#' explains which candidate(s) best match and asks a clarifying question
-#' when the query is ambiguous. The candidate table numbers and rankings
-#' always come from [statcan_find()] itself; the language model only
-#' interprets and explains them, and is never allowed to propose a table
-#' number of its own.
+#' user-configured language-model provider, which explains which
+#' candidate(s) best match and asks a clarifying question when the query is
+#' ambiguous. The candidate table numbers and rankings always come from
+#' [statcan_find()] itself; the language model only interprets and explains
+#' them, and is never allowed to propose a table number of its own.
+#'
+#' Two providers ship built in, selected with the `provider` argument:
+#'
+#' * `"openai"` (the default): the OpenAI chat-completions format, using an
+#'   `Authorization: Bearer` API key. This also covers any OpenAI-compatible
+#'   server -- Groq, Together, OpenRouter, Mistral, vLLM, or a local
+#'   open-source model served by Ollama or LM Studio -- by pointing
+#'   `endpoint` at it (a loopback `http://localhost` endpoint is accepted for
+#'   local models; pass any placeholder `api_key` for servers that ignore
+#'   it).
+#' * `"anthropic"`: the Claude Messages format, using an `x-api-key` header.
 #'
 #' This is an optional feature. It requires no additional packages beyond
 #' what statcanR already imports, but it does require you to configure an
-#' LLM endpoint, API key, and model, either as arguments or through
-#' `options()` / environment variables:
+#' API key and model (the endpoint defaults to the chosen provider), either
+#' as arguments or through `options()` / environment variables:
 #'
 #' * `endpoint`: `options(statcanR.llm_endpoint = ...)` or
-#'   `Sys.setenv(STATCANR_LLM_ENDPOINT = ...)`
+#'   `Sys.setenv(STATCANR_LLM_ENDPOINT = ...)`. Defaults to the provider's
+#'   own endpoint when unset.
 #' * `api_key`: `Sys.setenv(STATCANR_LLM_API_KEY = ...)` (or the `api_key`
-#'   argument). Because it is a secret, the key is **not** read from
-#'   `options()`, which can be dumped, saved with a session, or recorded in
-#'   `.Rhistory`.
+#'   argument, or the provider's native variable -- `OPENAI_API_KEY` /
+#'   `ANTHROPIC_API_KEY`). Because it is a secret, the key is **not** read
+#'   from `options()`, which can be dumped, saved with a session, or
+#'   recorded in `.Rhistory`.
 #' * `model`: `options(statcanR.llm_model = ...)` or
 #'   `Sys.setenv(STATCANR_LLM_MODEL = ...)`
 #'
@@ -34,16 +46,23 @@
 #'   `"eng"` or `"fra"`.
 #' @param n Maximum number of candidates to request from [statcan_find()].
 #' @param refresh Logical; forwarded to [statcan_find()].
-#' @param endpoint Chat-completions endpoint URL. Defaults to
+#' @param endpoint Provider endpoint URL. Defaults to
 #'   `getOption("statcanR.llm_endpoint")`, then
-#'   `Sys.getenv("STATCANR_LLM_ENDPOINT")`. Must be `https://`, except for
-#'   loopback hosts (for example, `http://localhost`).
-#' @param api_key API key sent as an `Authorization: Bearer` header. Defaults
-#'   to `Sys.getenv("STATCANR_LLM_API_KEY")`. For safety it is not read from
-#'   `options()`.
-#' @param model Model name sent to the endpoint. Defaults to
+#'   `Sys.getenv("STATCANR_LLM_ENDPOINT")`, then the chosen provider's own
+#'   endpoint. Must be `https://`, except for loopback hosts (for example,
+#'   `http://localhost`).
+#' @param api_key API key. Defaults to `Sys.getenv("STATCANR_LLM_API_KEY")`,
+#'   then the provider's native variable (`OPENAI_API_KEY` for `"openai"`,
+#'   `ANTHROPIC_API_KEY` for `"anthropic"`). For safety it is not read from
+#'   `options()`. It is sent as an `Authorization: Bearer` header for
+#'   `"openai"` and as an `x-api-key` header for `"anthropic"`.
+#' @param model Model name sent to the provider (for example, `"gpt-4o-mini"`
+#'   for OpenAI or `"claude-opus-4-8"` for Anthropic). Defaults to
 #'   `getOption("statcanR.llm_model")`, then
 #'   `Sys.getenv("STATCANR_LLM_MODEL")`.
+#' @param provider Which LLM provider to use: `"openai"` (the default,
+#'   also covering OpenAI-compatible and local servers) or `"anthropic"`
+#'   (Claude).
 #'
 #' @return A `statcan_chat_result` object: a list with `query`, `candidates`
 #'   (the [statcan_find()] data frame), `explanation`, and
@@ -52,16 +71,29 @@
 #'
 #' @examples
 #' \dontrun{
-#' options(
-#'   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-#'   statcanR.llm_model = "gpt-4o-mini"
+#' # OpenAI (the default provider)
+#' Sys.setenv(OPENAI_API_KEY = "sk-...")
+#' result <- statcan_chat(
+#'   "R&D expenditures in Quebec since 2020",
+#'   model = "gpt-4o-mini"
 #' )
-#' Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
+#'
+#' # Anthropic (Claude)
+#' Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...")
+#' result <- statcan_chat(
+#'   "R&D expenditures in Quebec since 2020",
+#'   provider = "anthropic", model = "claude-opus-4-8"
+#' )
+#'
+#' # A local open-source model served by Ollama (no key over loopback http)
+#' result <- statcan_chat(
+#'   "R&D expenditures in Quebec since 2020",
+#'   endpoint = "http://localhost:11434/v1/chat/completions",
+#'   api_key = "ollama", model = "llama3.1"
+#' )
 #'
 #' # statcan_chat() returns several ranked candidates, not a single table:
 #' # the model explains them but never picks or invents one for you.
-#' result <- statcan_chat("R&D expenditures in Quebec since 2020")
-#'
 #' # The candidates are already a data frame, so you never retype an id.
 #' result$candidates          # the full statcan_find() data frame
 #' result$candidates$id       # every candidate id, best-ranked first
@@ -73,9 +105,10 @@
 #' }
 statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
                          refresh = FALSE, endpoint = NULL, api_key = NULL,
-                         model = NULL) {
+                         model = NULL, provider = c("openai", "anthropic")) {
   lang <- match.arg(lang)
-  config <- resolve_llm_config(endpoint, api_key, model)
+  provider <- match.arg(provider)
+  config <- resolve_llm_config(endpoint, api_key, model, provider = provider)
   candidates <- statcan_find(query, lang = lang, n = n, refresh = refresh)
 
   if (!nrow(candidates)) {
@@ -96,9 +129,9 @@ statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
 
   messages <- build_llm_prompt(query, candidates, lang)
   parsed <- call_llm_chat(
-    config$endpoint, config$api_key, config$model, messages
+    config$provider, config$endpoint, config$api_key, config$model, messages
   )
-  reply <- parse_llm_reply(parsed)
+  reply <- parse_llm_reply(parsed, config$provider)
   contract <- parse_chat_contract(reply)
 
   structure(
@@ -125,16 +158,85 @@ print.statcan_chat_result <- function(x, ...) {
 }
 
 
-resolve_llm_config <- function(endpoint, api_key, model) {
+# The built-in provider registry. Each provider bundles the few things that
+# actually differ between vendors: the default endpoint, the native API-key
+# environment variable, how the API key is attached (auth scheme), how the
+# request body is shaped, and how the reply is read back out. Everything else
+# -- the statcan_find() ranking, the prompt text, the reply contract, and the
+# https-only security check -- is provider-neutral.
+llm_provider <- function(provider = c("openai", "anthropic")) {
+  provider <- match.arg(provider)
+  switch(
+    provider,
+    openai = list(
+      name = "openai",
+      endpoint = "https://api.openai.com/v1/chat/completions",
+      key_env = "OPENAI_API_KEY",
+      build_headers = function(api_key) {
+        httr::add_headers(Authorization = paste("Bearer", api_key))
+      },
+      build_body = function(model, messages) {
+        list(model = model, messages = messages)
+      },
+      parse_content = function(parsed) {
+        parsed$choices[[1L]]$message$content
+      }
+    ),
+    anthropic = list(
+      name = "anthropic",
+      endpoint = "https://api.anthropic.com/v1/messages",
+      key_env = "ANTHROPIC_API_KEY",
+      build_headers = function(api_key) {
+        httr::add_headers(
+          `x-api-key` = api_key,
+          `anthropic-version` = "2023-06-01"
+        )
+      },
+      build_body = function(model, messages) {
+        # Claude takes the system prompt as a top-level field, not a message,
+        # and requires max_tokens. Lift the neutral "system" message out and
+        # keep the rest (the user turn) as messages.
+        system_text <- NULL
+        chat <- list()
+        for (message in messages) {
+          if (identical(message$role, "system")) {
+            system_text <- message$content
+          } else {
+            chat[[length(chat) + 1L]] <- message
+          }
+        }
+        body <- list(model = model, max_tokens = 4096L, messages = chat)
+        if (!is.null(system_text)) {
+          body$system <- system_text
+        }
+        body
+      },
+      parse_content = function(parsed) {
+        parsed$content[[1L]]$text
+      }
+    )
+  )
+}
+
+
+resolve_llm_config <- function(endpoint, api_key, model,
+                               provider = c("openai", "anthropic")) {
+  provider <- match.arg(provider)
+  prov <- llm_provider(provider)
+
   endpoint <- first_nonempty(
     endpoint,
     getOption("statcanR.llm_endpoint"),
     Sys.getenv("STATCANR_LLM_ENDPOINT")
   )
+  if (is.null(endpoint)) {
+    endpoint <- prov$endpoint
+  }
   # The API key is a secret, so it is deliberately not read from options():
   # options can be dumped with options(), captured in a saved session, or land
-  # in .Rhistory when set inline. It comes only from the api_key argument or the
-  # STATCANR_LLM_API_KEY environment variable. Earlier versions did read the
+  # in .Rhistory when set inline. It comes only from the api_key argument, the
+  # STATCANR_LLM_API_KEY environment variable, or the provider's native key
+  # variable (OPENAI_API_KEY / ANTHROPIC_API_KEY). Earlier versions did read the
   # option, so warn if a stale one is set. Only its presence is checked with
   # nzchar(); the value itself is never read, so the key is not re-exposed.
   if (nzchar(getOption("statcanR.llm_api_key", ""))) {
@@ -147,7 +249,8 @@ resolve_llm_config <- function(endpoint, api_key, model) {
   }
   api_key <- first_nonempty(
     api_key,
-    Sys.getenv("STATCANR_LLM_API_KEY")
+    Sys.getenv("STATCANR_LLM_API_KEY"),
+    Sys.getenv(prov$key_env)
   )
   model <- first_nonempty(
     model,
@@ -157,19 +260,21 @@ resolve_llm_config <- function(endpoint, api_key, model) {
 
   if (is.null(endpoint) || is.null(api_key) || is.null(model)) {
     stop(
-      "statcan_chat() requires an LLM endpoint, API key, and model. Set the ",
-      "endpoint and model via arguments, options(statcanR.llm_endpoint = , ",
-      "statcanR.llm_model = ), or the STATCANR_LLM_ENDPOINT / ",
-      "STATCANR_LLM_MODEL environment variables. Set the API key via the ",
-      "api_key argument or Sys.setenv(STATCANR_LLM_API_KEY = ); for safety it ",
-      "is not read from options().",
+      "statcan_chat() requires an LLM endpoint, API key, and model. The ",
+      "endpoint defaults to the chosen provider, or set it via the endpoint ",
+      "argument, options(statcanR.llm_endpoint = ), or STATCANR_LLM_ENDPOINT. ",
+      "Set the model via the model argument, options(statcanR.llm_model = ), ",
+      "or STATCANR_LLM_MODEL. Set the API key via the api_key argument, ",
+      "Sys.setenv(STATCANR_LLM_API_KEY = ), or the provider's native ",
+      "variable (OPENAI_API_KEY / ANTHROPIC_API_KEY); for safety it is not ",
+      "read from options().",
       call. = FALSE
     )
   }
 
   validate_llm_endpoint(endpoint)
 
-  list(endpoint = endpoint, api_key = api_key, model = model)
+  list(provider = prov, endpoint = endpoint, api_key = api_key, model = model)
 }
 
 
@@ -264,12 +369,12 @@ build_llm_prompt <- function(query, candidates, lang) {
 }
 
 
-call_llm_chat <- function(endpoint, api_key, model, messages) {
+call_llm_chat <- function(provider, endpoint, api_key, model, messages) {
   response <- tryCatch(
     httr::POST(
       endpoint,
-      httr::add_headers(Authorization = paste("Bearer", api_key)),
-      body = list(model = model, messages = messages),
+      provider$build_headers(api_key),
+      body = provider$build_body(model, messages),
       encode = "json",
       httr::timeout(60),
       httr::user_agent(statcan_user_agent())
@@ -324,9 +429,9 @@ stop_for_llm_status <- function(response) {
 }
 
 
-parse_llm_reply <- function(parsed) {
+parse_llm_reply <- function(parsed, provider = llm_provider("openai")) {
   content <- tryCatch(
-    parsed$choices[[1L]]$message$content,
+    provider$parse_content(parsed),
     error = function(error) NULL
   )
   if (is.null(content) || length(content) != 1L || !nzchar(content)) {

@@ -11,7 +11,8 @@ statcan_chat(
   refresh = FALSE,
   endpoint = NULL,
   api_key = NULL,
-  model = NULL
+  model = NULL,
+  provider = c("openai", "anthropic")
 )
 }
 \arguments{
@@ -25,18 +26,26 @@ Passed to \code{\link[=statcan_find]{statcan_find()}}.}
 
 \item{refresh}{Logical; forwarded to \code{\link[=statcan_find]{statcan_find()}}.}
 
-\item{endpoint}{Chat-completions endpoint URL. Defaults to
+\item{endpoint}{Provider endpoint URL. Defaults to
 \code{getOption("statcanR.llm_endpoint")}, then
-\code{Sys.getenv("STATCANR_LLM_ENDPOINT")}. Must be \verb{https://}, except for
-loopback hosts (for example, \verb{http://localhost}).}
+\code{Sys.getenv("STATCANR_LLM_ENDPOINT")}, then the chosen provider's own
+endpoint. Must be \verb{https://}, except for loopback hosts (for example,
+\verb{http://localhost}).}
 
-\item{api_key}{API key sent as an \code{Authorization: Bearer} header. Defaults
-to \code{Sys.getenv("STATCANR_LLM_API_KEY")}. For safety it is not read from
-\code{options()}.}
+\item{api_key}{API key. Defaults to \code{Sys.getenv("STATCANR_LLM_API_KEY")},
+then the provider's native variable (\code{OPENAI_API_KEY} for \code{"openai"},
+\code{ANTHROPIC_API_KEY} for \code{"anthropic"}). For safety it is not read from
+\code{options()}. It is sent as an \code{Authorization: Bearer} header for
+\code{"openai"} and as an \code{x-api-key} header for \code{"anthropic"}.}
 
-\item{model}{Model name sent to the endpoint. Defaults to
+\item{model}{Model name sent to the provider (for example, \code{"gpt-4o-mini"}
+for OpenAI or \code{"claude-opus-4-8"} for Anthropic). Defaults to
 \code{getOption("statcanR.llm_model")}, then
 \code{Sys.getenv("STATCANR_LLM_MODEL")}.}
+
+\item{provider}{Which LLM provider to use: \code{"openai"} (the default,
+also covering OpenAI-compatible and local servers) or \code{"anthropic"}
+(Claude).}
 }
 \value{
 A \code{statcan_chat_result} object: a list with \code{query}, \code{candidates}
@@ -45,25 +54,37 @@ A \code{statcan_chat_result} object: a list with \code{query}, \code{candidates}
 }
 \description{
 Sends the query and the ranked candidates from \code{\link[=statcan_find]{statcan_find()}} to a
-user-configured, OpenAI-compatible chat-completion endpoint, which
-explains which candidate(s) best match and asks a clarifying question
-when the query is ambiguous. The candidate table numbers and rankings
-always come from \code{\link[=statcan_find]{statcan_find()}} itself; the language model only
-interprets and explains them, and is never allowed to propose a table
-number of its own.
+user-configured language-model provider, which explains which
+candidate(s) best match and asks a clarifying question when the query is
+ambiguous. The candidate table numbers and rankings always come from
+\code{\link[=statcan_find]{statcan_find()}} itself; the language model only interprets and explains
+them, and is never allowed to propose a table number of its own.
 }
 \details{
+Two providers ship built in, selected with the \code{provider} argument:
+\itemize{
+\item \code{"openai"} (the default): the OpenAI chat-completions format, using an
+\code{Authorization: Bearer} API key. This also covers any OpenAI-compatible
+server -- Groq, Together, OpenRouter, Mistral, vLLM, or a local
+open-source model served by Ollama or LM Studio -- by pointing
+\code{endpoint} at it (a loopback \verb{http://localhost} endpoint is accepted so
+local models need no key over the wire).
+\item \code{"anthropic"}: the Claude Messages format, using an \code{x-api-key} header.
+}
+
 This is an optional feature. It requires no additional packages beyond
 what statcanR already imports, but it does require you to configure an
-LLM endpoint, API key, and model, either as arguments or through
-\code{options()} / environment variables:
+API key and model (the endpoint defaults to the chosen provider), either
+as arguments or through \code{options()} / environment variables:
 \itemize{
 \item \code{endpoint}: \code{options(statcanR.llm_endpoint = ...)} or
-\code{Sys.setenv(STATCANR_LLM_ENDPOINT = ...)}
+\code{Sys.setenv(STATCANR_LLM_ENDPOINT = ...)}. Defaults to the provider's
+own endpoint when unset.
 \item \code{api_key}: \code{Sys.setenv(STATCANR_LLM_API_KEY = ...)} (or the \code{api_key}
-argument). Because it is a secret, the key is \strong{not} read from
-\code{options()}, which can be dumped, saved with a session, or recorded in
-\code{.Rhistory}.
+argument, or the provider's native variable -- \code{OPENAI_API_KEY} /
+\code{ANTHROPIC_API_KEY}). Because it is a secret, the key is \strong{not} read
+from \code{options()}, which can be dumped, saved with a session, or
+recorded in \code{.Rhistory}.
 \item \code{model}: \code{options(statcanR.llm_model = ...)} or
 \code{Sys.setenv(STATCANR_LLM_MODEL = ...)}
 }
@@ -76,16 +97,29 @@ No network request is made unless \code{statcan_chat()} is called directly.
 }
 \examples{
 \dontrun{
-options(
-  statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_model = "gpt-4o-mini"
+# OpenAI (the default provider)
+Sys.setenv(OPENAI_API_KEY = "sk-...")
+result <- statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  model = "gpt-4o-mini"
 )
-Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
+
+# Anthropic (Claude)
+Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...")
+result <- statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  provider = "anthropic", model = "claude-opus-4-8"
+)
+
+# A local open-source model served by Ollama (no key over loopback http)
+result <- statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  endpoint = "http://localhost:11434/v1/chat/completions",
+  api_key = "ollama", model = "llama3.1"
+)
 
 # statcan_chat() returns several ranked candidates, not a single table:
 # the model explains them but never picks or invents one for you.
-result <- statcan_chat("R&D expenditures in Quebec since 2020")
-
 # The candidates are already a data frame, so you never retype an id.
 result$candidates          # the full statcan_find() data frame
 result$candidates$id       # every candidate id, best-ranked first

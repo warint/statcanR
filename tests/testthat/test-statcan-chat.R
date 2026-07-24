@@ -50,7 +50,11 @@ test_that("a stale statcanR.llm_api_key option is ignored with a warning", {
     statcanR.llm_api_key = "option-key",
     statcanR.llm_model = "model"
   )
-  withr::local_envvar(STATCANR_LLM_API_KEY = NA)
+  withr::local_envvar(
+    STATCANR_LLM_API_KEY = NA,
+    OPENAI_API_KEY = NA,
+    ANTHROPIC_API_KEY = NA
+  )
 
   # The option is ignored, but a warning guides migration; the explicit
   # argument still supplies the key.
@@ -97,12 +101,15 @@ test_that("resolve_llm_config errors clearly when nothing is configured", {
     statcanR.llm_model = NULL
   )
   old_env <- Sys.getenv(
-    c("STATCANR_LLM_ENDPOINT", "STATCANR_LLM_API_KEY", "STATCANR_LLM_MODEL"),
+    c(
+      "STATCANR_LLM_ENDPOINT", "STATCANR_LLM_API_KEY", "STATCANR_LLM_MODEL",
+      "OPENAI_API_KEY", "ANTHROPIC_API_KEY"
+    ),
     unset = NA
   )
   Sys.setenv(
     STATCANR_LLM_ENDPOINT = "", STATCANR_LLM_API_KEY = "",
-    STATCANR_LLM_MODEL = ""
+    STATCANR_LLM_MODEL = "", OPENAI_API_KEY = "", ANTHROPIC_API_KEY = ""
   )
   on.exit({
     options(old_options)
@@ -116,6 +123,60 @@ test_that("resolve_llm_config errors clearly when nothing is configured", {
   expect_error(
     statcanR:::resolve_llm_config(NULL, NULL, NULL),
     "requires an LLM endpoint"
+  )
+})
+
+
+test_that("resolve_llm_config defaults the endpoint and key var per provider", {
+  withr::local_options(
+    statcanR.llm_endpoint = NULL,
+    statcanR.llm_model = NULL
+  )
+  withr::local_envvar(
+    STATCANR_LLM_ENDPOINT = NA,
+    STATCANR_LLM_API_KEY = NA,
+    STATCANR_LLM_MODEL = NA,
+    OPENAI_API_KEY = "openai-key",
+    ANTHROPIC_API_KEY = "anthropic-key"
+  )
+
+  # openai: default endpoint, key from OPENAI_API_KEY
+  openai <- statcanR:::resolve_llm_config(NULL, NULL, "gpt-4o-mini")
+  expect_identical(openai$provider$name, "openai")
+  expect_identical(openai$endpoint, "https://api.openai.com/v1/chat/completions")
+  expect_identical(openai$api_key, "openai-key")
+
+  # anthropic: default endpoint, key from ANTHROPIC_API_KEY
+  anthropic <- statcanR:::resolve_llm_config(
+    NULL, NULL, "claude-opus-4-8", provider = "anthropic"
+  )
+  expect_identical(anthropic$provider$name, "anthropic")
+  expect_identical(anthropic$endpoint, "https://api.anthropic.com/v1/messages")
+  expect_identical(anthropic$api_key, "anthropic-key")
+})
+
+
+test_that("the anthropic provider shapes the body and parses the reply", {
+  prov <- statcanR:::llm_provider("anthropic")
+
+  messages <- list(
+    list(role = "system", content = "system text"),
+    list(role = "user", content = "user text")
+  )
+  body <- prov$build_body("claude-opus-4-8", messages)
+
+  # system is lifted to a top-level field; only the user turn stays in messages
+  expect_identical(body$system, "system text")
+  expect_length(body$messages, 1L)
+  expect_identical(body$messages[[1L]]$role, "user")
+  # Claude requires max_tokens
+  expect_true(is.numeric(body$max_tokens))
+
+  # reply content lives at content[[1]]$text, not choices[[1]]$message$content
+  parsed <- list(content = list(list(type = "text", text = "hello from claude")))
+  expect_identical(prov$parse_content(parsed), "hello from claude")
+  expect_identical(
+    statcanR:::parse_llm_reply(parsed, prov), "hello from claude"
   )
 })
 
