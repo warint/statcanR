@@ -1,3 +1,11 @@
+# statcanR 0.3.4
+
+## Chat (optional)
+
+* `statcan_chat()` now resolves its LLM endpoint, API key, and model
+  before calling `statcan_find()`, so a missing configuration fails
+  immediately instead of after a full catalogue lookup.
+
 # statcanR 0.3.3
 
 ## Package and documentation
