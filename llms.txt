@@ -6,7 +6,7 @@ Statistics Canada. It connects to the official [Web Data Service
 French, and returns ordinary data frames that can be analysed with base
 R or your preferred R packages.
 
-The package has four main functions:
+The package has four main functions, plus one optional one:
 
 | If you want to… | Use… | What you get |
 |----|----|----|
@@ -14,6 +14,7 @@ The package has four main functions:
 | Search for exact words in table titles | [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | An interactive table of matching titles and identifiers |
 | Load a complete table into R | [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md) | A data frame |
 | Load a table and also save a CSV copy | [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | A data frame and a UTF-8 CSV file |
+| Get a language model’s help interpreting a [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md) query *(optional, requires configuration)* | [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md) | An explanation of the best match and a clarifying question when needed |
 
 `statcanR` downloads the **complete** Statistics Canada table. Some
 tables are large, so check that the table is appropriate for your needs
@@ -115,6 +116,38 @@ Searches are case-insensitive. When you supply several keywords,
 **every** keyword must appear in the title. If a search is too narrow,
 try fewer or more general words. To search French titles, use
 `lang = "fra"`.
+
+### Optional: ask a language model for help
+
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+wraps
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+with a language model you configure. It explains which candidate best
+matches your query and asks a clarifying question when the query is
+ambiguous — it never invents a table number or reasons over the
+downloaded data itself, so
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+remains the authoritative source of candidates.
+
+This is entirely optional: it adds no new package dependencies, and it
+makes no network request unless you call
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+yourself. It works with any OpenAI-compatible chat-completions endpoint.
+Configure it once per session:
+
+``` r
+
+options(
+  statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
+  statcanR.llm_api_key = "sk-...",
+  statcanR.llm_model = "gpt-4o-mini"
+)
+```
+
+``` r
+
+statcan_chat("R&D expenditures in Quebec since 2020")
+```
 
 ### 2. Download the table into R
 
