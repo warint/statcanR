@@ -285,3 +285,78 @@ test_that("statcan_chat assembles a result from the mocked LLM reply", {
   expect_match(result$explanation, "27-10-0273-01", fixed = TRUE)
   expect_true(is.na(result$clarifying_question))
 })
+
+
+# The mocked endpoint echoes how many messages it was sent, so tests can assert
+# that the conversation grows by the expected amount on each turn.
+echo_message_count <- function(provider, endpoint, api_key, model, messages) {
+  list(choices = list(list(message = list(content = paste0(
+    "EXPLANATION:\n", length(messages), " messages\nCLARIFYING_QUESTION:\nNONE"
+  )))))
+}
+
+
+test_that("statcan_chat stores conversation state for a successful turn", {
+  local_mocked_bindings(
+    statcan_find = function(...) sample_candidates(),
+    call_llm_chat = echo_message_count,
+    .package = "statcanR"
+  )
+
+  r1 <- statcan_chat("q", endpoint = "https://x", api_key = "k", model = "m")
+  expect_false(is.null(r1$conversation))
+  expect_identical(r1$conversation$provider, "openai")
+  # system + user sent on the first turn
+  expect_match(r1$explanation, "2 messages")
+  # stored history also includes the assistant reply -> 3 turns
+  expect_length(r1$conversation$messages, 3L)
+})
+
+
+test_that("statcan_chat_continue stays scoped to candidates and chains", {
+  local_mocked_bindings(
+    statcan_find = function(...) sample_candidates(),
+    call_llm_chat = echo_message_count,
+    .package = "statcanR"
+  )
+
+  r1 <- statcan_chat("q", endpoint = "https://x", api_key = "k", model = "m")
+
+  r2 <- statcan_chat_continue(r1, "annual data", api_key = "k")
+  # continue appends the user turn to the stored 3 -> 4 sent
+  expect_match(r2$explanation, "4 messages")
+  expect_identical(r2$candidates, r1$candidates) # shortlist unchanged
+
+  # chainable: a second follow-up works on the result of the first
+  r3 <- statcan_chat_continue(r2, "since 2015", api_key = "k")
+  expect_match(r3$explanation, "6 messages")
+  expect_length(r3$conversation$messages, 7L)
+
+  expect_error(
+    statcan_chat_continue(r1, "", api_key = "k"),
+    "non-empty message"
+  )
+})
+
+
+test_that("statcan_chat_continue errors when there is no conversation", {
+  local_mocked_bindings(
+    statcan_find = function(...) statcanR:::empty_statcan_find_result(),
+    call_llm_chat = function(...) stop("the LLM should not be called"),
+    .package = "statcanR"
+  )
+
+  r <- statcan_chat(
+    "no matches", endpoint = "https://x", api_key = "k", model = "m"
+  )
+  expect_true(is.null(r$conversation))
+  expect_error(
+    statcan_chat_continue(r, "more detail", api_key = "k"),
+    "no conversation to continue"
+  )
+})
+
+
+test_that("statcan_chat_continue rejects a non-result first argument", {
+  expect_error(statcan_chat_continue(list(), "hi"), "statcan_chat_result")
+})

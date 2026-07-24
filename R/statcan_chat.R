@@ -112,19 +112,18 @@ statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
   candidates <- statcan_find(query, lang = lang, n = n, refresh = refresh)
 
   if (!nrow(candidates)) {
-    return(structure(
-      list(
-        query = query,
-        candidates = candidates,
-        explanation = if (lang == "eng") {
-          "No matching tables were found for this query."
-        } else {
-          "Aucun tableau correspondant n'a \u00e9t\u00e9 trouv\u00e9 pour cette requ\u00eate."
-        },
-        clarifying_question = NA_character_
-      ),
-      class = "statcan_chat_result"
-    ))
+    # No candidates: there is nothing for the model to explain, so we skip the
+    # network call and return a result with no conversation state. Continuing
+    # such a result is a clear error in statcan_chat_continue().
+    contract <- list(
+      explanation = if (lang == "eng") {
+        "No matching tables were found for this query."
+      } else {
+        "Aucun tableau correspondant n'a \u00e9t\u00e9 trouv\u00e9 pour cette requ\u00eate."
+      },
+      clarifying_question = NA_character_
+    )
+    return(new_statcan_chat_result(query, candidates, contract, conversation = NULL))
   }
 
   messages <- build_llm_prompt(query, candidates, lang)
@@ -133,15 +132,136 @@ statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
   )
   reply <- parse_llm_reply(parsed, config$provider)
   contract <- parse_chat_contract(reply)
+  messages <- c(messages, list(list(role = "assistant", content = reply)))
 
+  new_statcan_chat_result(
+    query = query,
+    candidates = candidates,
+    contract = contract,
+    conversation = list(
+      provider = provider,
+      endpoint = config$endpoint,
+      model = config$model,
+      lang = lang,
+      messages = messages
+    )
+  )
+}
+
+
+# Shared constructor for the statcan_chat_result object. `conversation` holds
+# everything needed to continue the chat -- provider name, endpoint, model,
+# lang, and the running message history -- but deliberately NOT the API key,
+# which is a secret and must not be persisted in a saved object. It is NULL
+# when there is no conversation to continue (an empty search).
+new_statcan_chat_result <- function(query, candidates, contract,
+                                    conversation = NULL) {
   structure(
     list(
       query = query,
       candidates = candidates,
       explanation = contract$explanation,
-      clarifying_question = contract$clarifying_question
+      clarifying_question = contract$clarifying_question,
+      conversation = conversation
     ),
     class = "statcan_chat_result"
+  )
+}
+
+
+#' Continue a `statcan_chat()` conversation
+#'
+#' Sends a follow-up `message` -- typically an answer to the
+#' `clarifying_question` from a previous turn -- and returns an updated
+#' result. The follow-up stays scoped to the **same candidate tables** that
+#' [statcan_chat()] already found: it never re-runs [statcan_find()] and the
+#' model still never proposes a table number of its own. To search the
+#' catalogue again, start a new conversation with [statcan_chat()].
+#'
+#' The returned object is itself continuable, so you can chain several
+#' follow-ups. The API key is re-resolved on each call (from the `api_key`
+#' argument, the `STATCANR_LLM_API_KEY` environment variable, or the
+#' provider's native variable) because, for safety, it is never stored in the
+#' result object.
+#'
+#' @param result A `statcan_chat_result` returned by [statcan_chat()] (or by a
+#'   previous `statcan_chat_continue()` call).
+#' @param message One non-empty character string: your follow-up to the model.
+#' @param api_key API key, re-resolved exactly as in [statcan_chat()]. Defaults
+#'   to `Sys.getenv("STATCANR_LLM_API_KEY")`, then the provider's native
+#'   variable. Not read from `options()`.
+#'
+#' @return An updated `statcan_chat_result` with the same `candidates`, a new
+#'   `explanation` and `clarifying_question`, and an extended conversation.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...")
+#' r1 <- statcan_chat(
+#'   "R&D spending in Quebec",
+#'   provider = "anthropic", model = "claude-opus-4-8"
+#' )
+#' r1$clarifying_question
+#'
+#' # Answer it and keep the same shortlist of candidates:
+#' r2 <- statcan_chat_continue(r1, "annual data, since 2015")
+#' r2$explanation
+#'
+#' # Chain another follow-up:
+#' r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+#' }
+statcan_chat_continue <- function(result, message, api_key = NULL) {
+  if (!inherits(result, "statcan_chat_result")) {
+    stop(
+      "statcan_chat_continue() expects a statcan_chat_result from ",
+      "statcan_chat().",
+      call. = FALSE
+    )
+  }
+  if (is.null(result$conversation)) {
+    stop(
+      "statcan_chat_continue(): there is no conversation to continue; the ",
+      "initial statcan_chat() search returned no candidate tables.",
+      call. = FALSE
+    )
+  }
+  if (!is.character(message) || length(message) != 1L ||
+        is.na(message) || !nzchar(trimws(message))) {
+    stop(
+      "statcan_chat_continue() requires a single non-empty message.",
+      call. = FALSE
+    )
+  }
+
+  conv <- result$conversation
+  # Reuse the same resolution path as statcan_chat() so the stale-option
+  # warning, the key fallback order, and the https-only check all behave
+  # identically. Only the key is re-resolved; endpoint/model/provider come
+  # from the stored conversation.
+  config <- resolve_llm_config(
+    conv$endpoint, api_key, conv$model, provider = conv$provider
+  )
+
+  messages <- c(conv$messages, list(list(role = "user", content = message)))
+  parsed <- call_llm_chat(
+    config$provider, config$endpoint, config$api_key, config$model, messages
+  )
+  reply <- parse_llm_reply(parsed, config$provider)
+  contract <- parse_chat_contract(reply)
+  messages <- c(messages, list(list(role = "assistant", content = reply)))
+
+  new_statcan_chat_result(
+    query = result$query,
+    candidates = result$candidates,
+    contract = contract,
+    conversation = list(
+      provider = conv$provider,
+      endpoint = conv$endpoint,
+      model = conv$model,
+      lang = conv$lang,
+      messages = messages
+    )
   )
 }
 

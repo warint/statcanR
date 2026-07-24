@@ -18,6 +18,14 @@
   key is never read from `options()`. For Anthropic the key is sent as an
   `x-api-key` header; for OpenAI it is sent as `Authorization: Bearer`.
 
+* New `statcan_chat_continue()` turns `statcan_chat()` into a multi-turn
+  conversation: send a follow-up message (for example, an answer to the
+  `clarifying_question`) and get an updated result. Follow-ups stay scoped to
+  the candidate tables the first call already found -- they never re-run
+  `statcan_find()`, and the model still never proposes a table number of its
+  own. Results are chainable, so you can keep answering. The API key is
+  re-resolved on each call rather than stored in the result object.
+
 # statcanR 0.3.8
 
 ## Data

@@ -139,8 +139,9 @@ also covering OpenAI-compatible and local servers) or <code>"anthropic"</code>
 <code>Authorization: Bearer</code> API key. This also covers any OpenAI-compatible
 server – Groq, Together, OpenRouter, Mistral, vLLM, or a local
 open-source model served by Ollama or LM Studio – by pointing
-<code>endpoint</code> at it (a loopback <code>http://localhost</code> endpoint is accepted so
-local models need no key over the wire).</p></li>
+<code>endpoint</code> at it (a loopback <code>http://localhost</code> endpoint is accepted for
+local models; pass any placeholder <code>api_key</code> for servers that ignore
+it).</p></li>
 <li><p><code>"anthropic"</code>: the Claude Messages format, using an <code>x-api-key</code> header.</p></li>
 </ul><p>This is an optional feature. It requires no additional packages beyond
 what statcanR already imports, but it does require you to configure an

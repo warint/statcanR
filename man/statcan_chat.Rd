@@ -67,8 +67,9 @@ Two providers ship built in, selected with the \code{provider} argument:
 \code{Authorization: Bearer} API key. This also covers any OpenAI-compatible
 server -- Groq, Together, OpenRouter, Mistral, vLLM, or a local
 open-source model served by Ollama or LM Studio -- by pointing
-\code{endpoint} at it (a loopback \verb{http://localhost} endpoint is accepted so
-local models need no key over the wire).
+\code{endpoint} at it (a loopback \verb{http://localhost} endpoint is accepted for
+local models; pass any placeholder \code{api_key} for servers that ignore
+it).
 \item \code{"anthropic"}: the Claude Messages format, using an \code{x-api-key} header.
 }
 

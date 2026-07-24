@@ -91,7 +91,8 @@ Two providers ship built in, selected with the `provider` argument:
   OpenAI-compatible server – Groq, Together, OpenRouter, Mistral, vLLM,
   or a local open-source model served by Ollama or LM Studio – by
   pointing `endpoint` at it (a loopback `http://localhost` endpoint is
-  accepted so local models need no key over the wire).
+  accepted for local models; pass any placeholder `api_key` for servers
+  that ignore it).
 
 - `"anthropic"`: the Claude Messages format, using an `x-api-key`
   header.

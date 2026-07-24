@@ -227,6 +227,23 @@ table_data <- statcan_data(top_id, lang = "eng")
 
 If more than one candidate looks plausible, read `result$explanation` and the `title` column of `result$candidates`, then pick the row you want (for example `result$candidates$id[2]`) before calling `statcan_data()`.
 
+#### Continue the conversation
+
+A single `statcan_chat()` call is one turn. If it comes back with a `clarifying_question`, you can answer it — and keep the discussion going — with `statcan_chat_continue()`. Each follow-up stays scoped to the **same candidate tables** the first call already found: it does not run a new catalogue search, and the model still never invents a table number. Results are chainable, so you can answer more than once:
+
+
+``` r
+r1 <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
+r1$clarifying_question             # e.g. "Annual or quarterly data?"
+
+r2 <- statcan_chat_continue(r1, "annual data, since 2015")
+r2$explanation                     # the model's updated take, same shortlist
+
+r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+```
+
+To search the catalogue again from scratch, start a fresh `statcan_chat()` call rather than continuing. The API key is re-read on each `statcan_chat_continue()` call (from the argument or your environment variable) and is never stored inside the result object.
+
 ### 2. Download the table into R
 
 Copy an identifier from the search result and pass it to `statcan_data()`. The example below uses a small table so it is convenient to try:

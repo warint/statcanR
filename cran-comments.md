@@ -10,6 +10,10 @@ arguments are unchanged. Since 0.3.0 the package:
   `statcan_find()`. A `provider` argument selects the provider: `"openai"` (the
   default, which also covers any OpenAI-compatible or local server) or
   `"anthropic"` (Claude).
+* adds `statcan_chat_continue()`, which continues a `statcan_chat()` result as
+  a multi-turn conversation. Follow-ups stay scoped to the candidate tables the
+  first call found; they do not re-run `statcan_find()`, and the API key is
+  re-resolved per call rather than stored in the result object.
 * fixes `statcan_data()` and `statcan_download_data()` for tables whose
   `_MetaData.csv` file has several sections with differing column counts, which
   could previously cause a valid table to be reported as empty.

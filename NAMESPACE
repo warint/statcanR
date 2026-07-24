@@ -2,6 +2,7 @@
 
 S3method(print,statcan_chat_result)
 export(statcan_chat)
+export(statcan_chat_continue)
 export(statcan_data)
 export(statcan_download_data)
 export(statcan_find)
