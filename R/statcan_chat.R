@@ -56,6 +56,7 @@ statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
                          refresh = FALSE, endpoint = NULL, api_key = NULL,
                          model = NULL) {
   lang <- match.arg(lang)
+  config <- resolve_llm_config(endpoint, api_key, model)
   candidates <- statcan_find(query, lang = lang, n = n, refresh = refresh)
 
   if (!nrow(candidates)) {
@@ -74,7 +75,6 @@ statcan_chat <- function(query, lang = c("eng", "fra"), n = 5L,
     ))
   }
 
-  config <- resolve_llm_config(endpoint, api_key, model)
   messages <- build_llm_prompt(query, candidates, lang)
   parsed <- call_llm_chat(
     config$endpoint, config$api_key, config$model, messages
