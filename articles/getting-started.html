@@ -129,6 +129,10 @@ saving a CSV copy.</p>
 not a filtered selection of observations. A Statistics Canada table can
 be large. It is therefore useful to identify the right table before
 starting the download.</p>
+<p>An optional fifth function, <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code>, wraps
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code> with a user-configured language model to
+explain candidates and ask clarifying questions; see <a href="#optional-ask-a-language-model-for-help">Optional: ask a language
+model for help</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="two-concepts-to-know-first">Two concepts to know first<a class="anchor" aria-label="anchor" href="#two-concepts-to-know-first"></a>
@@ -274,6 +278,30 @@ possible. Candidates whose geography could not be checked have
 <code>geography_match = NA</code>; the match explanation makes that
 uncertainty explicit.</p>
 </div>
+<div class="section level3">
+<h3 id="optional-ask-a-language-model-for-help">Optional: ask a language model for help<a class="anchor" aria-label="anchor" href="#optional-ask-a-language-model-for-help"></a>
+</h3>
+<p><code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> is an entirely optional layer on top of
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code>. It sends your query and
+<code><a href="../reference/statcan_find.html">statcan_find()</a></code>’s ranked candidates to a language model you
+configure, which explains which candidate best matches and asks a
+clarifying question when the query is ambiguous. The language model
+never sees or chooses a table number of its own; it only explains the
+candidates <code><a href="../reference/statcan_find.html">statcan_find()</a></code> already returned.</p>
+<p>This feature adds no new package dependencies, and it never makes a
+network request unless you call <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> yourself. It
+works with any OpenAI-compatible chat-completions endpoint. Configure it
+once per session with <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, or with environment
+variables, or by passing arguments directly:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
+<span>  statcanR.llm_endpoint <span class="op">=</span> <span class="st">"https://api.openai.com/v1/chat/completions"</span>,</span>
+<span>  statcanR.llm_api_key <span class="op">=</span> <span class="st">"sk-..."</span>,</span>
+<span>  statcanR.llm_model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="step-2-download-a-complete-table">Step 2: download a complete table<a class="anchor" aria-label="anchor" href="#step-2-download-a-complete-table"></a>
@@ -281,12 +309,12 @@ uncertainty explicit.</p>
 <p>After choosing an identifier, pass it and the desired language to
 <code><a href="../reference/statcan_data.html">statcan_data()</a></code>. This example uses a relatively small table
 that is convenient for learning:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, lang <span class="op">=</span> <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
 <p>The function downloads and unpacks the current full-table CSV
 archive, then returns a data frame. Start by examining its dimensions,
 names, and first observations:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span></code></pre></div>
@@ -304,13 +332,13 @@ its metadata.</li>
 </ul>
 <p>For example, you can select observations from 2020 onward with
 ordinary R subsetting:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recent_data</span> <span class="op">&lt;-</span> <span class="va">table_data</span><span class="op">[</span></span>
 <span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">$</span><span class="va">REF_DATE</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>    <span class="va">table_data</span><span class="op">$</span><span class="va">REF_DATE</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-01-01"</span><span class="op">)</span>,</span>
 <span><span class="op">]</span></span></code></pre></div>
 <p>To download the French version of the table, change the language:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, lang <span class="op">=</span> <span class="st">"fra"</span><span class="op">)</span></span></code></pre></div>
 <p>Most source column names remain in the selected language, so do not
 assume that every English column name has an identical French
@@ -324,13 +352,13 @@ equivalent.</p>
 <code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code> when you also need a CSV file.</p>
 <p>Existing two-argument calls save the file in the current working
 directory:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_download_data.html">statcan_download_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This creates <code>statcan_10100001_eng.csv</code>. To keep project
 files organized, create a dedicated directory and pass it through
 <code>path</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"statcanR-data"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">output_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -351,7 +379,7 @@ fields.</p>
 <h2 id="compatibility-with-earlier-statcanr-scripts">Compatibility with earlier statcanR scripts<a class="anchor" aria-label="anchor" href="#compatibility-with-earlier-statcanr-scripts"></a>
 </h2>
 <p>The update does not require you to rewrite established calls:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This familiar two-argument form remains valid.</span></span>
 <span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span></span>
@@ -443,7 +471,7 @@ data licence.</li>
 <p>Review the <a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence" class="external-link">Statistics
 Canada Open Licence</a> before redistributing downloaded data. To obtain
 the package’s current citation, run:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"statcanR"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

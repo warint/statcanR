@@ -29,6 +29,14 @@ selection of observations. A Statistics Canada table can be large. It is
 therefore useful to identify the right table before starting the
 download.
 
+An optional fifth function,
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md),
+wraps
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+with a user-configured language model to explain candidates and ask
+clarifying questions; see [Optional: ask a language model for
+help](#optional-ask-a-language-model-for-help).
+
 ## Two concepts to know first
 
 ### Table number and Product ID
@@ -203,6 +211,42 @@ refreshed,
 uses valid cached metadata where possible. Candidates whose geography
 could not be checked have `geography_match = NA`; the match explanation
 makes that uncertainty explicit.
+
+### Optional: ask a language model for help
+
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+is an entirely optional layer on top of
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md).
+It sends your query and
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)’s
+ranked candidates to a language model you configure, which explains
+which candidate best matches and asks a clarifying question when the
+query is ambiguous. The language model never sees or chooses a table
+number of its own; it only explains the candidates
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+already returned.
+
+This feature adds no new package dependencies, and it never makes a
+network request unless you call
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+yourself. It works with any OpenAI-compatible chat-completions endpoint.
+Configure it once per session with
+[`options()`](https://rdrr.io/r/base/options.html), or with environment
+variables, or by passing arguments directly:
+
+``` r
+
+options(
+  statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
+  statcanR.llm_api_key = "sk-...",
+  statcanR.llm_model = "gpt-4o-mini"
+)
+```
+
+``` r
+
+statcan_chat("R&D expenditures in Quebec since 2020")
+```
 
 ## Step 2: download a complete table
 
