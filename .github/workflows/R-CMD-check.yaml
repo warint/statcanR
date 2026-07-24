@@ -36,6 +36,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Install pak from the regular CRAN repositories rather than the
+          # r-lib.github.io pak index. That index intermittently returned
+          # "unable to access index" on windows-latest and failed the job
+          # before R CMD check could run; CRAN is the same reliable source the
+          # rest of the dependency install already uses.
+          pak-version: repo
           extra-packages: any::rcmdcheck
           needs: check
       - uses: r-lib/actions/check-r-package@v2
