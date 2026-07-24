@@ -43,7 +43,7 @@ with:
 packageVersion("statcanR")
 ```
 
-Version 0.3.0 keeps the established calls to
+Version 0.3.x keeps the established calls to
 [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md),
 [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md),
 and
