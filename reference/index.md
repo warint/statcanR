@@ -18,3 +18,10 @@
 
 - [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
   : Get an LLM's help interpreting a natural-language table search
+
+- [`statcan_chat_continue()`](https://warint.github.io/statcanR/reference/statcan_chat_continue.md)
+  :
+
+  Continue a
+  [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+  conversation

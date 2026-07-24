@@ -280,6 +280,29 @@ The `"openai"` provider also covers any OpenAI-compatible server — Groq,
 Together, OpenRouter, Mistral, vLLM, or a local open-source model served
 by Ollama or LM Studio — by pointing `endpoint` at it.
 
+A single
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+call is one turn. To answer its `clarifying_question` and keep the
+discussion going, use
+[`statcan_chat_continue()`](https://warint.github.io/statcanR/reference/statcan_chat_continue.md).
+Each follow-up stays scoped to the same candidate tables the first call
+found (it never re-runs
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md),
+and the model still never invents a table number), and results are
+chainable:
+
+``` r
+
+r1 <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
+r1$clarifying_question
+r2 <- statcan_chat_continue(r1, "annual data, since 2015")
+r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+```
+
+To search the catalogue again, start a fresh
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+call rather than continuing.
+
 ## Step 2: download a complete table
 
 After choosing an identifier, pass it and the desired language to
