@@ -84,14 +84,16 @@ local `R CMD check --as-cran` clean apart from the documented LaTeX/`tidy`
 artifacts, GitHub Actions R-CMD-check passing, URLs verified (the DOI 403 is a
 false positive that resolves in a browser), and no reverse dependencies.
 
-Remaining steps to run at actual submission time:
+Status:
 
-1. **win-builder** -- `devtools::check_win_devel()` and
-   `devtools::check_win_release()`; update the "Test environments" and
-   "R CMD check results" sections above with the outcome.
-2. **Spell check** -- `devtools::spell_check()`.
-3. **Submit** -- `devtools::release()` (runs its interactive checklist,
-   submits, and writes the `CRAN-SUBMISSION` record).
+1. **win-builder** -- submitted to both R-devel and R-release; results are
+   emailed to the maintainer (~15-30 min). Paste the outcome into the
+   "Test environments" and "R CMD check results" sections above once received.
+2. **Spell check** -- done. `inst/WORDLIST` whitelists the package's technical
+   terms, British spellings, and proper nouns; `spelling::spell_check_package()`
+   is now clean, and `Language: en-US` is set in DESCRIPTION.
+3. **Submit** -- not yet done. `devtools::release()` runs its interactive
+   checklist, submits, and writes the `CRAN-SUBMISSION` record.
 
 Then delete this checklist section so CRAN sees only the submission comments.
 </content>

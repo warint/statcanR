@@ -16,6 +16,7 @@ Depends:
     R (>= 4.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
 Suggests:
     knitr,
