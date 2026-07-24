@@ -56,7 +56,7 @@ If you upgrade while `statcanR` is already loaded, restart your R session before
 packageVersion("statcanR")
 ```
 
-Version 0.3.0 keeps the established calls to `statcan_search()`, `statcan_data()`, and `statcan_download_data()`, so scripts written for earlier releases continue to work. The new `statcan_find()` function adds a more conversational way to discover a table without changing those functions.
+Version 0.3.x keeps the established calls to `statcan_search()`, `statcan_data()`, and `statcan_download_data()`, so scripts written for earlier releases continue to work. The new `statcan_find()` function adds a more conversational way to discover a table without changing those functions.
 
 ## A first workflow
 
