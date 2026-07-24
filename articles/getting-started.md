@@ -230,18 +230,42 @@ This feature adds no new package dependencies, and it never makes a
 network request unless you call
 [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
 yourself. It works with any OpenAI-compatible chat-completions endpoint.
-Configure it once per session with
-[`options()`](https://rdrr.io/r/base/options.html), or with environment
-variables, or by passing arguments directly:
+The endpoint must use `https://` so the key is never sent in cleartext
+(plain `http://` is accepted only for a loopback host such as
+`http://localhost`, for a local model). Configure the endpoint and model
+once per session with
+[`options()`](https://rdrr.io/r/base/options.html), environment
+variables, or arguments; supply the API key through the
+`STATCANR_LLM_API_KEY` environment variable (or the `api_key` argument),
+since a secret should not be kept in
+[`options()`](https://rdrr.io/r/base/options.html):
 
 ``` r
 
 options(
   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_api_key = "sk-...",
   statcanR.llm_model = "gpt-4o-mini"
 )
+Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
 ```
+
+Loading the package with
+[`library(statcanR)`](https://warint.github.io/statcanR/) never requests
+these settings, and no key is needed for
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+or
+[`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md);
+the key is read only when you call
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md).
+To set it once and reuse it across sessions without retyping it, add it
+to your `~/.Renviron` file (open it with `usethis::edit_r_environ()`,
+then restart R) instead of calling
+[`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
+
+    STATCANR_LLM_API_KEY=sk-...
+
+R reads `.Renviron` automatically at startup, so the key stays out of
+your scripts and `.Rhistory`.
 
 ``` r
 

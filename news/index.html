@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,19 @@
       <small>Source: <a href="https://github.com/warint/statcanR/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.8" id="statcanr-038">statcanR 0.3.8<a class="anchor" aria-label="anchor" href="#statcanr-038"></a></h2>
+<div class="section level3">
+<h3 id="data-0-3-8">Data<a class="anchor" aria-label="anchor" href="#data-0-3-8"></a></h3>
+<ul><li>
+<code><a href="../reference/statcan_data.html">statcan_data()</a></code> and <code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code> now return stable column types. A column that Statistics Canada leaves blank for a whole table (often <code>DGUID</code>, <code>STATUS</code>, <code>SYMBOL</code>, or <code>TERMINATED</code>) was previously read as a logical, all-<code>NA</code> column, so its type changed from table to table and could break <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind()</a></code>/<code>dplyr::bind_rows()</code> or code expecting text. Such columns are now returned as empty character columns. Columns that carry real values, including reliability flags such as <code>"E"</code>, <code>"F"</code>, or <code>"t"</code>, are unchanged.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="security-0-3-8">Security<a class="anchor" aria-label="anchor" href="#security-0-3-8"></a></h3>
+<ul><li><p><code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> now refuses to send your API key over an unencrypted connection. The endpoint must use <code>https://</code>, except for loopback hosts (for example, <code>http://localhost</code> for a local model), so a mistyped <code>http://</code> endpoint can no longer leak the key in cleartext.</p></li>
+<li><p><strong>Breaking:</strong> the API key is no longer read from <code>options(statcanR.llm_api_key = )</code>. A secret placed in <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> can be dumped with <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, saved with a session, or recorded in <code>.Rhistory</code>, so the key is now taken only from the <code>STATCANR_LLM_API_KEY</code> environment variable or the <code>api_key</code> argument. If you previously configured the option, switch to <code>Sys.setenv(STATCANR_LLM_API_KEY = "...")</code> (or pass <code>api_key =</code>); a stale option is ignored with a warning. The <code>endpoint</code> and <code>model</code> settings are unchanged and may still be set through <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.7" id="statcanr-037">statcanR 0.3.7<a class="anchor" aria-label="anchor" href="#statcanr-037"></a></h2>
 <div class="section level3">

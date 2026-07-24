@@ -19,7 +19,7 @@ number of its own."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,13 +103,14 @@ Passed to <code><a href="statcan_find.html">statcan_find()</a></code>.</p></dd>
 <dt id="arg-endpoint">endpoint<a class="anchor" aria-label="anchor" href="#arg-endpoint"></a></dt>
 <dd><p>Chat-completions endpoint URL. Defaults to
 <code>getOption("statcanR.llm_endpoint")</code>, then
-<code>Sys.getenv("STATCANR_LLM_ENDPOINT")</code>.</p></dd>
+<code>Sys.getenv("STATCANR_LLM_ENDPOINT")</code>. Must be <code>https://</code>, except for
+loopback hosts (for example, <code>http://localhost</code>).</p></dd>
 
 
 <dt id="arg-api-key">api_key<a class="anchor" aria-label="anchor" href="#arg-api-key"></a></dt>
 <dd><p>API key sent as an <code>Authorization: Bearer</code> header. Defaults
-to <code>getOption("statcanR.llm_api_key")</code>, then
-<code>Sys.getenv("STATCANR_LLM_API_KEY")</code>.</p></dd>
+to <code>Sys.getenv("STATCANR_LLM_API_KEY")</code>. For safety it is not read from
+<code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
@@ -131,11 +132,16 @@ what statcanR already imports, but it does require you to configure an
 LLM endpoint, API key, and model, either as arguments or through
 <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code> / environment variables:</p><ul><li><p><code>endpoint</code>: <code>options(statcanR.llm_endpoint = ...)</code> or
 <code>Sys.setenv(STATCANR_LLM_ENDPOINT = ...)</code></p></li>
-<li><p><code>api_key</code>: <code>options(statcanR.llm_api_key = ...)</code> or
-<code>Sys.setenv(STATCANR_LLM_API_KEY = ...)</code></p></li>
+<li><p><code>api_key</code>: <code>Sys.setenv(STATCANR_LLM_API_KEY = ...)</code> (or the <code>api_key</code>
+argument). Because it is a secret, the key is <strong>not</strong> read from
+<code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, which can be dumped, saved with a session, or recorded in
+<code>.Rhistory</code>.</p></li>
 <li><p><code>model</code>: <code>options(statcanR.llm_model = ...)</code> or
 <code>Sys.setenv(STATCANR_LLM_MODEL = ...)</code></p></li>
-</ul><p>No network request is made unless <code>statcan_chat()</code> is called directly.</p>
+</ul><p>The endpoint must use <code>https://</code> so the key is never sent in cleartext;
+plain <code>http://</code> is accepted only for loopback hosts (for example,
+<code>http://localhost</code> for a local model).</p>
+<p>No network request is made unless <code>statcan_chat()</code> is called directly.</p>
     </div>
 
     <div class="section level2">
@@ -143,9 +149,9 @@ LLM endpoint, API key, and model, either as arguments or through
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  statcanR.llm_endpoint <span class="op">=</span> <span class="st">"https://api.openai.com/v1/chat/completions"</span>,</span></span>
-<span class="r-in"><span>  statcanR.llm_api_key <span class="op">=</span> <span class="st">"sk-..."</span>,</span></span>
 <span class="r-in"><span>  statcanR.llm_model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>STATCANR_LLM_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># statcan_chat() returns several ranked candidates, not a single table:</span></span></span>
 <span class="r-in"><span><span class="co"># the model explains them but never picks or invents one for you.</span></span></span>

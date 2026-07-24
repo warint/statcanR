@@ -50,13 +50,14 @@ statcan_chat(
 
   Chat-completions endpoint URL. Defaults to
   `getOption("statcanR.llm_endpoint")`, then
-  `Sys.getenv("STATCANR_LLM_ENDPOINT")`.
+  `Sys.getenv("STATCANR_LLM_ENDPOINT")`. Must be `https://`, except for
+  loopback hosts (for example, `http://localhost`).
 
 - api_key:
 
   API key sent as an `Authorization: Bearer` header. Defaults to
-  `getOption("statcanR.llm_api_key")`, then
-  `Sys.getenv("STATCANR_LLM_API_KEY")`.
+  `Sys.getenv("STATCANR_LLM_API_KEY")`. For safety it is not read from
+  [`options()`](https://rdrr.io/r/base/options.html).
 
 - model:
 
@@ -82,11 +83,17 @@ variables:
 - `endpoint`: `options(statcanR.llm_endpoint = ...)` or
   `Sys.setenv(STATCANR_LLM_ENDPOINT = ...)`
 
-- `api_key`: `options(statcanR.llm_api_key = ...)` or
-  `Sys.setenv(STATCANR_LLM_API_KEY = ...)`
+- `api_key`: `Sys.setenv(STATCANR_LLM_API_KEY = ...)` (or the `api_key`
+  argument). Because it is a secret, the key is **not** read from
+  [`options()`](https://rdrr.io/r/base/options.html), which can be
+  dumped, saved with a session, or recorded in `.Rhistory`.
 
 - `model`: `options(statcanR.llm_model = ...)` or
   `Sys.setenv(STATCANR_LLM_MODEL = ...)`
+
+The endpoint must use `https://` so the key is never sent in cleartext;
+plain `http://` is accepted only for loopback hosts (for example,
+`http://localhost` for a local model).
 
 No network request is made unless `statcan_chat()` is called directly.
 
@@ -96,9 +103,9 @@ No network request is made unless `statcan_chat()` is called directly.
 if (FALSE) { # \dontrun{
 options(
   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_api_key = "sk-...",
   statcanR.llm_model = "gpt-4o-mini"
 )
+Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
 
 # statcan_chat() returns several ranked candidates, not a single table:
 # the model explains them but never picks or invents one for you.

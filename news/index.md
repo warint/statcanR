@@ -1,5 +1,41 @@
 # Changelog
 
+## statcanR 0.3.8
+
+### Data
+
+- [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)
+  and
+  [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md)
+  now return stable column types. A column that Statistics Canada leaves
+  blank for a whole table (often `DGUID`, `STATUS`, `SYMBOL`, or
+  `TERMINATED`) was previously read as a logical, all-`NA` column, so
+  its type changed from table to table and could break
+  [`rbind()`](https://rdrr.io/r/base/cbind.html)/`dplyr::bind_rows()` or
+  code expecting text. Such columns are now returned as empty character
+  columns. Columns that carry real values, including reliability flags
+  such as `"E"`, `"F"`, or `"t"`, are unchanged.
+
+### Security
+
+- [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+  now refuses to send your API key over an unencrypted connection. The
+  endpoint must use `https://`, except for loopback hosts (for example,
+  `http://localhost` for a local model), so a mistyped `http://`
+  endpoint can no longer leak the key in cleartext.
+
+- **Breaking:** the API key is no longer read from
+  `options(statcanR.llm_api_key = )`. A secret placed in
+  [`options()`](https://rdrr.io/r/base/options.html) can be dumped with
+  [`options()`](https://rdrr.io/r/base/options.html), saved with a
+  session, or recorded in `.Rhistory`, so the key is now taken only from
+  the `STATCANR_LLM_API_KEY` environment variable or the `api_key`
+  argument. If you previously configured the option, switch to
+  `Sys.setenv(STATCANR_LLM_API_KEY = "...")` (or pass `api_key =`); a
+  stale option is ignored with a warning. The `endpoint` and `model`
+  settings are unchanged and may still be set through
+  [`options()`](https://rdrr.io/r/base/options.html).
+
 ## statcanR 0.3.7
 
 ### Bug fixes
