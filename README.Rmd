@@ -120,6 +120,51 @@ options(
 statcan_chat("R&D expenditures in Quebec since 2020")
 ```
 
+#### What `statcan_chat()` gives back
+
+`statcan_chat()` does **not** narrow your query down to a single table. Like `statcan_find()`, it returns *several* ranked candidates — the language model only explains them; it never picks or invents one for you. When you print the result you see the whole shortlist:
+
+```{r chat-print}
+Query: R&D expenditures in Quebec since 2020
+
+  rank                                                 title       id
+1    1 Gross domestic expenditures on research and develo... 27100359
+2    2 Personnel engaged in research and development (R&D...  27100341
+3    3 ...                                                    ...
+
+<the model's explanation of which candidate fits best>
+
+Clarifying question: Do you want spending totals, or the number of personnel?
+```
+
+The value it returns is a list with four named parts, so you can reach any piece of it directly instead of copying identifiers by hand:
+
+```{r chat-structure}
+result <- statcan_chat("R&D expenditures in Quebec since 2020")
+
+result$query               # the query you asked, unchanged
+result$candidates          # the full data frame from statcan_find()
+result$explanation         # the model's plain-language explanation
+result$clarifying_question # a follow-up question, or NA when the query was clear
+```
+
+The important part is `result$candidates`: it is the **same data frame** that `statcan_find()` produces, already containing every identifier and its ranking. You therefore never need to retype a table number — just index into that data frame:
+
+```{r chat-candidates}
+result$candidates$id       # every candidate identifier, best-ranked first
+result$candidates$id[1]    # just the top-ranked identifier
+```
+
+That last value is exactly what `statcan_data()` expects, so a full workflow — describe, choose, download — becomes three short lines with nothing copied by hand:
+
+```{r chat-to-data}
+result     <- statcan_chat("R&D expenditures in Quebec since 2020")
+top_id     <- result$candidates$id[1]
+table_data <- statcan_data(top_id, lang = "eng")
+```
+
+If more than one candidate looks plausible, read `result$explanation` and the `title` column of `result$candidates`, then pick the row you want (for example `result$candidates$id[2]`) before calling `statcan_data()`.
+
 ### 2. Download the table into R
 
 Copy an identifier from the search result and pass it to `statcan_data()`. The example below uses a small table so it is convenient to try:
