@@ -166,6 +166,25 @@
 <h3 id="optional-ask-a-language-model-for-help">Optional: ask a language model for help<a class="anchor" aria-label="anchor" href="#optional-ask-a-language-model-for-help"></a>
 </h3>
 <p><code><a href="reference/statcan_chat.html">statcan_chat()</a></code> wraps <code><a href="reference/statcan_find.html">statcan_find()</a></code> with a language model you configure. It explains which candidate best matches your query and asks a clarifying question when the query is ambiguous — it never invents a table number or reasons over the downloaded data itself, so <code><a href="reference/statcan_find.html">statcan_find()</a></code> remains the authoritative source of candidates.</p>
+<div class="section level4">
+<h4 id="who-is-this-function-for">Who is this function for?<a class="anchor" aria-label="anchor" href="#who-is-this-function-for"></a>
+</h4>
+<p><code><a href="reference/statcan_chat.html">statcan_chat()</a></code> is <strong>not</strong> required to use <code>statcanR</code>. Finding and downloading data — <code><a href="reference/statcan_find.html">statcan_find()</a></code>, <code><a href="reference/statcan_search.html">statcan_search()</a></code>, <code><a href="reference/statcan_data.html">statcan_data()</a></code> — works with no account, no key, and no configuration. <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> is a convenience layer on top of <code><a href="reference/statcan_find.html">statcan_find()</a></code> for people who prefer to <em>describe</em> the data they want in plain language and get a short explanation of the shortlist, rather than skim the ranked titles themselves. Think of it as an optional research assistant, useful when:</p>
+<ul>
+<li>you are new to the Statistics Canada catalogue and don’t yet know which table numbers to look for;</li>
+<li>a query is ambiguous and you’d like a nudge (a clarifying question) before committing;</li>
+<li>you’re teaching or demonstrating and want the reasoning spelled out.</li>
+</ul>
+<p>Because it talks to a language model, it needs <em>one</em> of three things, in decreasing order of setup effort and cost:</p>
+<ol style="list-style-type: decimal">
+<li>an <strong>API key</strong> from a commercial provider (OpenAI or Anthropic/Claude) — pay-as-you-go, billed separately from any ChatGPT Plus or Claude Pro subscription;</li>
+<li>a <strong>free-tier key</strong> from an OpenAI-compatible provider (for example Groq or Google Gemini);</li>
+<li>
+<strong>nothing at all</strong> — a model you run yourself, locally, on your own computer (see <a href="#no-api-key-run-a-model-on-your-own-computer">No API key? Run a model on your own computer</a> below).</li>
+</ol>
+<blockquote>
+<p><strong>A subscription is not API access.</strong> A ChatGPT Plus or Claude Pro subscription lets you chat on the provider’s website; it does <em>not</em> give you a programmatic key that R can use. There is no supported “log in through the website” flow for a package like this. If you don’t want to create a billed API account, use option 2 or 3.</p>
+</blockquote>
 <p>This is entirely optional: it adds no new package dependencies, and it makes no network request unless you call <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> yourself. Choose a provider with the <code>provider</code> argument — <code>"openai"</code> (the default) or <code>"anthropic"</code> (Claude). The endpoint must use <code>https://</code> (plain <code>http://</code> is accepted only for a loopback host such as <code>http://localhost</code>, for a local model), so the key is never sent in cleartext. Set your provider’s API key once per session (the endpoint follows from the provider; you pass the <code>model</code> you want):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The API key is a secret, so it is read from an environment variable rather</span></span>
@@ -186,13 +205,30 @@
 <span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
 <span>  provider <span class="op">=</span> <span class="st">"anthropic"</span>, model <span class="op">=</span> <span class="st">"claude-opus-4-8"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The <code>"openai"</code> provider also works with any OpenAI-compatible server — Groq, Together, OpenRouter, Mistral, vLLM, or a local open-source model served by Ollama or LM Studio — by pointing <code>endpoint</code> at it:</p>
+</div>
+<div class="section level4">
+<h4 id="no-api-key-run-a-model-on-your-own-computer">No API key? Run a model on your own computer<a class="anchor" aria-label="anchor" href="#no-api-key-run-a-model-on-your-own-computer"></a>
+</h4>
+<p>If you don’t have — and don’t want to pay for — an API key, you can run an open-source language model <strong>locally</strong>. The model lives on your own machine, so there is no account to create, nothing to pay, and your queries never leave your computer. This is often the best choice for teaching, for privacy-sensitive work, or simply for trying the feature out.</p>
+<p>The most beginner-friendly option is <a href="https://ollama.com" class="external-link"><strong>Ollama</strong></a>: install it, then in a terminal run <code>ollama pull llama3.1</code> once to download a model and <code>ollama serve</code> to start it. Ollama exposes an OpenAI-compatible endpoint at <code>http://localhost:11434</code>, so <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> reaches it through the default <code>"openai"</code> provider — you just point <code>endpoint</code> at your local server:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span></span>
 <span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
 <span>  endpoint <span class="op">=</span> <span class="st">"http://localhost:11434/v1/chat/completions"</span>,</span>
-<span>  api_key <span class="op">=</span> <span class="st">"ollama"</span>, model <span class="op">=</span> <span class="st">"llama3.1"</span></span>
+<span>  api_key <span class="op">=</span> <span class="st">"ollama"</span>,   <span class="co"># a placeholder; a local server ignores the key</span></span>
+<span>  model <span class="op">=</span> <span class="st">"llama3.1"</span>    <span class="co"># any model you have pulled with `ollama pull`</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>A few things worth knowing:</p>
+<ul>
+<li>
+<strong><code>http://localhost</code> is allowed on purpose.</strong> Normally <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> refuses plain <code>http://</code> so your key can never travel unencrypted, but a loopback address (<code>localhost</code>) never leaves your machine, so it is safe and permitted.</li>
+<li>
+<strong>The <code>api_key</code> is a placeholder.</strong> Local servers don’t check it, but the argument is still required, so pass any non-empty string (<code>"ollama"</code> is a convention).</li>
+<li>
+<strong><code>model</code> must be one you have downloaded</strong> — whatever you pulled with <code>ollama pull</code> (for example <code>"llama3.1"</code>, <code>"mistral"</code>, <code>"qwen2.5"</code>).</li>
+</ul>
+<p>The same pattern works for <a href="https://lmstudio.ai" class="external-link">LM Studio</a> and other OpenAI-compatible local servers, as well as free hosted options like Groq or Google Gemini — point <code>endpoint</code> (and, for hosted ones, <code>api_key</code>) at the service and keep <code>provider = "openai"</code>.</p>
+</div>
 <div class="section level4">
 <h4 id="what-statcan_chat-gives-back">What <code>statcan_chat()</code> gives back<a class="anchor" aria-label="anchor" href="#what-statcan_chat-gives-back"></a>
 </h4>

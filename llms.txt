@@ -129,6 +129,46 @@ downloaded data itself, so
 [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
 remains the authoritative source of candidates.
 
+#### Who is this function for?
+
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+is **not** required to use `statcanR`. Finding and downloading data —
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md),
+[`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md),
+[`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)
+— works with no account, no key, and no configuration.
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+is a convenience layer on top of
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+for people who prefer to *describe* the data they want in plain language
+and get a short explanation of the shortlist, rather than skim the
+ranked titles themselves. Think of it as an optional research assistant,
+useful when:
+
+- you are new to the Statistics Canada catalogue and don’t yet know
+  which table numbers to look for;
+- a query is ambiguous and you’d like a nudge (a clarifying question)
+  before committing;
+- you’re teaching or demonstrating and want the reasoning spelled out.
+
+Because it talks to a language model, it needs *one* of three things, in
+decreasing order of setup effort and cost:
+
+1.  an **API key** from a commercial provider (OpenAI or
+    Anthropic/Claude) — pay-as-you-go, billed separately from any
+    ChatGPT Plus or Claude Pro subscription;
+2.  a **free-tier key** from an OpenAI-compatible provider (for example
+    Groq or Google Gemini);
+3.  **nothing at all** — a model you run yourself, locally, on your own
+    computer (see [No API key? Run a model on your own
+    computer](#no-api-key-run-a-model-on-your-own-computer) below).
+
+> **A subscription is not API access.** A ChatGPT Plus or Claude Pro
+> subscription lets you chat on the provider’s website; it does *not*
+> give you a programmatic key that R can use. There is no supported “log
+> in through the website” flow for a package like this. If you don’t
+> want to create a billed API account, use option 2 or 3.
+
 This is entirely optional: it adds no new package dependencies, and it
 makes no network request unless you call
 [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
@@ -178,18 +218,50 @@ statcan_chat(
 )
 ```
 
-The `"openai"` provider also works with any OpenAI-compatible server —
-Groq, Together, OpenRouter, Mistral, vLLM, or a local open-source model
-served by Ollama or LM Studio — by pointing `endpoint` at it:
+#### No API key? Run a model on your own computer
+
+If you don’t have — and don’t want to pay for — an API key, you can run
+an open-source language model **locally**. The model lives on your own
+machine, so there is no account to create, nothing to pay, and your
+queries never leave your computer. This is often the best choice for
+teaching, for privacy-sensitive work, or simply for trying the feature
+out.
+
+The most beginner-friendly option is [**Ollama**](https://ollama.com):
+install it, then in a terminal run `ollama pull llama3.1` once to
+download a model and `ollama serve` to start it. Ollama exposes an
+OpenAI-compatible endpoint at `http://localhost:11434`, so
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+reaches it through the default `"openai"` provider — you just point
+`endpoint` at your local server:
 
 ``` r
 
 statcan_chat(
   "R&D expenditures in Quebec since 2020",
   endpoint = "http://localhost:11434/v1/chat/completions",
-  api_key = "ollama", model = "llama3.1"
+  api_key = "ollama",   # a placeholder; a local server ignores the key
+  model = "llama3.1"    # any model you have pulled with `ollama pull`
 )
 ```
+
+A few things worth knowing:
+
+- **`http://localhost` is allowed on purpose.** Normally
+  [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+  refuses plain `http://` so your key can never travel unencrypted, but
+  a loopback address (`localhost`) never leaves your machine, so it is
+  safe and permitted.
+- **The `api_key` is a placeholder.** Local servers don’t check it, but
+  the argument is still required, so pass any non-empty string
+  (`"ollama"` is a convention).
+- **`model` must be one you have downloaded** — whatever you pulled with
+  `ollama pull` (for example `"llama3.1"`, `"mistral"`, `"qwen2.5"`).
+
+The same pattern works for [LM Studio](https://lmstudio.ai) and other
+OpenAI-compatible local servers, as well as free hosted options like
+Groq or Google Gemini — point `endpoint` (and, for hosted ones,
+`api_key`) at the service and keep `provider = "openai"`.
 
 #### What `statcan_chat()` gives back
 
