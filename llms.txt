@@ -132,21 +132,20 @@ remains the authoritative source of candidates.
 This is entirely optional: it adds no new package dependencies, and it
 makes no network request unless you call
 [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
-yourself. It works with any OpenAI-compatible chat-completions endpoint.
-The endpoint must use `https://` (plain `http://` is accepted only for a
-loopback host such as `http://localhost`, for a local model), so the key
-is never sent in cleartext. Configure it once per session:
+yourself. Choose a provider with the `provider` argument — `"openai"`
+(the default) or `"anthropic"` (Claude). The endpoint must use
+`https://` (plain `http://` is accepted only for a loopback host such as
+`http://localhost`, for a local model), so the key is never sent in
+cleartext. Set your provider’s API key once per session (the endpoint
+follows from the provider; you pass the `model` you want):
 
 ``` r
 
-options(
-  statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_model = "gpt-4o-mini"
-)
 # The API key is a secret, so it is read from an environment variable rather
 # than options() (which can be dumped, saved with a session, or land in
 # .Rhistory).
-Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
+Sys.setenv(OPENAI_API_KEY = "sk-...")        # OpenAI
+Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...") # Anthropic (Claude)
 ```
 
 [`library(statcanR)`](https://warint.github.io/statcanR/) never asks for
@@ -161,14 +160,35 @@ add it to your `~/.Renviron` file (open it with
 `usethis::edit_r_environ()`, then restart R) rather than calling
 [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
 
-    STATCANR_LLM_API_KEY=sk-...
+    OPENAI_API_KEY=sk-...
+    ANTHROPIC_API_KEY=sk-ant-...
 
 R reads `.Renviron` automatically at startup, so the key stays out of
 your scripts and `.Rhistory`.
 
 ``` r
 
-statcan_chat("R&D expenditures in Quebec since 2020")
+# OpenAI (the default provider)
+statcan_chat("R&D expenditures in Quebec since 2020", model = "gpt-4o-mini")
+
+# Anthropic (Claude)
+statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  provider = "anthropic", model = "claude-opus-4-8"
+)
+```
+
+The `"openai"` provider also works with any OpenAI-compatible server —
+Groq, Together, OpenRouter, Mistral, vLLM, or a local open-source model
+served by Ollama or LM Studio — by pointing `endpoint` at it:
+
+``` r
+
+statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  endpoint = "http://localhost:11434/v1/chat/completions",
+  api_key = "ollama", model = "llama3.1"
+)
 ```
 
 #### What `statcan_chat()` gives back

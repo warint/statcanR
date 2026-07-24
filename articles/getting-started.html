@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -289,22 +289,21 @@ clarifying question when the query is ambiguous. The language model
 never sees or chooses a table number of its own; it only explains the
 candidates <code><a href="../reference/statcan_find.html">statcan_find()</a></code> already returned.</p>
 <p>This feature adds no new package dependencies, and it never makes a
-network request unless you call <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> yourself. It
-works with any OpenAI-compatible chat-completions endpoint. The endpoint
-must use <code>https://</code> so the key is never sent in cleartext
-(plain <code>http://</code> is accepted only for a loopback host such as
-<code>http://localhost</code>, for a local model). Configure the
-endpoint and model once per session with <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-environment variables, or arguments; supply the API key through the
-<code>STATCANR_LLM_API_KEY</code> environment variable (or the
-<code>api_key</code> argument), since a secret should not be kept in
+network request unless you call <code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> yourself.
+Two providers ship built in, selected with the <code>provider</code>
+argument: <code>"openai"</code> (the default) and
+<code>"anthropic"</code> (Claude). The endpoint defaults to the chosen
+provider and must use <code>https://</code> so the key is never sent in
+cleartext (plain <code>http://</code> is accepted only for a loopback
+host such as <code>http://localhost</code>, for a local model). Supply
+the API key through the provider’s environment variable
+(<code>OPENAI_API_KEY</code> or <code>ANTHROPIC_API_KEY</code>, or the
+generic <code>STATCANR_LLM_API_KEY</code>, or the <code>api_key</code>
+argument), since a secret should not be kept in
 <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  statcanR.llm_endpoint <span class="op">=</span> <span class="st">"https://api.openai.com/v1/chat/completions"</span>,</span>
-<span>  statcanR.llm_model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>STATCANR_LLM_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span>        <span class="co"># OpenAI</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ANTHROPIC_API_KEY <span class="op">=</span> <span class="st">"sk-ant-..."</span><span class="op">)</span> <span class="co"># Anthropic (Claude)</span></span></code></pre></div>
 <p>Loading the package with <code><a href="https://warint.github.io/statcanR/">library(statcanR)</a></code> never
 requests these settings, and no key is needed for
 <code><a href="../reference/statcan_find.html">statcan_find()</a></code> or <code><a href="../reference/statcan_data.html">statcan_data()</a></code>; the key is
@@ -313,11 +312,23 @@ reuse it across sessions without retyping it, add it to your
 <code>~/.Renviron</code> file (open it with
 <code>usethis::edit_r_environ()</code>, then restart R) instead of
 calling <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code> each time:</p>
-<pre><code><span><span class="va">STATCANR_LLM_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">...</span></span></code></pre>
+<pre><code><span><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">...</span></span>
+<span><span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">ant</span><span class="op">-</span><span class="va">...</span></span></code></pre>
 <p>R reads <code>.Renviron</code> automatically at startup, so the key
 stays out of your scripts and <code>.Rhistory</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># OpenAI (the default provider)</span></span>
+<span><span class="fu"><a href="../reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span>, model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Anthropic (Claude)</span></span>
+<span><span class="fu"><a href="../reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span></span>
+<span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
+<span>  provider <span class="op">=</span> <span class="st">"anthropic"</span>, model <span class="op">=</span> <span class="st">"claude-opus-4-8"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The <code>"openai"</code> provider also covers any OpenAI-compatible
+server — Groq, Together, OpenRouter, Mistral, vLLM, or a local
+open-source model served by Ollama or LM Studio — by pointing
+<code>endpoint</code> at it.</p>
 </div>
 </div>
 <div class="section level2">

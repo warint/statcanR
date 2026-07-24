@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,9 +71,9 @@
 <p>The package has four main functions, plus one optional one:</p>
 <table class="table">
 <colgroup>
-<col width="51%">
-<col width="13%">
-<col width="35%">
+<col width="33%">
+<col width="33%">
+<col width="33%">
 </colgroup>
 <thead><tr>
 <th>If you want to…</th>
@@ -166,37 +166,49 @@
 <h3 id="optional-ask-a-language-model-for-help">Optional: ask a language model for help<a class="anchor" aria-label="anchor" href="#optional-ask-a-language-model-for-help"></a>
 </h3>
 <p><code><a href="reference/statcan_chat.html">statcan_chat()</a></code> wraps <code><a href="reference/statcan_find.html">statcan_find()</a></code> with a language model you configure. It explains which candidate best matches your query and asks a clarifying question when the query is ambiguous — it never invents a table number or reasons over the downloaded data itself, so <code><a href="reference/statcan_find.html">statcan_find()</a></code> remains the authoritative source of candidates.</p>
-<p>This is entirely optional: it adds no new package dependencies, and it makes no network request unless you call <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> yourself. It works with any OpenAI-compatible chat-completions endpoint. The endpoint must use <code>https://</code> (plain <code>http://</code> is accepted only for a loopback host such as <code>http://localhost</code>, for a local model), so the key is never sent in cleartext. Configure it once per session:</p>
+<p>This is entirely optional: it adds no new package dependencies, and it makes no network request unless you call <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> yourself. Choose a provider with the <code>provider</code> argument — <code>"openai"</code> (the default) or <code>"anthropic"</code> (Claude). The endpoint must use <code>https://</code> (plain <code>http://</code> is accepted only for a loopback host such as <code>http://localhost</code>, for a local model), so the key is never sent in cleartext. Set your provider’s API key once per session (the endpoint follows from the provider; you pass the <code>model</code> you want):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  statcanR.llm_endpoint <span class="op">=</span> <span class="st">"https://api.openai.com/v1/chat/completions"</span>,</span>
-<span>  statcanR.llm_model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co"># The API key is a secret, so it is read from an environment variable rather</span></span>
+<code class="sourceCode R"><span><span class="co"># The API key is a secret, so it is read from an environment variable rather</span></span>
 <span><span class="co"># than options() (which can be dumped, saved with a session, or land in</span></span>
 <span><span class="co"># .Rhistory).</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>STATCANR_LLM_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span>        <span class="co"># OpenAI</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ANTHROPIC_API_KEY <span class="op">=</span> <span class="st">"sk-ant-..."</span><span class="op">)</span> <span class="co"># Anthropic (Claude)</span></span></code></pre></div>
 <p><code><a href="https://warint.github.io/statcanR/">library(statcanR)</a></code> never asks for these settings, and no key is needed for <code><a href="reference/statcan_find.html">statcan_find()</a></code> or <code><a href="reference/statcan_data.html">statcan_data()</a></code> — they are read only when you call <code><a href="reference/statcan_chat.html">statcan_chat()</a></code>. To set the key once and reuse it in every session without retyping it, add it to your <code>~/.Renviron</code> file (open it with <code>usethis::edit_r_environ()</code>, then restart R) rather than calling <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code> each time:</p>
-<pre><code><span><span class="va">STATCANR_LLM_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">...</span></span></code></pre>
+<pre><code><span><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">...</span></span>
+<span><span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">ant</span><span class="op">-</span><span class="va">...</span></span></code></pre>
 <p>R reads <code>.Renviron</code> automatically at startup, so the key stays out of your scripts and <code>.Rhistory</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># OpenAI (the default provider)</span></span>
+<span><span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span>, model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Anthropic (Claude)</span></span>
+<span><span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span></span>
+<span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
+<span>  provider <span class="op">=</span> <span class="st">"anthropic"</span>, model <span class="op">=</span> <span class="st">"claude-opus-4-8"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The <code>"openai"</code> provider also works with any OpenAI-compatible server — Groq, Together, OpenRouter, Mistral, vLLM, or a local open-source model served by Ollama or LM Studio — by pointing <code>endpoint</code> at it:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span></span>
+<span>  <span class="st">"R&amp;D expenditures in Quebec since 2020"</span>,</span>
+<span>  endpoint <span class="op">=</span> <span class="st">"http://localhost:11434/v1/chat/completions"</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="st">"ollama"</span>, model <span class="op">=</span> <span class="st">"llama3.1"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="what-statcan_chat-gives-back">What <code>statcan_chat()</code> gives back<a class="anchor" aria-label="anchor" href="#what-statcan_chat-gives-back"></a>
 </h4>
 <p><code><a href="reference/statcan_chat.html">statcan_chat()</a></code> does <strong>not</strong> narrow your query down to a single table. Like <code><a href="reference/statcan_find.html">statcan_find()</a></code>, it returns <em>several</em> ranked candidates — the language model only explains them; it never picks or invents one for you. When you print the result you see the whole shortlist:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>Query<span class="sc">:</span> R<span class="sc">&amp;</span>D expenditures <span class="cf">in</span> Quebec since <span class="dv">2020</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  rank                                                 title       id</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="dv">1</span>    <span class="dv">1</span> Gross domestic expenditures on research and develo... <span class="dv">27100359</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="dv">2</span>    <span class="dv">2</span> Personnel engaged <span class="cf">in</span> research and <span class="fu">development</span> (R<span class="sc">&amp;</span>D...  <span class="dv">27100341</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="dv">3</span>    <span class="dv">3</span> ...                                                    ...</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="sc">&lt;</span>the model<span class="st">'s explanation of which candidate fits best&gt;</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="st">Clarifying question: Do you want spending totals, or the number of personnel?</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>Query<span class="sc">:</span> R<span class="sc">&amp;</span>D expenditures <span class="cf">in</span> Quebec since <span class="dv">2020</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  rank                                                 title       id</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="dv">1</span>    <span class="dv">1</span> Gross domestic expenditures on research and develo... <span class="dv">27100359</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="dv">2</span>    <span class="dv">2</span> Personnel engaged <span class="cf">in</span> research and <span class="fu">development</span> (R<span class="sc">&amp;</span>D...  <span class="dv">27100341</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="dv">3</span>    <span class="dv">3</span> ...                                                    ...</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="sc">&lt;</span>the model<span class="st">'s explanation of which candidate fits best&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="st">Clarifying question: Do you want spending totals, or the number of personnel?</span></span></code></pre></div>
 <p>The value it returns is a list with four named parts, so you can reach any piece of it directly instead of copying identifiers by hand:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">query</span>               <span class="co"># the query you asked, unchanged</span></span>
@@ -204,11 +216,11 @@
 <span><span class="va">result</span><span class="op">$</span><span class="va">explanation</span>         <span class="co"># the model's plain-language explanation</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">clarifying_question</span> <span class="co"># a follow-up question, or NA when the query was clear</span></span></code></pre></div>
 <p>The important part is <code>result$candidates</code>: it is the <strong>same data frame</strong> that <code><a href="reference/statcan_find.html">statcan_find()</a></code> produces, already containing every identifier and its ranking. You therefore never need to retype a table number — just index into that data frame:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">candidates</span><span class="op">$</span><span class="va">id</span>       <span class="co"># every candidate identifier, best-ranked first</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">candidates</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>    <span class="co"># just the top-ranked identifier</span></span></code></pre></div>
 <p>That last value is exactly what <code><a href="reference/statcan_data.html">statcan_data()</a></code> expects, so a full workflow — describe, choose, download — becomes three short lines with nothing copied by hand:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span>     <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D expenditures in Quebec since 2020"</span><span class="op">)</span></span>
 <span><span class="va">top_id</span>     <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">candidates</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="va">top_id</span>, lang <span class="op">=</span> <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
@@ -219,10 +231,10 @@
 <h3 id="id_2-download-the-table-into-r">2. Download the table into R<a class="anchor" aria-label="anchor" href="#id_2-download-the-table-into-r"></a>
 </h3>
 <p>Copy an identifier from the search result and pass it to <code><a href="reference/statcan_data.html">statcan_data()</a></code>. The example below uses a small table so it is convenient to try:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, lang <span class="op">=</span> <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
 <p>The result is a data frame. Inspect its size, column names, and first rows before beginning an analysis:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span></span></code></pre></div>
@@ -232,11 +244,11 @@
 <h3 id="id_3-understand-table-identifiers-and-languages">3. Understand table identifiers and languages<a class="anchor" aria-label="anchor" href="#id_3-understand-table-identifiers-and-languages"></a>
 </h3>
 <p>Statistics Canada displays identifiers such as <code>10-10-0001-01</code>. The corresponding eight-digit Product ID (PID) is <code>10100001</code>. <code>statcanR</code> accepts either form, so these calls request the same table:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10100001"</span>, <span class="st">"eng"</span><span class="op">)</span></span></code></pre></div>
 <p>Use <code>lang = "eng"</code> for English or <code>lang = "fra"</code> for French:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_data.html">statcan_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"fra"</span><span class="op">)</span></span></code></pre></div>
 <p>Column labels supplied by Statistics Canada may differ between the English and French tables.</p>
 </div>
@@ -245,11 +257,11 @@
 <h2 id="save-a-csv-file">Save a CSV file<a class="anchor" aria-label="anchor" href="#save-a-csv-file"></a>
 </h2>
 <p>Use <code><a href="reference/statcan_data.html">statcan_data()</a></code> when you only need the data in R. Use <code><a href="reference/statcan_download_data.html">statcan_download_data()</a></code> when you also want a CSV copy. Earlier two-argument calls remain valid and save into the current working directory:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_download_data.html">statcan_download_data</a></span><span class="op">(</span><span class="st">"10-10-0001-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>For clearer file management, create an output directory and provide it with <code>path</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"statcanR-data"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">output_dir</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -266,7 +278,7 @@
 <h2 id="catalogue-and-metadata-caching">Catalogue and metadata caching<a class="anchor" aria-label="anchor" href="#catalogue-and-metadata-caching"></a>
 </h2>
 <p>The table catalogue is cached for 24 hours so repeated searches are fast. <code><a href="reference/statcan_find.html">statcan_find()</a></code> also caches the candidate metadata used to verify a geography for seven days. Use <code>refresh = TRUE</code> only when you need the newest catalogue and metadata:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/statcan_find.html">statcan_find</a></span><span class="op">(</span></span>
 <span>  <span class="st">"population in Alberta since 2021"</span>,</span>
 <span>  lang <span class="op">=</span> <span class="st">"eng"</span>,</span>
@@ -274,7 +286,7 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>Downloading and refreshing require an internet connection. If Statistics Canada’s service is temporarily unavailable, searches can use an existing valid cache. A natural-language search can still return candidates when geography metadata is unavailable; in that case, <code>geography_match</code> is <code>NA</code> and the explanation says that the geography could not be verified. Confirm the table title, identifier, language, and output directory before retrying.</p>
 <p>For the complete walkthrough, open the installed vignette:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"getting-started"</span>, package <span class="op">=</span> <span class="st">"statcanR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -282,7 +294,7 @@
 </h2>
 <p>Statistics Canada data are provided under the <a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence" class="external-link">Statistics Canada Open Licence</a>. The <code>statcanR</code> package is released under the MIT licence.</p>
 <p>To cite the package and its methodology, run:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"statcanR"</span><span class="op">)</span></span></code></pre></div>
 <p>The preferred methodological reference is:</p>
 <blockquote>

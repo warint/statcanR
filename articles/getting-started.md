@@ -229,24 +229,20 @@ already returned.
 This feature adds no new package dependencies, and it never makes a
 network request unless you call
 [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
-yourself. It works with any OpenAI-compatible chat-completions endpoint.
-The endpoint must use `https://` so the key is never sent in cleartext
-(plain `http://` is accepted only for a loopback host such as
-`http://localhost`, for a local model). Configure the endpoint and model
-once per session with
-[`options()`](https://rdrr.io/r/base/options.html), environment
-variables, or arguments; supply the API key through the
-`STATCANR_LLM_API_KEY` environment variable (or the `api_key` argument),
-since a secret should not be kept in
+yourself. Two providers ship built in, selected with the `provider`
+argument: `"openai"` (the default) and `"anthropic"` (Claude). The
+endpoint defaults to the chosen provider and must use `https://` so the
+key is never sent in cleartext (plain `http://` is accepted only for a
+loopback host such as `http://localhost`, for a local model). Supply the
+API key through the provider’s environment variable (`OPENAI_API_KEY` or
+`ANTHROPIC_API_KEY`, or the generic `STATCANR_LLM_API_KEY`, or the
+`api_key` argument), since a secret should not be kept in
 [`options()`](https://rdrr.io/r/base/options.html):
 
 ``` r
 
-options(
-  statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_model = "gpt-4o-mini"
-)
-Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
+Sys.setenv(OPENAI_API_KEY = "sk-...")        # OpenAI
+Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...") # Anthropic (Claude)
 ```
 
 Loading the package with
@@ -262,15 +258,27 @@ to your `~/.Renviron` file (open it with `usethis::edit_r_environ()`,
 then restart R) instead of calling
 [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
 
-    STATCANR_LLM_API_KEY=sk-...
+    OPENAI_API_KEY=sk-...
+    ANTHROPIC_API_KEY=sk-ant-...
 
 R reads `.Renviron` automatically at startup, so the key stays out of
 your scripts and `.Rhistory`.
 
 ``` r
 
-statcan_chat("R&D expenditures in Quebec since 2020")
+# OpenAI (the default provider)
+statcan_chat("R&D expenditures in Quebec since 2020", model = "gpt-4o-mini")
+
+# Anthropic (Claude)
+statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  provider = "anthropic", model = "claude-opus-4-8"
+)
 ```
+
+The `"openai"` provider also covers any OpenAI-compatible server — Groq,
+Together, OpenRouter, Mistral, vLLM, or a local open-source model served
+by Ollama or LM Studio — by pointing `endpoint` at it.
 
 ## Step 2: download a complete table
 

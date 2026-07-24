@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statcanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,15 @@
       <small>Source: <a href="https://github.com/warint/statcanR/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.9" id="statcanr-039">statcanR 0.3.9<a class="anchor" aria-label="anchor" href="#statcanr-039"></a></h2>
+<div class="section level3">
+<h3 id="llm-providers-0-3-9">LLM providers<a class="anchor" aria-label="anchor" href="#llm-providers-0-3-9"></a></h3>
+<ul><li><p><code><a href="../reference/statcan_chat.html">statcan_chat()</a></code> gains a <code>provider</code> argument so you can choose which language-model provider to connect to. Two providers ship built in: <code>"openai"</code> (the default, unchanged behaviour) and <code>"anthropic"</code> (Claude). The <code>"openai"</code> provider also covers any OpenAI-compatible server – Groq, Together, OpenRouter, Mistral, vLLM, or a local open-source model served by Ollama or LM Studio – by pointing <code>endpoint</code> at it.</p></li>
+<li><p>The endpoint now defaults to the chosen provider, so you no longer have to set it for OpenAI or Anthropic; only an API key and model are required.</p></li>
+<li><p>The API key is now also read from the provider’s native environment variable (<code>OPENAI_API_KEY</code> or <code>ANTHROPIC_API_KEY</code>), in addition to the <code>STATCANR_LLM_API_KEY</code> variable and the <code>api_key</code> argument. As before, the key is never read from <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>. For Anthropic the key is sent as an <code>x-api-key</code> header; for OpenAI it is sent as <code>Authorization: Bearer</code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.8" id="statcanr-038">statcanR 0.3.8<a class="anchor" aria-label="anchor" href="#statcanr-038"></a></h2>
 <div class="section level3">
