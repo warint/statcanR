@@ -76,4 +76,22 @@ statcanR has no reverse dependencies on CRAN (checked with
 `tools::package_dependencies(reverse = TRUE)` against the current CRAN
 snapshot), so this update affects no other package. The public function names
 and existing required arguments are unchanged.
+
+## Pre-submission checklist (maintainer note -- remove before submitting)
+
+Everything below is already done: version bumped to 0.3.9, NEWS complete,
+local `R CMD check --as-cran` clean apart from the documented LaTeX/`tidy`
+artifacts, GitHub Actions R-CMD-check passing, URLs verified (the DOI 403 is a
+false positive that resolves in a browser), and no reverse dependencies.
+
+Remaining steps to run at actual submission time:
+
+1. **win-builder** -- `devtools::check_win_devel()` and
+   `devtools::check_win_release()`; update the "Test environments" and
+   "R CMD check results" sections above with the outcome.
+2. **Spell check** -- `devtools::spell_check()`.
+3. **Submit** -- `devtools::release()` (runs its interactive checklist,
+   submits, and writes the `CRAN-SUBMISSION` record).
+
+Then delete this checklist section so CRAN sees only the submission comments.
 </content>
