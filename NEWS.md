@@ -1,9 +1,23 @@
-# statcanR 0.3.0.9000
+# statcanR 0.3.1
+
+## Data access
+
+* Fixed `statcan_data()` and `statcan_download_data()` failing on real
+  Statistics Canada tables with `"Statistics Canada returned an empty data or
+  metadata file"`. The metadata CSV's trailing comma and multi-section
+  structure confused column detection; parsing is now tolerant of the extra
+  field.
 
 ## Search
 
 * Table titles returned by `statcan_find()` and `statcan_search()` now display HTML/XML characters normally (for example, `R&D` instead of `R&amp;D`).
 * Existing catalogue caches are corrected automatically when they are read.
+* `statcan_find()` recognizes Canada's major Census Metropolitan Areas (for
+  example, Toronto, Montreal, Vancouver) as geography constraints, in
+  addition to provinces and territories.
+* `statcan_find()` expands common acronyms (`GDP`, `CPI`, `PPI`/`IPPI`, and
+  the French `PIB`, `IPC`) to their spelled-out form so queries such as
+  `"GDP by industry"` match tables whose titles spell the term out in full.
 
 # statcanR 0.3.0
 
