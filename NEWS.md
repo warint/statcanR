@@ -1,3 +1,20 @@
+# statcanR 0.3.2
+
+## Chat (optional)
+
+* Added `statcan_chat()`, an optional layer over `statcan_find()` that sends
+  the query and its ranked candidates to a user-configured,
+  OpenAI-compatible chat-completions endpoint. The model explains the best
+  match and asks a clarifying question when the query is ambiguous, but it
+  can never invent a table number or reason over downloaded data — those
+  always come from `statcan_find()` itself.
+* This feature adds no new package dependencies and makes no network
+  request unless `statcan_chat()` is called directly. Configure the
+  endpoint, API key, and model via function arguments,
+  `options(statcanR.llm_endpoint = , statcanR.llm_api_key = ,
+  statcanR.llm_model = )`, or `Sys.setenv(STATCANR_LLM_ENDPOINT = ,
+  STATCANR_LLM_API_KEY = , STATCANR_LLM_MODEL = )`.
+
 # statcanR 0.3.1
 
 ## Data access
