@@ -312,6 +312,7 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
   metadata <- data.table::fread(
     metadata_file,
     nrows = 1L,
+    fill = TRUE,
     encoding = "UTF-8",
     showProgress = FALSE
   )
