@@ -17,17 +17,25 @@ The package supports four common tasks:
 
 The four public functions have distinct purposes:
 
-| Function | Use it when… | Result |
-|----|----|----|
-| [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md) | You can describe the subject, geography, or period you need | A ranked data frame of likely tables and reasons for each match |
-| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | You know words that occur in the official table title | An interactive table of exact keyword matches |
-| [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md) | You want the complete table in R | A data frame |
-| [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | You want the data frame and a CSV copy | A data frame with the saved file path attached |
+| Function                                                                                          | Use it when…                                                | Result                                                          |
+|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------|
+| [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)                   | You can describe the subject, geography, or period you need | A ranked data frame of likely tables and reasons for each match |
+| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)               | You know words that occur in the official table title       | An interactive table of exact keyword matches                   |
+| [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)                   | You want the complete table in R                            | A data frame                                                    |
+| [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | You want the data frame and a CSV copy                      | A data frame with the saved file path attached                  |
 
 The download functions retrieve a **complete table**, not a filtered
 selection of observations. A Statistics Canada table can be large. It is
 therefore useful to identify the right table before starting the
 download.
+
+An optional fifth function,
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md),
+wraps
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+with a user-configured language model to explain candidates and ask
+clarifying questions; see [Optional: ask a language model for
+help](#optional-ask-a-language-model-for-help).
 
 ## Two concepts to know first
 
@@ -194,6 +202,73 @@ uses valid cached metadata where possible. Candidates whose geography
 could not be checked have `geography_match = NA`; the match explanation
 makes that uncertainty explicit.
 
+### Optional: ask a language model for help
+
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+is an entirely optional layer on top of
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md).
+It sends your query and
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)’s
+ranked candidates to a language model you configure, which explains
+which candidate best matches and asks a clarifying question when the
+query is ambiguous. The language model never sees or chooses a table
+number of its own; it only explains the candidates
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+already returned.
+
+This feature adds no new package dependencies, and it never makes a
+network request unless you call
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md)
+yourself. Two providers ship built in, selected with the `provider`
+argument: `"openai"` (the default) and `"anthropic"` (Claude). The
+endpoint defaults to the chosen provider and must use `https://` so the
+key is never sent in cleartext (plain `http://` is accepted only for a
+loopback host such as `http://localhost`, for a local model). Supply the
+API key through the provider’s environment variable (`OPENAI_API_KEY` or
+`ANTHROPIC_API_KEY`, or the generic `STATCANR_LLM_API_KEY`, or the
+`api_key` argument), since a secret should not be kept in
+[`options()`](https://rdrr.io/r/base/options.html):
+
+``` r
+Sys.setenv(OPENAI_API_KEY = "sk-...")        # OpenAI
+Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...") # Anthropic (Claude)
+```
+
+Loading the package with
+[`library(statcanR)`](https://warint.github.io/statcanR/) never requests
+these settings, and no key is needed for
+[`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+or
+[`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md);
+the key is read only when you call
+[`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md).
+To set it once and reuse it across sessions without retyping it, add it
+to your `~/.Renviron` file (open it with
+[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html),
+then restart R) instead of calling
+[`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
+
+    OPENAI_API_KEY=sk-...
+    ANTHROPIC_API_KEY=sk-ant-...
+
+R reads `.Renviron` automatically at startup, so the key stays out of
+your scripts and `.Rhistory`.
+
+``` r
+# OpenAI (the default provider)
+statcan_chat("R&D expenditures in Quebec since 2020", model = "gpt-4o-mini")
+
+# Anthropic (Claude)
+statcan_chat(
+  "R&D expenditures in Quebec since 2020",
+  provider = "anthropic", model = "claude-opus-4-8"
+)
+```
+
+The `"openai"` provider also covers any OpenAI-compatible server — Groq,
+Together, OpenRouter, Mistral, vLLM, or a local open-source model served
+by Ollama or LM Studio — by pointing `endpoint` at it.
+
 ## Step 2: download a complete table
 
 After choosing an identifier, pass it and the desired language to
@@ -306,15 +381,15 @@ table numbers and eight-digit PIDs are accepted.
 The package validates inputs before downloading and reports network or
 service problems explicitly. Common issues include:
 
-| Message or symptom | What to check |
-|----|----|
-| No natural-language results | Keep a clear subject, but remove a geography or date constraint; then inspect broader candidates |
-| No exact keyword results | Try fewer keywords, check the selected language, or use a broader official term |
-| Invalid `tableNumber` | Use a displayed number such as `10-10-0001-01` or an eight-digit PID such as `10100001` |
-| Invalid `lang` | Use exactly `"eng"` or `"fra"` |
-| Output directory does not exist | Create the directory before supplying it through `path` |
-| WDS is unavailable | Check the internet connection and try again later; catalogue search may use a valid cache |
-| Download takes a long time | The function retrieves the complete table, which may be large |
+| Message or symptom              | What to check                                                                                    |
+|---------------------------------|--------------------------------------------------------------------------------------------------|
+| No natural-language results     | Keep a clear subject, but remove a geography or date constraint; then inspect broader candidates |
+| No exact keyword results        | Try fewer keywords, check the selected language, or use a broader official term                  |
+| Invalid `tableNumber`           | Use a displayed number such as `10-10-0001-01` or an eight-digit PID such as `10100001`          |
+| Invalid `lang`                  | Use exactly `"eng"` or `"fra"`                                                                   |
+| Output directory does not exist | Create the directory before supplying it through `path`                                          |
+| WDS is unavailable              | Check the internet connection and try again later; catalogue search may use a valid cache        |
+| Download takes a long time      | The function retrieves the complete table, which may be large                                    |
 
 Network failures, invalid tables, unexpected API responses, and
 malformed archives stop with messages that identify the affected Product
