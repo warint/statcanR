@@ -16,44 +16,77 @@ sample_candidates <- function() {
 }
 
 
-test_that("resolve_llm_config prefers arguments, then options, then env vars", {
-  old_options <- options(
+test_that("resolve_llm_config resolves endpoint and model via arg, option, env", {
+  withr::local_options(
     statcanR.llm_endpoint = "https://option-endpoint",
-    statcanR.llm_api_key = "option-key",
     statcanR.llm_model = "option-model"
   )
-  old_env <- Sys.getenv(
-    c("STATCANR_LLM_ENDPOINT", "STATCANR_LLM_API_KEY", "STATCANR_LLM_MODEL"),
-    unset = NA
-  )
-  Sys.setenv(
+  withr::local_envvar(
     STATCANR_LLM_ENDPOINT = "https://env-endpoint",
     STATCANR_LLM_API_KEY = "env-key",
     STATCANR_LLM_MODEL = "env-model"
   )
-  on.exit({
-    options(old_options)
-    for (name in names(old_env)) {
-      if (is.na(old_env[[name]])) Sys.unsetenv(name) else {
-        do.call(Sys.setenv, stats::setNames(list(old_env[[name]]), name))
-      }
-    }
-  })
 
+  # Argument beats option beats environment variable.
   config <- statcanR:::resolve_llm_config("https://arg-endpoint", NULL, NULL)
   expect_identical(config$endpoint, "https://arg-endpoint")
-  expect_identical(config$api_key, "option-key")
+  expect_identical(config$api_key, "env-key")
   expect_identical(config$model, "option-model")
 
-  options(
+  withr::local_options(
     statcanR.llm_endpoint = NULL,
-    statcanR.llm_api_key = NULL,
     statcanR.llm_model = NULL
   )
   config <- statcanR:::resolve_llm_config(NULL, NULL, NULL)
   expect_identical(config$endpoint, "https://env-endpoint")
   expect_identical(config$api_key, "env-key")
   expect_identical(config$model, "env-model")
+})
+
+
+test_that("a stale statcanR.llm_api_key option is ignored with a warning", {
+  withr::local_options(
+    statcanR.llm_endpoint = "https://endpoint",
+    statcanR.llm_api_key = "option-key",
+    statcanR.llm_model = "model"
+  )
+  withr::local_envvar(STATCANR_LLM_API_KEY = NA)
+
+  # The option is ignored, but a warning guides migration; the explicit
+  # argument still supplies the key.
+  expect_warning(
+    config <- statcanR:::resolve_llm_config(NULL, "arg-key", NULL),
+    "ignored for security"
+  )
+  expect_identical(config$api_key, "arg-key")
+
+  # With no argument and no env var, the ignored option leaves the key missing.
+  expect_error(
+    suppressWarnings(statcanR:::resolve_llm_config(NULL, NULL, NULL)),
+    "requires an LLM endpoint"
+  )
+})
+
+
+test_that("validate_llm_endpoint enforces https except on loopback hosts", {
+  expect_silent(
+    statcanR:::validate_llm_endpoint("https://api.openai.com/v1/chat")
+  )
+  expect_silent(
+    statcanR:::validate_llm_endpoint("http://localhost:11434/v1/chat")
+  )
+  expect_silent(
+    statcanR:::validate_llm_endpoint("http://127.0.0.1:11434/v1/chat")
+  )
+
+  expect_error(
+    statcanR:::validate_llm_endpoint("http://api.example.com/v1/chat"),
+    "unencrypted"
+  )
+  expect_error(
+    statcanR:::validate_llm_endpoint("ftp://example.com/x"),
+    "requires an https"
+  )
 })
 
 

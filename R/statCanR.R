@@ -327,6 +327,7 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
   for (coordinate_column in coordinate_columns) {
     can_data[[coordinate_column]] <- as.character(can_data[[coordinate_column]])
   }
+  can_data <- stabilize_statcan_empty_columns(can_data)
   can_data[["INDICATOR"]] <- as.character(metadata[[1L]][1L])
 
   if (has_fiscal) {
@@ -343,6 +344,27 @@ read_statcan_zip <- function(zip_file, product_id, lang, work_dir) {
   }
 
   data.table::setDF(can_data)
+  can_data
+}
+
+
+# Give columns that are blank throughout a table a stable type.
+#
+# data.table::fread() types a column that is empty for every row as logical
+# (all NA). Statistics Canada tables contain no boolean columns, so such a
+# column is really an unpopulated text column - DGUID, STATUS, SYMBOL and
+# TERMINATED are commonly empty. Left as logical, a column's type would depend
+# on whether the particular table happened to populate it, which breaks code
+# that binds several tables together or expects, say, STATUS to be character.
+# Converting only all-NA logical columns is safe: a column that carries real
+# flags (for example "F" or "t") is already character and is left untouched.
+stabilize_statcan_empty_columns <- function(can_data) {
+  for (name in names(can_data)) {
+    column <- can_data[[name]]
+    if (is.logical(column) && all(is.na(column))) {
+      can_data[[name]] <- as.character(column)
+    }
+  }
   can_data
 }
 

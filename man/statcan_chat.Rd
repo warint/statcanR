@@ -27,11 +27,12 @@ Passed to \code{\link[=statcan_find]{statcan_find()}}.}
 
 \item{endpoint}{Chat-completions endpoint URL. Defaults to
 \code{getOption("statcanR.llm_endpoint")}, then
-\code{Sys.getenv("STATCANR_LLM_ENDPOINT")}.}
+\code{Sys.getenv("STATCANR_LLM_ENDPOINT")}. Must be \verb{https://}, except for
+loopback hosts (for example, \verb{http://localhost}).}
 
 \item{api_key}{API key sent as an \code{Authorization: Bearer} header. Defaults
-to \code{getOption("statcanR.llm_api_key")}, then
-\code{Sys.getenv("STATCANR_LLM_API_KEY")}.}
+to \code{Sys.getenv("STATCANR_LLM_API_KEY")}. For safety it is not read from
+\code{options()}.}
 
 \item{model}{Model name sent to the endpoint. Defaults to
 \code{getOption("statcanR.llm_model")}, then
@@ -59,11 +60,17 @@ LLM endpoint, API key, and model, either as arguments or through
 \itemize{
 \item \code{endpoint}: \code{options(statcanR.llm_endpoint = ...)} or
 \code{Sys.setenv(STATCANR_LLM_ENDPOINT = ...)}
-\item \code{api_key}: \code{options(statcanR.llm_api_key = ...)} or
-\code{Sys.setenv(STATCANR_LLM_API_KEY = ...)}
+\item \code{api_key}: \code{Sys.setenv(STATCANR_LLM_API_KEY = ...)} (or the \code{api_key}
+argument). Because it is a secret, the key is \strong{not} read from
+\code{options()}, which can be dumped, saved with a session, or recorded in
+\code{.Rhistory}.
 \item \code{model}: \code{options(statcanR.llm_model = ...)} or
 \code{Sys.setenv(STATCANR_LLM_MODEL = ...)}
 }
+
+The endpoint must use \verb{https://} so the key is never sent in cleartext;
+plain \verb{http://} is accepted only for loopback hosts (for example,
+\verb{http://localhost} for a local model).
 
 No network request is made unless \code{statcan_chat()} is called directly.
 }
@@ -71,9 +78,9 @@ No network request is made unless \code{statcan_chat()} is called directly.
 \dontrun{
 options(
   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_api_key = "sk-...",
   statcanR.llm_model = "gpt-4o-mini"
 )
+Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
 
 # statcan_chat() returns several ranked candidates, not a single table:
 # the model explains them but never picks or invents one for you.

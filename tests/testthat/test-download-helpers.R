@@ -93,6 +93,91 @@ test_that("empty or truncated metadata files return an empty table", {
   expect_identical(nrow(metadata), 0L)
 })
 
+test_that("empty Statistics Canada columns get a stable character type", {
+  data_csv <- tempfile(fileext = ".csv")
+  on.exit(unlink(data_csv), add = TRUE)
+  # DGUID, STATUS, SYMBOL and TERMINATED are blank for every row, as in many
+  # real tables; the data-bearing columns are populated.
+  writeLines(
+    c(
+      paste(
+        "REF_DATE", "GEO", "DGUID", "Sector", "UOM", "UOM_ID",
+        "SCALAR_FACTOR", "SCALAR_ID", "VECTOR", "COORDINATE", "VALUE",
+        "STATUS", "SYMBOL", "TERMINATED", "DECIMALS",
+        sep = ","
+      ),
+      "2020,Canada,,Public sector,Persons,249,units,0,v1,1.1,100,,,,0",
+      "2021,Canada,,Public sector,Persons,249,units,0,v1,1.1,110,,,,0"
+    ),
+    data_csv
+  )
+  raw <- data.table::fread(data_csv, encoding = "UTF-8", showProgress = FALSE)
+
+  # Precondition: fread types the all-blank columns as logical.
+  expect_true(is.logical(raw$DGUID))
+  expect_true(is.logical(raw$STATUS))
+  expect_true(is.logical(raw$SYMBOL))
+  expect_true(is.logical(raw$TERMINATED))
+
+  stable <- statcanR:::stabilize_statcan_empty_columns(raw)
+
+  # The empty text columns are now character, still holding no values.
+  for (nm in c("DGUID", "STATUS", "SYMBOL", "TERMINATED")) {
+    expect_type(stable[[nm]], "character")
+    expect_true(all(is.na(stable[[nm]])))
+  }
+
+  # Populated columns keep their natural type and values.
+  expect_type(stable$GEO, "character")
+  expect_identical(stable$GEO, c("Canada", "Canada"))
+  expect_true(is.numeric(stable$VALUE))
+  expect_equal(as.numeric(stable$VALUE), c(100, 110))
+  expect_true(is.numeric(stable$UOM_ID))
+})
+
+test_that("type stabilization never rewrites populated flag columns", {
+  data_csv <- tempfile(fileext = ".csv")
+  on.exit(unlink(data_csv), add = TRUE)
+  # STATUS carries reliability letters ("E", "F"); TERMINATED carries "t". The
+  # "F" and "t" must survive as themselves, not be coerced to "FALSE"/logical.
+  writeLines(
+    c(
+      "REF_DATE,GEO,VALUE,STATUS,TERMINATED",
+      "2020,Canada,100,E,",
+      "2021,Canada,,F,t"
+    ),
+    data_csv
+  )
+  raw <- data.table::fread(data_csv, encoding = "UTF-8", showProgress = FALSE)
+  stable <- statcanR:::stabilize_statcan_empty_columns(raw)
+
+  expect_type(stable$STATUS, "character")
+  expect_identical(stable$STATUS, c("E", "F"))
+  expect_identical(stable$TERMINATED, c("", "t"))
+})
+
+test_that("type stabilization is column-name agnostic", {
+  data_csv <- tempfile(fileext = ".csv")
+  on.exit(unlink(data_csv), add = TRUE)
+  # An arbitrary, non-standard empty column stands in for a French header or a
+  # column Statistics Canada might add later: the rule is driven by type, not
+  # by a hard-coded list of names.
+  writeLines(
+    c(
+      "REF_DATE,GEO,SOME_NEW_COLUMN,VALUE",
+      "2020,Canada,,100",
+      "2021,Canada,,110"
+    ),
+    data_csv
+  )
+  raw <- data.table::fread(data_csv, encoding = "UTF-8", showProgress = FALSE)
+  expect_true(is.logical(raw$SOME_NEW_COLUMN))
+
+  stable <- statcanR:::stabilize_statcan_empty_columns(raw)
+  expect_type(stable$SOME_NEW_COLUMN, "character")
+  expect_true(all(is.na(stable$SOME_NEW_COLUMN)))
+})
+
 test_that("download output paths must already exist", {
   expect_identical(statcanR:::normalize_output_path(tempdir()), tempdir())
   expect_error(

@@ -15,10 +15,16 @@
 #'
 #' * `endpoint`: `options(statcanR.llm_endpoint = ...)` or
 #'   `Sys.setenv(STATCANR_LLM_ENDPOINT = ...)`
-#' * `api_key`: `options(statcanR.llm_api_key = ...)` or
-#'   `Sys.setenv(STATCANR_LLM_API_KEY = ...)`
+#' * `api_key`: `Sys.setenv(STATCANR_LLM_API_KEY = ...)` (or the `api_key`
+#'   argument). Because it is a secret, the key is **not** read from
+#'   `options()`, which can be dumped, saved with a session, or recorded in
+#'   `.Rhistory`.
 #' * `model`: `options(statcanR.llm_model = ...)` or
 #'   `Sys.setenv(STATCANR_LLM_MODEL = ...)`
+#'
+#' The endpoint must use `https://` so the key is never sent in cleartext;
+#' plain `http://` is accepted only for loopback hosts (for example,
+#' `http://localhost` for a local model).
 #'
 #' No network request is made unless `statcan_chat()` is called directly.
 #'
@@ -30,10 +36,11 @@
 #' @param refresh Logical; forwarded to [statcan_find()].
 #' @param endpoint Chat-completions endpoint URL. Defaults to
 #'   `getOption("statcanR.llm_endpoint")`, then
-#'   `Sys.getenv("STATCANR_LLM_ENDPOINT")`.
+#'   `Sys.getenv("STATCANR_LLM_ENDPOINT")`. Must be `https://`, except for
+#'   loopback hosts (for example, `http://localhost`).
 #' @param api_key API key sent as an `Authorization: Bearer` header. Defaults
-#'   to `getOption("statcanR.llm_api_key")`, then
-#'   `Sys.getenv("STATCANR_LLM_API_KEY")`.
+#'   to `Sys.getenv("STATCANR_LLM_API_KEY")`. For safety it is not read from
+#'   `options()`.
 #' @param model Model name sent to the endpoint. Defaults to
 #'   `getOption("statcanR.llm_model")`, then
 #'   `Sys.getenv("STATCANR_LLM_MODEL")`.
@@ -47,9 +54,9 @@
 #' \dontrun{
 #' options(
 #'   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-#'   statcanR.llm_api_key = "sk-...",
 #'   statcanR.llm_model = "gpt-4o-mini"
 #' )
+#' Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
 #'
 #' # statcan_chat() returns several ranked candidates, not a single table:
 #' # the model explains them but never picks or invents one for you.
@@ -124,9 +131,22 @@ resolve_llm_config <- function(endpoint, api_key, model) {
     getOption("statcanR.llm_endpoint"),
     Sys.getenv("STATCANR_LLM_ENDPOINT")
   )
+  # The API key is a secret, so it is deliberately not read from options():
+  # options can be dumped with options(), captured in a saved session, or land
+  # in .Rhistory when set inline. It comes only from the api_key argument or the
+  # STATCANR_LLM_API_KEY environment variable. Earlier versions did read the
+  # option, so warn if a stale one is set. Only its presence is checked with
+  # nzchar(); the value itself is never read, so the key is not re-exposed.
+  if (nzchar(getOption("statcanR.llm_api_key", ""))) {
+    warning(
+      "The statcanR.llm_api_key option is ignored for security. Set the API ",
+      "key via Sys.setenv(STATCANR_LLM_API_KEY = ) or the api_key argument ",
+      "instead.",
+      call. = FALSE
+    )
+  }
   api_key <- first_nonempty(
     api_key,
-    getOption("statcanR.llm_api_key"),
     Sys.getenv("STATCANR_LLM_API_KEY")
   )
   model <- first_nonempty(
@@ -137,16 +157,55 @@ resolve_llm_config <- function(endpoint, api_key, model) {
 
   if (is.null(endpoint) || is.null(api_key) || is.null(model)) {
     stop(
-      "statcan_chat() requires an LLM endpoint, API key, and model. Set ",
-      "them via arguments, options(statcanR.llm_endpoint = , ",
-      "statcanR.llm_api_key = , statcanR.llm_model = ), or ",
-      "Sys.setenv(STATCANR_LLM_ENDPOINT = , STATCANR_LLM_API_KEY = , ",
-      "STATCANR_LLM_MODEL = ).",
+      "statcan_chat() requires an LLM endpoint, API key, and model. Set the ",
+      "endpoint and model via arguments, options(statcanR.llm_endpoint = , ",
+      "statcanR.llm_model = ), or the STATCANR_LLM_ENDPOINT / ",
+      "STATCANR_LLM_MODEL environment variables. Set the API key via the ",
+      "api_key argument or Sys.setenv(STATCANR_LLM_API_KEY = ); for safety it ",
+      "is not read from options().",
       call. = FALSE
     )
   }
 
+  validate_llm_endpoint(endpoint)
+
   list(endpoint = endpoint, api_key = api_key, model = model)
+}
+
+
+# Refuse to send the API key over an unencrypted connection. https is always
+# allowed; plain http is allowed only for loopback hosts, so that local models
+# (for example, an Ollama server on http://localhost) keep working while a
+# mistyped public http:// endpoint cannot leak the key in cleartext.
+validate_llm_endpoint <- function(endpoint) {
+  parsed <- httr::parse_url(endpoint)
+  scheme <- tolower(if (is.null(parsed$scheme)) "" else parsed$scheme)
+  host <- tolower(if (is.null(parsed$hostname)) "" else parsed$hostname)
+
+  if (scheme == "https") {
+    return(invisible(endpoint))
+  }
+
+  is_loopback <- host %in% c("localhost", "127.0.0.1", "::1", "[::1]") ||
+    startsWith(host, "127.")
+  if (scheme == "http" && is_loopback) {
+    return(invisible(endpoint))
+  }
+
+  if (scheme == "http") {
+    stop(
+      "statcan_chat() will not send the API key to an unencrypted http:// ",
+      "endpoint (", host, "). Use an https:// endpoint, or a loopback host ",
+      "such as http://localhost for a local model.",
+      call. = FALSE
+    )
+  }
+
+  stop(
+    "statcan_chat() requires an https:// endpoint (or http:// on a loopback ",
+    "host for a local model). Received: ", endpoint, ".",
+    call. = FALSE
+  )
 }
 
 

@@ -173,15 +173,23 @@ If WDS is temporarily unavailable, catalogue searches use the most recent valid 
 
 `statcan_chat()` is an entirely optional layer on top of `statcan_find()`. It sends your query and `statcan_find()`'s ranked candidates to a language model you configure, which explains which candidate best matches and asks a clarifying question when the query is ambiguous. The language model never sees or chooses a table number of its own; it only explains the candidates `statcan_find()` already returned.
 
-This feature adds no new package dependencies, and it never makes a network request unless you call `statcan_chat()` yourself. It works with any OpenAI-compatible chat-completions endpoint. Configure it once per session with `options()`, or with environment variables, or by passing arguments directly:
+This feature adds no new package dependencies, and it never makes a network request unless you call `statcan_chat()` yourself. It works with any OpenAI-compatible chat-completions endpoint. The endpoint must use `https://` so the key is never sent in cleartext (plain `http://` is accepted only for a loopback host such as `http://localhost`, for a local model). Configure the endpoint and model once per session with `options()`, environment variables, or arguments; supply the API key through the `STATCANR_LLM_API_KEY` environment variable (or the `api_key` argument), since a secret should not be kept in `options()`:
 
 ```{r chat-configure}
 options(
   statcanR.llm_endpoint = "https://api.openai.com/v1/chat/completions",
-  statcanR.llm_api_key = "sk-...",
   statcanR.llm_model = "gpt-4o-mini"
 )
+Sys.setenv(STATCANR_LLM_API_KEY = "sk-...")
 ```
+
+Loading the package with `library(statcanR)` never requests these settings, and no key is needed for `statcan_find()` or `statcan_data()`; the key is read only when you call `statcan_chat()`. To set it once and reuse it across sessions without retyping it, add it to your `~/.Renviron` file (open it with `usethis::edit_r_environ()`, then restart R) instead of calling `Sys.setenv()` each time:
+
+```
+STATCANR_LLM_API_KEY=sk-...
+```
+
+R reads `.Renviron` automatically at startup, so the key stays out of your scripts and `.Rhistory`.
 
 ```{r chat-use}
 statcan_chat("R&D expenditures in Quebec since 2020")
