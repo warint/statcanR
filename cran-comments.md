@@ -1,43 +1,69 @@
-## Resubmission
+## Update
 
-This is a return of an archived package. Version 0.2.6 was the last release
-published by CRAN, and the package was archived on 2025-12-03 for repeated
-Internet-access policy violations.
+This is a maintenance and feature update from the current CRAN release (0.3.0).
+The three long-standing public functions and their required arguments are
+unchanged. Since 0.3.0 the package:
 
-The update preserves the three established public functions and their existing
-required arguments and adds `statcan_find()` for ranked natural-language table
-discovery. It replaces obsolete data-download URLs with Statistics Canada's
-documented Web Data Service method, fixes CSV output and temporary file
-handling, removes an obsolete bundled catalogue, and updates the package tests
-and documentation.
+* adds `statcan_chat()`, an optional layer over `statcan_find()` that asks a
+  user-configured, OpenAI-compatible chat endpoint to explain the ranked
+  candidates. It never invents or chooses a table number; those always come
+  from `statcan_find()`.
+* fixes `statcan_data()` and `statcan_download_data()` for tables whose
+  `_MetaData.csv` file has several sections with differing column counts, which
+  could previously cause a valid table to be reported as empty.
+* returns stable column types: a column left blank for a whole table (for
+  example `DGUID`, `STATUS`, `SYMBOL`, or `TERMINATED`) is now an empty
+  character column rather than a logical, all-`NA` column whose type varied
+  between tables.
+* speeds up `statcan_find()` by caching per-title tokens and streamlining the
+  ranking, without changing the ranking results.
 
-This release performs no Internet access during installation, package loading,
-examples, tests, or vignette builds. Network requests occur only when a user
-explicitly calls one of the four public data-discovery or access functions. Those requests use
-timeouts and fail gracefully with informative errors when Statistics Canada's
-service is unavailable or returns an unexpected response. `statcan_search()`
-can use its most recent valid user cache when the service is unavailable.
+## Internet access
 
-Thierry Warin is the sole author and maintainer of this release. There is no
-change of maintainer or maintainer email address from the last CRAN release.
+As in 0.3.0, the package performs no Internet access during installation,
+package loading, examples, tests, or vignette builds. Network requests occur
+only when a user explicitly calls one of the data-discovery or data-access
+functions; each request uses a timeout and fails gracefully with an informative
+error when the service is unavailable or returns an unexpected response.
+Catalogue and metadata lookups reuse the most recent valid user cache when the
+service is unavailable.
+
+`statcan_chat()` follows the same rule: it makes no request unless the user
+calls it directly, and it requires a user-supplied endpoint, API key, and
+model. No third-party service is contacted automatically. For safety the
+endpoint must use `https://` (except loopback hosts for a local model), and the
+API key is read only from the `STATCANR_LLM_API_KEY` environment variable or an
+argument, never from `options()`.
+
+Thierry Warin is the sole author and maintainer. There is no change of
+maintainer or maintainer email address from the last CRAN release.
 
 ## Test environments
 
-* Local: macOS 26.5.2, R 4.5.1
-* GitHub Actions: macOS, Windows, and Ubuntu; R release, devel, and oldrel
+* Local: Ubuntu 24.04.4 LTS, R 4.6.0
+* Planned before submission: win-builder (R-release and R-devel) and R-hub
+  across macOS, Windows, and Linux.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+Local `R CMD check --as-cran` reported 0 errors and, aside from artifacts of
+the local check machine, no package issues. The one warning and two notes are
+all caused by a missing local toolchain, not by the package, and do not occur
+on CRAN's build systems:
 
-The NOTE is expected for a package returning from the CRAN archive:
+* WARNING: the PDF manual failed to build because the LaTeX package
+  `inconsolata` is not installed on the local machine.
+* NOTE: HTML manual validation was skipped because `tidy` is not installed
+  locally.
+* NOTE: a leftover `statcanR-manual.tex` file, a byproduct of the failed local
+  PDF build above.
 
-* New submission; package was archived on CRAN for repeated Internet-access
-  policy violations.
-
-The changes addressing that archival reason are described above.
+`checking CRAN incoming feasibility` returned OK, and all code, documentation,
+example, test, and vignette checks passed.
 
 ## Downstream dependencies
 
-The archived CRAN release had no reverse dependencies. The public function
-names and existing required arguments are unchanged.
+statcanR has no reverse dependencies on CRAN (checked with
+`tools::package_dependencies(reverse = TRUE)` against the current CRAN
+snapshot), so this update affects no other package. The public function names
+and existing required arguments are unchanged.
