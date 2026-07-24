@@ -1,4 +1,0 @@
-# License
-
-    YEAR: 2020
-    COPYRIGHT HOLDER: Thierry Warin ; Romain Le Duc

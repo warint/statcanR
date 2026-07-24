@@ -1,6 +1,41 @@
 # Changelog
 
+## statcanR 0.3.1
+
+### Data access
+
+- Fixed
+  [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)
+  and
+  [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md)
+  failing on real Statistics Canada tables with
+  `"Statistics Canada returned an empty data or metadata file"`. The
+  metadata CSV’s trailing comma and multi-section structure confused
+  column detection; parsing is now tolerant of the extra field.
+
+### Search
+
+- Table titles returned by
+  [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  and
+  [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)
+  now display HTML/XML characters normally (for example, `R&D` instead
+  of `R&amp;D`).
+- Existing catalogue caches are corrected automatically when they are
+  read.
+- [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  recognizes Canada’s major Census Metropolitan Areas (for example,
+  Toronto, Montreal, Vancouver) as geography constraints, in addition to
+  provinces and territories.
+- [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)
+  expands common acronyms (`GDP`, `CPI`, `PPI`/`IPPI`, and the French
+  `PIB`, `IPC`) to their spelled-out form so queries such as
+  `"GDP by industry"` match tables whose titles spell the term out in
+  full.
+
 ## statcanR 0.3.0
+
+CRAN release: 2026-07-17
 
 ### Compatibility
 
@@ -99,9 +134,7 @@ CRAN release: 2021-12-14
 
 ## statcanR 0.2.2
 
-- Used
-  [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
-  for metadata tables.
+- Used `readr::read_csv()` for metadata tables.
 
 ## statcanR 0.2.1
 
