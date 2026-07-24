@@ -40,26 +40,21 @@ maintainer or maintainer email address from the last CRAN release.
 
 ## Test environments
 
-* Local: Ubuntu 24.04.4 LTS, R 4.6.0
-* Planned before submission: win-builder (R-release and R-devel) and R-hub
-  across macOS, Windows, and Linux.
+* Local: Ubuntu 24.04.4 LTS, R 4.6.0 (`R CMD check --as-cran`)
+* win-builder: R-release and R-devel
+* GitHub Actions: macOS (release), Windows (release), and Ubuntu
+  (R-devel, release, and oldrel-1)
 
 ## R CMD check results
 
-Local `R CMD check --as-cran` reported 0 errors and, aside from artifacts of
-the local check machine, no package issues. The one warning and two notes are
-all caused by a missing local toolchain, not by the package, and do not occur
-on CRAN's build systems:
+0 errors | 0 warnings | 0 notes
 
-* WARNING: the PDF manual failed to build because the LaTeX package
-  `inconsolata` is not installed on the local machine.
-* NOTE: HTML manual validation was skipped because `tidy` is not installed
-  locally.
-* NOTE: a leftover `statcanR-manual.tex` file, a byproduct of the failed local
-  PDF build above.
-
-`checking CRAN incoming feasibility` returned OK, and all code, documentation,
-example, test, and vignette checks passed.
+`checking CRAN incoming feasibility` returned OK. The check is clean on
+win-builder (R-release and R-devel) and on the GitHub Actions runners listed
+above. The only findings anywhere were on the local Linux machine, caused by
+its incomplete manual-building toolchain (a missing LaTeX `inconsolata` package
+and no `tidy`); they are environment artifacts, not package issues, and do not
+occur on win-builder or CRAN.
 
 ## Downstream dependencies
 
