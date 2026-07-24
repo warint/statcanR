@@ -1,3 +1,11 @@
+# statcanR 0.3.3
+
+## Package and documentation
+
+* Documented `statcan_chat()` in the README: added it to the function
+  overview table and a short "Optional: ask a language model for help"
+  section, mirroring the vignette's coverage.
+
 # statcanR 0.3.2
 
 ## Chat (optional)
