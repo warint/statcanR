@@ -198,18 +198,19 @@ new_statcan_chat_result <- function(query, candidates, contract,
 #' @examples
 #' \dontrun{
 #' Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...")
-#' r1 <- statcan_chat(
+#' chat <- statcan_chat(
 #'   "R&D spending in Quebec",
 #'   provider = "anthropic", model = "claude-opus-4-8"
 #' )
-#' r1$clarifying_question
+#' chat$clarifying_question
 #'
-#' # Answer it and keep the same shortlist of candidates:
-#' r2 <- statcan_chat_continue(r1, "annual data, since 2015")
-#' r2$explanation
+#' # Answer it and keep the same shortlist of candidates. Reassigning the same
+#' # variable keeps the latest turn; you never need r1/r2/r3-style names.
+#' chat <- statcan_chat_continue(chat, "annual data, since 2015")
+#' chat$explanation
 #'
-#' # Chain another follow-up:
-#' r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+#' # Chain another follow-up the same way:
+#' chat <- statcan_chat_continue(chat, "just the total, not by industry")
 #' }
 statcan_chat_continue <- function(result, message, api_key = NULL) {
   if (!inherits(result, "statcan_chat_result")) {
