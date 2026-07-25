@@ -50,11 +50,14 @@ maintainer or maintainer email address from the last CRAN release.
 * Local: Ubuntu 24.04 LTS, R 4.6.0 (`R CMD check --as-cran`)
 * GitHub Actions: macOS (release), Windows (release), and Ubuntu
   (R-devel, release, and oldrel-1) -- all passing
-* win-builder (R-release and R-devel): to be run immediately before submission
+* win-builder, R-release (R 4.6.1): OK -- 0 errors | 0 warnings | 0 notes
+* win-builder, R-devel (R Under development, 2026-07-24 r90297):
+  OK -- 0 errors | 0 warnings | 0 notes
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes on the GitHub Actions runners listed above.
+0 errors | 0 warnings | 0 notes on the GitHub Actions runners and on both
+win-builder checks listed above.
 
 The local Linux `R CMD check --as-cran` reports 1 warning and 2 notes, all of
 which are artifacts of that machine's incomplete manual-building toolchain, not
@@ -76,24 +79,3 @@ statcanR has no reverse dependencies on CRAN (checked with
 `tools::package_dependencies(reverse = TRUE)` against the current CRAN
 snapshot), so this update affects no other package. The public function names
 and existing required arguments are unchanged.
-
-## Pre-submission checklist (maintainer note -- remove before submitting)
-
-Everything below is already done: version bumped to 0.3.9, NEWS complete,
-local `R CMD check --as-cran` clean apart from the documented LaTeX/`tidy`
-artifacts, GitHub Actions R-CMD-check passing, URLs verified (the DOI 403 is a
-false positive that resolves in a browser), and no reverse dependencies.
-
-Status:
-
-1. **win-builder** -- submitted to both R-devel and R-release; results are
-   emailed to the maintainer (~15-30 min). Paste the outcome into the
-   "Test environments" and "R CMD check results" sections above once received.
-2. **Spell check** -- done. `inst/WORDLIST` whitelists the package's technical
-   terms, British spellings, and proper nouns; `spelling::spell_check_package()`
-   is now clean, and `Language: en-US` is set in DESCRIPTION.
-3. **Submit** -- not yet done. `devtools::release()` runs its interactive
-   checklist, submits, and writes the `CRAN-SUBMISSION` record.
-
-Then delete this checklist section so CRAN sees only the submission comments.
-</content>
