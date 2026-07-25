@@ -29,7 +29,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+
+      # setup-pandoc downloads Pandoc from GitHub's release servers, which
+      # occasionally return a transient 502 that outlasts the action's own
+      # ~27s of built-in retries and fails the whole job. Make it resilient:
+      # try once (non-fatal), wait out the blip, then try again. We check
+      # `outcome` rather than `conclusion` because continue-on-error coerces
+      # `conclusion` to success, so only `outcome` reports the real failure.
       - uses: r-lib/actions/setup-pandoc@v2
+        id: pandoc
+        continue-on-error: true
+      - name: Wait before retrying Pandoc download
+        if: steps.pandoc.outcome == 'failure'
+        run: sleep 30
+        shell: bash
+      - uses: r-lib/actions/setup-pandoc@v2
+        if: steps.pandoc.outcome == 'failure'
+
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
