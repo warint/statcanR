@@ -71,9 +71,9 @@
 <p>The package has four main functions, plus one optional one:</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
+<col width="51%">
+<col width="13%">
+<col width="35%">
 </colgroup>
 <thead><tr>
 <th>If you want to…</th>
@@ -193,8 +193,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OPENAI_API_KEY <span class="op">=</span> <span class="st">"sk-..."</span><span class="op">)</span>        <span class="co"># OpenAI</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ANTHROPIC_API_KEY <span class="op">=</span> <span class="st">"sk-ant-..."</span><span class="op">)</span> <span class="co"># Anthropic (Claude)</span></span></code></pre></div>
 <p><code><a href="https://warint.github.io/statcanR/">library(statcanR)</a></code> never asks for these settings, and no key is needed for <code><a href="reference/statcan_find.html">statcan_find()</a></code> or <code><a href="reference/statcan_data.html">statcan_data()</a></code> — they are read only when you call <code><a href="reference/statcan_chat.html">statcan_chat()</a></code>. To set the key once and reuse it in every session without retyping it, add it to your <code>~/.Renviron</code> file (open it with <code>usethis::edit_r_environ()</code>, then restart R) rather than calling <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code> each time:</p>
-<pre><code><span><span class="va">OPENAI_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">...</span></span>
-<span><span class="va">ANTHROPIC_API_KEY</span><span class="op">=</span><span class="va">sk</span><span class="op">-</span><span class="va">ant</span><span class="op">-</span><span class="va">...</span></span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>OPENAI_API_KEY<span class="ot">=</span>sk<span class="sc">-</span>...</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>ANTHROPIC_API_KEY<span class="ot">=</span>sk<span class="sc">-</span>ant<span class="sc">-</span>...</span></code></pre></div>
 <p>R reads <code>.Renviron</code> automatically at startup, so the key stays out of your scripts and <code>.Rhistory</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># OpenAI (the default provider)</span></span>
@@ -265,15 +265,15 @@
 <div class="section level4">
 <h4 id="continue-the-conversation">Continue the conversation<a class="anchor" aria-label="anchor" href="#continue-the-conversation"></a>
 </h4>
-<p>A single <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> call is one turn. If it comes back with a <code>clarifying_question</code>, you can answer it — and keep the discussion going — with <code><a href="reference/statcan_chat_continue.html">statcan_chat_continue()</a></code>. Each follow-up stays scoped to the <strong>same candidate tables</strong> the first call already found: it does not run a new catalogue search, and the model still never invents a table number. Results are chainable, so you can answer more than once:</p>
+<p>A single <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> call is one turn. If it comes back with a <code>clarifying_question</code>, you can answer it — and keep the discussion going — with <code><a href="reference/statcan_chat_continue.html">statcan_chat_continue()</a></code>. Each follow-up stays scoped to the <strong>same candidate tables</strong> the first call already found: it does not run a new catalogue search, and the model still never invents a table number. Results are chainable, so you can answer more than once. Just reassign the same variable each turn — there is no need for <code>r1</code>/<code>r2</code>/<code>r3</code>-style names:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D spending in Quebec"</span>, provider <span class="op">=</span> <span class="st">"anthropic"</span>, model <span class="op">=</span> <span class="st">"claude-opus-4-8"</span><span class="op">)</span></span>
-<span><span class="va">r1</span><span class="op">$</span><span class="va">clarifying_question</span>             <span class="co"># e.g. "Annual or quarterly data?"</span></span>
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat.html">statcan_chat</a></span><span class="op">(</span><span class="st">"R&amp;D spending in Quebec"</span>, provider <span class="op">=</span> <span class="st">"anthropic"</span>, model <span class="op">=</span> <span class="st">"claude-opus-4-8"</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="va">clarifying_question</span>           <span class="co"># e.g. "Annual or quarterly data?"</span></span>
 <span></span>
-<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat_continue.html">statcan_chat_continue</a></span><span class="op">(</span><span class="va">r1</span>, <span class="st">"annual data, since 2015"</span><span class="op">)</span></span>
-<span><span class="va">r2</span><span class="op">$</span><span class="va">explanation</span>                     <span class="co"># the model's updated take, same shortlist</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat_continue.html">statcan_chat_continue</a></span><span class="op">(</span><span class="va">chat</span>, <span class="st">"annual data, since 2015"</span><span class="op">)</span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="va">explanation</span>                   <span class="co"># the model's updated take, same shortlist</span></span>
 <span></span>
-<span><span class="va">r3</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat_continue.html">statcan_chat_continue</a></span><span class="op">(</span><span class="va">r2</span>, <span class="st">"just the total, not by industry"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/statcan_chat_continue.html">statcan_chat_continue</a></span><span class="op">(</span><span class="va">chat</span>, <span class="st">"just the total, not by industry"</span><span class="op">)</span></span></code></pre></div>
 <p>To search the catalogue again from scratch, start a fresh <code><a href="reference/statcan_chat.html">statcan_chat()</a></code> call rather than continuing. The API key is re-read on each <code><a href="reference/statcan_chat_continue.html">statcan_chat_continue()</a></code> call (from the argument or your environment variable) and is never stored inside the result object.</p>
 </div>
 </div>

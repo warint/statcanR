@@ -201,8 +201,10 @@ add it to your `~/.Renviron` file (open it with
 `usethis::edit_r_environ()`, then restart R) rather than calling
 [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
 
-    OPENAI_API_KEY=sk-...
-    ANTHROPIC_API_KEY=sk-ant-...
+``` R
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
 
 R reads `.Renviron` automatically at startup, so the key stays out of
 your scripts and `.Rhistory`.
@@ -339,17 +341,18 @@ answer it — and keep the discussion going — with
 Each follow-up stays scoped to the **same candidate tables** the first
 call already found: it does not run a new catalogue search, and the
 model still never invents a table number. Results are chainable, so you
-can answer more than once:
+can answer more than once. Just reassign the same variable each turn —
+there is no need for `r1`/`r2`/`r3`-style names:
 
 ``` r
 
-r1 <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
-r1$clarifying_question             # e.g. "Annual or quarterly data?"
+chat <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
+chat$clarifying_question           # e.g. "Annual or quarterly data?"
 
-r2 <- statcan_chat_continue(r1, "annual data, since 2015")
-r2$explanation                     # the model's updated take, same shortlist
+chat <- statcan_chat_continue(chat, "annual data, since 2015")
+chat$explanation                   # the model's updated take, same shortlist
 
-r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+chat <- statcan_chat_continue(chat, "just the total, not by industry")
 ```
 
 To search the catalogue again from scratch, start a fresh

@@ -289,14 +289,15 @@ Each follow-up stays scoped to the same candidate tables the first call
 found (it never re-runs
 [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md),
 and the model still never invents a table number), and results are
-chainable:
+chainable. Reassign the same variable each turn — there is no need for
+`r1`/`r2`/`r3`-style names:
 
 ``` r
 
-r1 <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
-r1$clarifying_question
-r2 <- statcan_chat_continue(r1, "annual data, since 2015")
-r3 <- statcan_chat_continue(r2, "just the total, not by industry")
+chat <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
+chat$clarifying_question
+chat <- statcan_chat_continue(chat, "annual data, since 2015")
+chat <- statcan_chat_continue(chat, "just the total, not by industry")
 ```
 
 To search the catalogue again, start a fresh
