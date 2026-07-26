@@ -58,7 +58,7 @@ hyphenated form (for example, <code>"27-10-0014-01"</code>) or as an eight-digit
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">statcan_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">statcan_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span>, refresh <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +73,11 @@ hyphenated form (for example, <code>"27-10-0014-01"</code>) or as an eight-digit
 <dt id="arg-lang">lang<a class="anchor" aria-label="anchor" href="#arg-lang"></a></dt>
 <dd><p>Language of the downloaded table: <code>"eng"</code> or <code>"fra"</code>.</p></dd>
 
+
+<dt id="arg-refresh">refresh<a class="anchor" aria-label="anchor" href="#arg-refresh"></a></dt>
+<dd><p>Logical; if <code>TRUE</code>, ignore any cached copy and download the
+table from Statistics Canada again.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -84,6 +89,16 @@ hyphenated form (for example, <code>"27-10-0014-01"</code>) or as an eight-digit
 and French downloads share the same processing rules. In particular, the
 first column is named <code>REF_DATE</code>, coordinates are stored as character, and
 the table title from the metadata file is added as <code>INDICATOR</code>.</p>
+<p>Downloaded tables are cached on disk in the directory returned by
+<code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code>, so repeated calls for the same table are served
+without downloading again. A cached copy is used only while Statistics Canada
+has not republished the table (its release date is unchanged), so the data
+returned is the same as a fresh download. When the release date cannot be
+determined offline, a cached copy is reused for 24 hours instead. Pass
+<code>refresh = TRUE</code> to ignore any cached copy and download the table again. The
+cache is capped at 500 MB and evicts least-recently-used tables to stay under
+that ceiling; set <code>options(statcanR.cache_max_bytes = ...)</code> to change the
+ceiling, or to <code>0</code> to disable table caching.</p>
     </div>
 
     <div class="section level2">
@@ -91,6 +106,7 @@ the table title from the metadata file is added as <code>INDICATOR</code>.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">science</span> <span class="op">&lt;-</span> <span class="fu">statcan_data</span><span class="op">(</span><span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">science_fr</span> <span class="op">&lt;-</span> <span class="fu">statcan_data</span><span class="op">(</span><span class="st">"27100014"</span>, <span class="st">"fra"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fresh</span> <span class="op">&lt;-</span> <span class="fu">statcan_data</span><span class="op">(</span><span class="st">"27-10-0014-01"</span>, <span class="st">"eng"</span>, refresh <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

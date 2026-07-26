@@ -9,7 +9,7 @@ select a different output directory.
 ## Usage
 
 ``` r
-statcan_download_data(tableNumber, lang, path = ".")
+statcan_download_data(tableNumber, lang, path = ".", refresh = FALSE)
 ```
 
 ## Arguments
@@ -27,6 +27,11 @@ statcan_download_data(tableNumber, lang, path = ".")
 
   Directory in which to save the CSV file. The directory must already
   exist. Defaults to the current working directory.
+
+- refresh:
+
+  Logical; if `TRUE`, ignore any cached copy and download the table from
+  Statistics Canada again.
 
 ## Value
 

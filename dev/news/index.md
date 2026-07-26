@@ -2,6 +2,30 @@
 
 ## statcanR 0.3.9.9000 (development version)
 
+### Table caching
+
+- [`statcan_data()`](https://warint.github.io/statcanR/dev/reference/statcan_data.md)
+  now caches downloaded tables on disk (in the directory returned by
+  [`tools::R_user_dir()`](https://rdrr.io/r/tools/userdir.html)), so
+  repeated calls for the same table are served without downloading
+  again. A cached copy is reused only while Statistics Canada has not
+  republished the table – its release date is compared against the
+  locally cached catalogue – so the data returned matches a fresh
+  download. When the release date cannot be determined offline, a cached
+  copy is reused for 24 hours instead.
+
+- [`statcan_data()`](https://warint.github.io/statcanR/dev/reference/statcan_data.md)
+  and
+  [`statcan_download_data()`](https://warint.github.io/statcanR/dev/reference/statcan_download_data.md)
+  gain a `refresh` argument; set `refresh = TRUE` to ignore any cached
+  copy and download the table again.
+
+- The table cache is capped at 500 MB and evicts least-recently-used
+  tables to stay within that ceiling, per CRAN’s policy that
+  `R_user_dir()` caches be kept small and actively managed. Set
+  `options(statcanR.cache_max_bytes = ...)` to change the ceiling, or to
+  `0` to disable table caching.
+
 ## statcanR 0.3.9
 
 CRAN release: 2026-07-25

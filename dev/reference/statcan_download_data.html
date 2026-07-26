@@ -55,7 +55,7 @@ can be used to select a different output directory.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">statcan_download_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span>, path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">statcan_download_data</span><span class="op">(</span><span class="va">tableNumber</span>, <span class="va">lang</span>, path <span class="op">=</span> <span class="st">"."</span>, refresh <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,6 +74,11 @@ can be used to select a different output directory.</p>
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>Directory in which to save the CSV file. The directory must
 already exist. Defaults to the current working directory.</p></dd>
+
+
+<dt id="arg-refresh">refresh<a class="anchor" aria-label="anchor" href="#arg-refresh"></a></dt>
+<dd><p>Logical; if <code>TRUE</code>, ignore any cached copy and download the
+table from Statistics Canada again.</p></dd>
 
 </dl></div>
     <div class="section level2">

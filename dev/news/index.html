@@ -44,6 +44,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.9.9000" id="statcanr-0399000-development-version">statcanR 0.3.9.9000 (development version)<a class="anchor" aria-label="anchor" href="#statcanr-0399000-development-version"></a></h2>
+<div class="section level3">
+<h3 id="table-caching-0-3-9-9000">Table caching<a class="anchor" aria-label="anchor" href="#table-caching-0-3-9-9000"></a></h3>
+<ul><li><p><code><a href="../reference/statcan_data.html">statcan_data()</a></code> now caches downloaded tables on disk (in the directory returned by <code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code>), so repeated calls for the same table are served without downloading again. A cached copy is reused only while Statistics Canada has not republished the table – its release date is compared against the locally cached catalogue – so the data returned matches a fresh download. When the release date cannot be determined offline, a cached copy is reused for 24 hours instead.</p></li>
+<li><p><code><a href="../reference/statcan_data.html">statcan_data()</a></code> and <code><a href="../reference/statcan_download_data.html">statcan_download_data()</a></code> gain a <code>refresh</code> argument; set <code>refresh = TRUE</code> to ignore any cached copy and download the table again.</p></li>
+<li><p>The table cache is capped at 500 MB and evicts least-recently-used tables to stay within that ceiling, per CRAN’s policy that <code>R_user_dir()</code> caches be kept small and actively managed. Set <code>options(statcanR.cache_max_bytes = ...)</code> to change the ceiling, or to <code>0</code> to disable table caching.</p></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.9" id="statcanr-039">statcanR 0.3.9<a class="anchor" aria-label="anchor" href="#statcanr-039"></a></h2><p class="text-muted">CRAN release: 2026-07-25</p>
