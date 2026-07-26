@@ -76,9 +76,22 @@ statcan_table_release_date <- function(product_id) {
 }
 
 
-# Reject corrupt cache entries and entries written by an incompatible schema.
+# Reject corrupt cache entries and entries written by an incompatible version.
+#
+# The stored data.frame is the *processed* table, so its shape depends on the
+# read_statcan_zip() logic (column set, REF_DATE parsing, the fiscal REF_PERIOD
+# column). A release-date-keyed entry has no time bound, so without a version
+# stamp an upgrade that changed that processing would serve old-schema data
+# indefinitely -- until StatCan happened to republish the table. Stamping each
+# entry with the package version and requiring a match fails safe: an upgrade
+# invalidates stale-schema entries once. This mirrors the token cache in
+# statcan_search.R.
 is_valid_cached_table <- function(entry) {
   is.list(entry) &&
+    identical(
+      entry$version,
+      as.character(utils::packageVersion("statcanR"))
+    ) &&
     is.data.frame(entry$data) &&
     inherits(entry$release_date, "Date") &&
     length(entry$release_date) == 1L &&
@@ -138,6 +151,7 @@ write_statcan_data_cache <- function(product_id, lang, release_date, data) {
   }
   cache_file <- statcan_data_cache_file(cache_dir, product_id, lang)
   entry <- list(
+    version = as.character(utils::packageVersion("statcanR")),
     data = data,
     release_date = as.Date(release_date),
     cached_at = as.numeric(Sys.time())

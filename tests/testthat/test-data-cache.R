@@ -92,6 +92,74 @@ test_that("an unknown release date falls back to the time-to-live", {
 })
 
 
+test_that("entries written by a different package version are ignored", {
+  clear_table_cache()
+  cache_dir <- statcanR:::statcan_data_cache_dir()
+  dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+  cache_file <- statcanR:::statcan_data_cache_file(cache_dir, "10100004", "eng")
+
+  # A structurally valid entry stamped with a stale version must be rejected, so
+  # an upgrade that changes table processing never serves old-schema data.
+  saveRDS(
+    list(
+      version = "0.0.0",
+      data = sample_table(),
+      release_date = as.Date("2026-07-16"),
+      cached_at = as.numeric(Sys.time())
+    ),
+    cache_file,
+    version = 3L
+  )
+  expect_null(
+    statcanR:::read_statcan_data_cache("10100004", "eng", as.Date("2026-07-16"))
+  )
+})
+
+
+test_that("statcan_data() serves the second call from cache", {
+  clear_table_cache()
+  seed_cached_catalogue()
+
+  downloads <- 0L
+  # Stand in for the whole network + unzip path. read_statcan_zip() is the last
+  # step of statcan_data() before the result is cached, so mocking it exercises
+  # the real cache read/write wiring while counting downloads.
+  local_mocked_bindings(
+    statcan_download_url = function(product_id, lang) {
+      "https://example.invalid/table.zip"
+    },
+    read_statcan_zip = function(zip_file, product_id, lang, work_dir) {
+      downloads <<- downloads + 1L
+      sample_table(99)
+    },
+    .package = "statcanR"
+  )
+  # Also short-circuit the actual HTTP GET and status check.
+  local_mocked_bindings(
+    GET = function(...) structure(list(), class = "response"),
+    http_error = function(...) FALSE,
+    .package = "httr"
+  )
+
+  first <- suppressMessages(statcan_data("10-10-0004-01", "eng"))
+  expect_identical(first$VALUE, 99)
+  expect_identical(downloads, 1L)
+
+  # Second call: same release date in the seeded catalogue, so it is served from
+  # cache and never reaches the download path.
+  expect_message(
+    second <- statcan_data("10-10-0004-01", "eng"),
+    "cached copy"
+  )
+  expect_identical(second$VALUE, 99)
+  expect_identical(downloads, 1L)
+
+  # refresh = TRUE bypasses the cache and downloads again.
+  suppressMessages(statcan_data("10-10-0004-01", "eng", refresh = TRUE))
+  expect_identical(downloads, 2L)
+})
+
+
 test_that("corrupt or foreign cache entries are ignored", {
   clear_table_cache()
   cache_dir <- statcanR:::statcan_data_cache_dir()
