@@ -17,12 +17,12 @@ The package supports four common tasks:
 
 The four public functions have distinct purposes:
 
-| Function | Use it when… | Result |
-|----|----|----|
-| [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md) | You can describe the subject, geography, or period you need | A ranked data frame of likely tables and reasons for each match |
-| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md) | You know words that occur in the official table title | An interactive table of exact keyword matches |
-| [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md) | You want the complete table in R | A data frame |
-| [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | You want the data frame and a CSV copy | A data frame with the saved file path attached |
+| Function                                                                                          | Use it when…                                                | Result                                                          |
+|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------|
+| [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md)                   | You can describe the subject, geography, or period you need | A ranked data frame of likely tables and reasons for each match |
+| [`statcan_search()`](https://warint.github.io/statcanR/reference/statcan_search.md)               | You know words that occur in the official table title       | An interactive table of exact keyword matches                   |
+| [`statcan_data()`](https://warint.github.io/statcanR/reference/statcan_data.md)                   | You want the complete table in R                            | A data frame                                                    |
+| [`statcan_download_data()`](https://warint.github.io/statcanR/reference/statcan_download_data.md) | You want the data frame and a CSV copy                      | A data frame with the saved file path attached                  |
 
 The download functions retrieve a **complete table**, not a filtered
 selection of observations. A Statistics Canada table can be large. It is
@@ -47,7 +47,6 @@ first eight digits form the WDS Product ID (PID), `10100001`; the final
 displayed table number or the eight-digit PID:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", "eng")
 table_data <- statcan_data("10100001", "eng")
 ```
@@ -66,14 +65,12 @@ The command used for a first installation also upgrades an older CRAN
 installation:
 
 ``` r
-
 install.packages("statcanR")
 ```
 
 Then load the package:
 
 ``` r
-
 library(statcanR)
 ```
 
@@ -82,7 +79,6 @@ before calling [`library(statcanR)`](https://warint.github.io/statcanR/)
 again. Check which version R will use with:
 
 ``` r
-
 packageVersion("statcanR")
 ```
 
@@ -102,7 +98,6 @@ table number. Write a short request containing as much of the subject,
 Canadian geography, and period as you know:
 
 ``` r
-
 matches <- statcan_find(
   "R&D expenditures in Quebec since 2020",
   lang = "eng",
@@ -135,7 +130,6 @@ geography and reference-period columns.
 French requests and French catalogue titles are supported too:
 
 ``` r
-
 matches_fr <- statcan_find(
   "Dépenses de R-D au Québec depuis 2020",
   lang = "fra"
@@ -156,7 +150,6 @@ when you know words that occur in the official title. It searches titles
 without regard to letter case:
 
 ``` r
-
 statcan_search(
   c("federal", "expenditures", "objectives"),
   lang = "eng"
@@ -176,14 +169,12 @@ title. This makes searches precise, but it can also produce no matches.
 If that happens, remove one keyword or use a broader term:
 
 ``` r
-
 statcan_search("expenditures", lang = "eng")
 ```
 
 Search French titles by using `lang = "fra"`:
 
 ``` r
-
 statcan_search(c("dépenses", "fédérales"), lang = "fra")
 ```
 
@@ -196,7 +187,6 @@ requests to Statistics Canada. Set `refresh = TRUE` only when you
 specifically need fresh information:
 
 ``` r
-
 statcan_find(
   "population in Alberta since 2021",
   lang = "eng",
@@ -240,7 +230,6 @@ API key through the provider’s environment variable (`OPENAI_API_KEY` or
 [`options()`](https://rdrr.io/r/base/options.html):
 
 ``` r
-
 Sys.setenv(OPENAI_API_KEY = "sk-...")        # OpenAI
 Sys.setenv(ANTHROPIC_API_KEY = "sk-ant-...") # Anthropic (Claude)
 ```
@@ -254,7 +243,8 @@ or
 the key is read only when you call
 [`statcan_chat()`](https://warint.github.io/statcanR/reference/statcan_chat.md).
 To set it once and reuse it across sessions without retyping it, add it
-to your `~/.Renviron` file (open it with `usethis::edit_r_environ()`,
+to your `~/.Renviron` file (open it with
+[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html),
 then restart R) instead of calling
 [`Sys.setenv()`](https://rdrr.io/r/base/Sys.setenv.html) each time:
 
@@ -265,7 +255,6 @@ R reads `.Renviron` automatically at startup, so the key stays out of
 your scripts and `.Rhistory`.
 
 ``` r
-
 # OpenAI (the default provider)
 statcan_chat("R&D expenditures in Quebec since 2020", model = "gpt-4o-mini")
 
@@ -289,15 +278,13 @@ Each follow-up stays scoped to the same candidate tables the first call
 found (it never re-runs
 [`statcan_find()`](https://warint.github.io/statcanR/reference/statcan_find.md),
 and the model still never invents a table number), and results are
-chainable. Reassign the same variable each turn — there is no need for
-`r1`/`r2`/`r3`-style names:
+chainable:
 
 ``` r
-
-chat <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
-chat$clarifying_question
-chat <- statcan_chat_continue(chat, "annual data, since 2015")
-chat <- statcan_chat_continue(chat, "just the total, not by industry")
+r1 <- statcan_chat("R&D spending in Quebec", provider = "anthropic", model = "claude-opus-4-8")
+r1$clarifying_question
+r2 <- statcan_chat_continue(r1, "annual data, since 2015")
+r3 <- statcan_chat_continue(r2, "just the total, not by industry")
 ```
 
 To search the catalogue again, start a fresh
@@ -312,7 +299,6 @@ This example uses a relatively small table that is convenient for
 learning:
 
 ``` r
-
 table_data <- statcan_data("10-10-0001-01", lang = "eng")
 ```
 
@@ -321,7 +307,6 @@ then returns a data frame. Start by examining its dimensions, names, and
 first observations:
 
 ``` r
-
 dim(table_data)
 names(table_data)
 head(table_data)
@@ -341,7 +326,6 @@ For example, you can select observations from 2020 onward with ordinary
 R subsetting:
 
 ``` r
-
 recent_data <- table_data[
   !is.na(table_data$REF_DATE) &
     table_data$REF_DATE >= as.Date("2020-01-01"),
@@ -351,7 +335,6 @@ recent_data <- table_data[
 To download the French version of the table, change the language:
 
 ``` r
-
 table_fr <- statcan_data("10-10-0001-01", lang = "fra")
 ```
 
@@ -371,7 +354,6 @@ Existing two-argument calls save the file in the current working
 directory:
 
 ``` r
-
 table_data <- statcan_download_data("10-10-0001-01", "eng")
 getwd()
 ```
@@ -380,7 +362,6 @@ This creates `statcan_10100001_eng.csv`. To keep project files
 organized, create a dedicated directory and pass it through `path`:
 
 ``` r
-
 output_dir <- file.path(tempdir(), "statcanR-data")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -405,7 +386,6 @@ empty fields.
 The update does not require you to rewrite established calls:
 
 ``` r
-
 # This familiar two-argument form remains valid.
 table_data <- statcan_data("10-10-0001-01", "eng")
 
@@ -423,15 +403,15 @@ table numbers and eight-digit PIDs are accepted.
 The package validates inputs before downloading and reports network or
 service problems explicitly. Common issues include:
 
-| Message or symptom | What to check |
-|----|----|
-| No natural-language results | Keep a clear subject, but remove a geography or date constraint; then inspect broader candidates |
-| No exact keyword results | Try fewer keywords, check the selected language, or use a broader official term |
-| Invalid `tableNumber` | Use a displayed number such as `10-10-0001-01` or an eight-digit PID such as `10100001` |
-| Invalid `lang` | Use exactly `"eng"` or `"fra"` |
-| Output directory does not exist | Create the directory before supplying it through `path` |
-| WDS is unavailable | Check the internet connection and try again later; catalogue search may use a valid cache |
-| Download takes a long time | The function retrieves the complete table, which may be large |
+| Message or symptom              | What to check                                                                                    |
+|---------------------------------|--------------------------------------------------------------------------------------------------|
+| No natural-language results     | Keep a clear subject, but remove a geography or date constraint; then inspect broader candidates |
+| No exact keyword results        | Try fewer keywords, check the selected language, or use a broader official term                  |
+| Invalid `tableNumber`           | Use a displayed number such as `10-10-0001-01` or an eight-digit PID such as `10100001`          |
+| Invalid `lang`                  | Use exactly `"eng"` or `"fra"`                                                                   |
+| Output directory does not exist | Create the directory before supplying it through `path`                                          |
+| WDS is unavailable              | Check the internet connection and try again later; catalogue search may use a valid cache        |
+| Download takes a long time      | The function retrieves the complete table, which may be large                                    |
 
 Network failures, invalid tables, unexpected API responses, and
 malformed archives stop with messages that identify the affected Product
@@ -458,6 +438,5 @@ before redistributing downloaded data. To obtain the package’s current
 citation, run:
 
 ``` r
-
 citation("statcanR")
 ```

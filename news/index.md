@@ -48,10 +48,10 @@
   blank for a whole table (often `DGUID`, `STATUS`, `SYMBOL`, or
   `TERMINATED`) was previously read as a logical, all-`NA` column, so
   its type changed from table to table and could break
-  [`rbind()`](https://rdrr.io/r/base/cbind.html)/`dplyr::bind_rows()` or
-  code expecting text. Such columns are now returned as empty character
-  columns. Columns that carry real values, including reliability flags
-  such as `"E"`, `"F"`, or `"t"`, are unchanged.
+  [`rbind()`](https://rdrr.io/r/base/cbind.html)/[`dplyr::bind_rows()`](https://dplyr.tidyverse.org/reference/bind_rows.html)
+  or code expecting text. Such columns are now returned as empty
+  character columns. Columns that carry real values, including
+  reliability flags such as `"E"`, `"F"`, or `"t"`, are unchanged.
 
 ### Security
 
@@ -310,7 +310,9 @@ CRAN release: 2021-12-14
 
 ## statcanR 0.2.2
 
-- Used `readr::read_csv()` for metadata tables.
+- Used
+  [`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
+  for metadata tables.
 
 ## statcanR 0.2.1
 
