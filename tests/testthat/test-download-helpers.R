@@ -192,7 +192,7 @@ test_that("statcan_download_data writes and returns its data", {
   on.exit(unlink(output_dir, recursive = TRUE, force = TRUE), add = TRUE)
 
   local_mocked_bindings(
-    statcan_data = function(tableNumber, lang) {
+    statcan_data = function(tableNumber, lang, refresh = FALSE) {
       data.frame(
         REF_DATE = as.Date("2026-01-01"),
         COORDINATE = "1.1",

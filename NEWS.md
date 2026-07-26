@@ -1,5 +1,23 @@
 # statcanR 0.3.9.9000 (development version)
 
+## Table caching
+
+* `statcan_data()` now caches downloaded tables on disk (in the directory
+  returned by `tools::R_user_dir()`), so repeated calls for the same table are
+  served without downloading again. A cached copy is reused only while
+  Statistics Canada has not republished the table -- its release date is
+  compared against the locally cached catalogue -- so the data returned matches
+  a fresh download. When the release date cannot be determined offline, a
+  cached copy is reused for 24 hours instead.
+
+* `statcan_data()` and `statcan_download_data()` gain a `refresh` argument;
+  set `refresh = TRUE` to ignore any cached copy and download the table again.
+
+* The table cache is capped at 500 MB and evicts least-recently-used tables to
+  stay within that ceiling, per CRAN's policy that `R_user_dir()` caches be kept
+  small and actively managed. Set `options(statcanR.cache_max_bytes = ...)` to
+  change the ceiling, or to `0` to disable table caching.
+
 # statcanR 0.3.9
 
 ## LLM providers

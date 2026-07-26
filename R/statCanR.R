@@ -10,9 +10,22 @@
 #' first column is named `REF_DATE`, coordinates are stored as character, and
 #' the table title from the metadata file is added as `INDICATOR`.
 #'
+#' Downloaded tables are cached on disk in the directory returned by
+#' [tools::R_user_dir()], so repeated calls for the same table are served
+#' without downloading again. A cached copy is used only while Statistics Canada
+#' has not republished the table (its release date is unchanged), so the data
+#' returned is the same as a fresh download. When the release date cannot be
+#' determined offline, a cached copy is reused for 24 hours instead. Pass
+#' `refresh = TRUE` to ignore any cached copy and download the table again. The
+#' cache is capped at 500 MB and evicts least-recently-used tables to stay under
+#' that ceiling; set `options(statcanR.cache_max_bytes = ...)` to change the
+#' ceiling, or to `0` to disable table caching.
+#'
 #' @param tableNumber A Statistics Canada table number or Product ID. Both
 #'   `"27-10-0014-01"` and `"27100014"` are accepted.
 #' @param lang Language of the downloaded table: `"eng"` or `"fra"`.
+#' @param refresh Logical; if `TRUE`, ignore any cached copy and download the
+#'   table from Statistics Canada again.
 #'
 #' @return A data frame containing the complete Statistics Canada table.
 #' @export
@@ -21,10 +34,24 @@
 #' \dontrun{
 #' science <- statcan_data("27-10-0014-01", "eng")
 #' science_fr <- statcan_data("27100014", "fra")
+#' fresh <- statcan_data("27-10-0014-01", "eng", refresh = TRUE)
 #' }
-statcan_data <- function(tableNumber, lang) {
+statcan_data <- function(tableNumber, lang, refresh = FALSE) {
   product_id <- normalize_product_id(tableNumber)
   lang <- normalize_language(lang)
+  if (!is.logical(refresh) || length(refresh) != 1L || is.na(refresh)) {
+    stop("`refresh` must be TRUE or FALSE.", call. = FALSE)
+  }
+
+  release_date <- statcan_table_release_date(product_id)
+  if (!refresh) {
+    cached <- read_statcan_data_cache(product_id, lang, release_date)
+    if (!is.null(cached)) {
+      message("statcanR: using the cached copy of table ",
+              format_product_id(product_id), ".")
+      return(cached)
+    }
+  }
 
   work_dir <- tempfile("statcanR-")
   if (!dir.create(work_dir, recursive = TRUE)) {
@@ -54,7 +81,9 @@ statcan_data <- function(tableNumber, lang) {
   )
   stop_for_statcan_status(response, product_id)
 
-  read_statcan_zip(zip_file, product_id, lang, work_dir)
+  can_data <- read_statcan_zip(zip_file, product_id, lang, work_dir)
+  write_statcan_data_cache(product_id, lang, release_date, can_data)
+  can_data
 }
 
 
@@ -80,12 +109,13 @@ statcan_data <- function(tableNumber, lang) {
 #' )
 #' attr(science, "statcan_file")
 #' }
-statcan_download_data <- function(tableNumber, lang, path = ".") {
+statcan_download_data <- function(tableNumber, lang, path = ".",
+                                  refresh = FALSE) {
   product_id <- normalize_product_id(tableNumber)
   lang <- normalize_language(lang)
   path <- normalize_output_path(path)
 
-  can_data <- statcan_data(product_id, lang)
+  can_data <- statcan_data(product_id, lang, refresh = refresh)
   output_file <- file.path(
     path,
     paste0("statcan_", product_id, "_", lang, ".csv")

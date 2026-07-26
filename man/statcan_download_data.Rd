@@ -4,7 +4,7 @@
 \alias{statcan_download_data}
 \title{Download a Statistics Canada table and save a CSV file}
 \usage{
-statcan_download_data(tableNumber, lang, path = ".")
+statcan_download_data(tableNumber, lang, path = ".", refresh = FALSE)
 }
 \arguments{
 \item{tableNumber}{A Statistics Canada table number or Product ID. Both
@@ -14,6 +14,9 @@ statcan_download_data(tableNumber, lang, path = ".")
 
 \item{path}{Directory in which to save the CSV file. The directory must
 already exist. Defaults to the current working directory.}
+
+\item{refresh}{Logical; if \code{TRUE}, ignore any cached copy and download the
+table from Statistics Canada again.}
 }
 \value{
 The downloaded table. The CSV path is available in the

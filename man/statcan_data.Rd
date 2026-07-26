@@ -4,13 +4,16 @@
 \alias{statcan_data}
 \title{Download a Statistics Canada data table}
 \usage{
-statcan_data(tableNumber, lang)
+statcan_data(tableNumber, lang, refresh = FALSE)
 }
 \arguments{
 \item{tableNumber}{A Statistics Canada table number or Product ID. Both
 \code{"27-10-0014-01"} and \code{"27100014"} are accepted.}
 
 \item{lang}{Language of the downloaded table: \code{"eng"} or \code{"fra"}.}
+
+\item{refresh}{Logical; if \code{TRUE}, ignore any cached copy and download the
+table from Statistics Canada again.}
 }
 \value{
 A data frame containing the complete Statistics Canada table.
@@ -26,10 +29,22 @@ The function keeps the interface used by earlier statcanR releases. English
 and French downloads share the same processing rules. In particular, the
 first column is named \code{REF_DATE}, coordinates are stored as character, and
 the table title from the metadata file is added as \code{INDICATOR}.
+
+Downloaded tables are cached on disk in the directory returned by
+\code{\link[tools:R_user_dir]{tools::R_user_dir()}}, so repeated calls for the same table are served
+without downloading again. A cached copy is used only while Statistics Canada
+has not republished the table (its release date is unchanged), so the data
+returned is the same as a fresh download. When the release date cannot be
+determined offline, a cached copy is reused for 24 hours instead. Pass
+\code{refresh = TRUE} to ignore any cached copy and download the table again. The
+cache is capped at 500 MB and evicts least-recently-used tables to stay under
+that ceiling; set \code{options(statcanR.cache_max_bytes = ...)} to change the
+ceiling, or to \code{0} to disable table caching.
 }
 \examples{
 \dontrun{
 science <- statcan_data("27-10-0014-01", "eng")
 science_fr <- statcan_data("27100014", "fra")
+fresh <- statcan_data("27-10-0014-01", "eng", refresh = TRUE)
 }
 }
